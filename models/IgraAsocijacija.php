@@ -63,4 +63,10 @@ class IgraAsocijacija extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Igra::className(), ['id' => 'igra_id']);
     }
+    
+    public function vratiAsocPovezanuSaIgrom($igraId, $nizResAsoc){
+        $query = IgraAsocijacija::find()->select('asocijacija_id')
+                ->from('igra_asocijacija')->where('igra_id = ' . $igraId)->all(); //vracamo kao obican niz activeRecord-a
+        return $query[stripos($nizResAsoc, '0')]; // vraca prvu nedovrsenu asocijaciju povezanu sa igrom
+    }
 }

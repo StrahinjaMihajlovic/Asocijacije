@@ -16,6 +16,8 @@ use Yii;
  * @property Asocijacija[] $asocijacijas0
  * @property Korisnik $kreator
  */
+
+use yii\data\ActiveDataProvider;
 class Pojam extends \yii\db\ActiveRecord
 {
     /**
@@ -83,4 +85,36 @@ class Pojam extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Korisnik::className(), ['id' => 'kreator_id']);
     }
+   
+    public function traziPojmove($id_asocijacije){  //trazi pojmove odabrane asocijacije
+        $wrapper = new nosilacPodatka();
+         $query = Asocijacija::find()->select('asocijacija.pojmovi_ids')
+                 ->from('asocijacija')->where('id = '.$id_asocijacije);
+         
+        $provider = new ActiveDataProvider([
+                'query' => $query,       
+            ]);
+         $nizId = $provider->getModels();
+         $nizId = $nizId[array_rand($nizId)];
+         
+         $queryPojam = self::find()->select('*')->where('id in ('.$nizId->pojmovi_ids.')')
+                 ->orderBy('id');
+         $providerPojmova = new ActiveDataProvider([
+             'query' => $queryPojam,
+         ]);
+         $nizPojmova = explode(',', trim($nizId->pojmovi_ids));
+         $wrapper->RedosledPojmova = array_filter($nizPojmova, array(__CLASS__ , 'ukloni_zapete'));
+         $wrapper->nizPojmova = $providerPojmova->getModels();
+         
+         return $wrapper;
+    }
+    
+    private function ukloni_zapete($value){ //koristi se par linija gore, ne uklanjati!
+        return $value === ',' ? false : true;
+    }
+}
+
+class nosilacPodatka{
+    public $RedosledPojmova;
+    public $nizPojmova;
 }

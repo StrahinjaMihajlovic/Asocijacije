@@ -75,4 +75,19 @@ class SablonIgre extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Polje::className(), ['id' => 'resenje']);
     }
+    
+    public function vratiSablon($idSablona){
+        $query = self::find()->select('naziv')->from('sablon_igre')
+                ->where('id = ' . $idSablona);
+        $provider = new \yii\data\ActiveDataProvider([
+            'query' => $query
+        ]);
+        
+        return $provider->getModels()[0];
+    }
+    
+    public function vratiSablonKaoNiz(){
+        return preg_split('/[x]/', $this->naziv);
+        
+    }
 }

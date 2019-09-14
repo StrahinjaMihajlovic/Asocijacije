@@ -137,8 +137,10 @@ class Igra extends \yii\db\ActiveRecord
          return $provider;
     }
     
-    public function traziPolja(){
-        $query = Igra::find()->select('polje.naziv')->from('polje')->innerJoin('igra','polje.sablon_igre_id = igra.sablon_igre_id');
+    public function traziPolja($id_igre){
+        $query = Igra::find()->select('polje.naziv')->from('polje')
+                ->innerJoin('igra','polje.sablon_igre_id = igra.sablon_igre_id')
+                ->where('igra.id = ' . strval($id_igre));
         
         $provider = new ActiveDataProvider([
                 'query' => $query,
@@ -147,4 +149,30 @@ class Igra extends \yii\db\ActiveRecord
             
          return $provider;
     }
+    
+    public function vratiNepovezaneIgre($korisnik_id){
+        $query = Igra::find()->select('*')->from('igra')->leftJoin('resena_igra', 'igra.id ='
+                . 'resena_igra.igra_id')->where('resena_igra.igra_id is null');
+        
+         $provider = new ActiveDataProvider([
+                'query' => $query,
+                
+            ]);
+            
+         return $provider;
+    }
+    
+    public function vratiIgru($igra_id){
+        //TODO dodati proveru da li je igra povezana sa ulogovanim korisnikom
+         $query = Igra::find()->select('*')->from('igra')->where('id = ' . $igra_id);
+        
+        $provider = new ActiveDataProvider([
+                'query' => $query
+                ]);
+            
+         return $provider;
+    
+    }
+    
+    
 }

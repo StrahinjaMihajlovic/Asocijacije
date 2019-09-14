@@ -9,11 +9,22 @@ and open the template in the editor.
 */
 
 #asocijacija>input{
-    position:relative;
+    position:absolute;
 }
 #asocijacija{
     position: relative;
     width: 80vw;
     min-height: 100vh;
     
+}
+
+#Resenje{
+    margin: 1% 1% 1% 1%;
+}
+.A{
+    margin: 1% 1% 1% 1%;
+}
+
+.B{
+    margin: 1% 1% 1% 1%; 
 }
