@@ -122,4 +122,6 @@ class Asocijacija extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Korisnik::className(), ['id' => 'korisnik_id'])->viaTable('resena_asocijacija', ['asocijacija_id' => 'id']);
     }
+    
+    
 }

@@ -17,8 +17,7 @@ class IgraController extends \yii\web\Controller
         $igra = new Igra();
         $korisnik_id = \yii::$app->user->id 
                 ? \yii::$app->user->id : 0;
-        $session = \yii::$app->session;
-        $session->destroy();
+        
         $modelResena_igra = $Igra
                 ? (new \app\models\ResenaIgra())
                 ->vratiResenuIgru($Igra, $korisnik_id)
@@ -49,8 +48,16 @@ class IgraController extends \yii\web\Controller
         
         if(\yii::$app->request->post('kliknuto', false)){
             $this->Kliknuto(\yii::$app->request->post('kliknuto'), $resenaAsocijacija); 
+            $this->refresh();
         }
-        
+       
+        if(\yii::$app->request->post('polje', false) && \yii::$app->request->post('unos', false)){
+            $unos = [\yii::$app->request->post('polje') , \yii::$app->request->post('unos')];
+            $this->otvoriPodResenje($unos[0], $unos[1]
+                    , $resenaAsocijacija, $sablon_igreDimenzije, $Nosilac);
+            $this->refresh();
+           
+        }
         return $this->render('index'
                 ,['modelPolje' =>  $polje, 'nizPojam' => $Nosilac, 'modelResAsoc'
                     => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
@@ -78,8 +85,13 @@ class IgraController extends \yii\web\Controller
         return $IgraAsoc->vratiAsocPovezanuSaIgrom($igraId, $nizResAsoc);
     }
     
+    private function otvoriPodResenje($nazivPolja, $unosKorisnika, &$resenaAsocijacijaModel, $sablonDimenzija, $nosilac){
+        return $resenaAsocijacijaModel->proveriPodResenjeIDodaj($nazivPolja, $unosKorisnika, $sablonDimenzija, $nosilac);
+    }
+    
     private function Kliknuto($nazivPolja, &$resenaAsocijacijaModel){
        
         $resenaAsocijacijaModel->dodajOtvorenoPolje($nazivPolja);
+        
     }
 }

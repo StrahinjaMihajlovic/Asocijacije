@@ -109,6 +109,10 @@ class Pojam extends \yii\db\ActiveRecord
          return $wrapper;
     }
     
+    public function vratiSadrzajPojma($id){
+        return self::findOne($id)->getAttribute('sadrzaj');
+    }
+    
     private function ukloni_zapete($value){ //koristi se par linija gore, ne uklanjati!
         return $value === ',' ? false : true;
     }

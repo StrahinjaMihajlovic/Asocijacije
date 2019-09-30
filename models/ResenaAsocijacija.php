@@ -87,6 +87,9 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
     }
     
     public function dodajOtvorenoPolje($poljeNaziv){
+        if(stripos($this->otvorena_polja, $poljeNaziv) !== false)
+                return false;
+        
         if($this->otvorena_polja === ''){
             $this->otvorena_polja .= $poljeNaziv;
         }else{
@@ -99,5 +102,43 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
     
     public function vratiOtovrenaPoljaNiz(){
         return preg_split('/[,]/', $this->otvorena_polja);
+    }
+    
+    public function proveriPodResenjeIDodaj($nazivPolja, $unosKorisnika, $sablonDimenzija, $nosilac){
+        if(preg_match('/' .$nazivPolja . ',|'.$nazivPolja.'$/',$this->otvorena_polja))
+            return false;
+        
+        $vrednost = $this->konvertujPoljeUBroj($nazivPolja, $sablonDimenzija);
+        
+        foreach($nosilac->nizPojmova as $pojam){
+            
+            if ($pojam['id'] == $nosilac->RedosledPojmova[$vrednost] 
+                    &&  (strcasecmp($pojam['sadrzaj'], $unosKorisnika)) === 0){
+                $vrednost = true;
+                break;
+            }
+        }
+        
+        if($this->otvorena_polja === '' && is_bool($vrednost)){
+            $this->otvorena_polja .= $nazivPolja;
+        }else if($vrednost === true){
+            $this->otvorena_polja .= ', ' . $nazivPolja;
+        }
+        
+        return $this->save() ? 1 : 0;
+        
+    }
+    
+    private function konvertujPoljeUBroj($nazivPolja ,$duzina){ //prekopirano iz views/igra/index fajla izmenjen regex
+     $polje = substr($nazivPolja, 0, 1);
+        
+        
+     //$polje = preg_split('/([\D]?)/', $nazivPolja, 0,PREG_SPLIT_DELIM_CAPTURE); 
+     //izracunamo vrednost slova kao a = 0, b = 1... pa onda dodamo broj koji 
+     //oznacava redosled polja da bi dobili poziciju tog polja iz kolone
+     //"pojmovi ids" u tabeli "asocijacija"
+     $vrednost = ((ord(strtolower($polje)) - 96) * ($duzina[0] + 1));
+    
+     return $vrednost;
     }
 }

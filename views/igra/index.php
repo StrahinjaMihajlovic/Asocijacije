@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
+use yii\base\ErrorException;
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $modelAsocijacija app\models\Asocijacija*/
@@ -22,8 +23,9 @@ use yii\widgets\Pjax;
 function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $nizPojam){
     //echo $nazivPolja . ' '. $resenaAsocijacijaModel->otvorena_polja . ' - ';
     
-    if(is_bool(stripos($resenaAsocijacijaModel->otvorena_polja, $nazivPolja)))
-            return 'false';
+    try{
+    if(!preg_match('/' .$nazivPolja . ',|'.$nazivPolja.'$/',$resenaAsocijacijaModel->otvorena_polja))
+            return 'otvori';
     
      // note: delim_capture se ne ponasa predvidljivo, moras dodati zagrade
      // /()/ u regex-u
@@ -35,12 +37,16 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
              (array_key_exists(1, $polje) ? intval($polje[1]) : $duzina + 1);
      echo $duzina;
      $trazeniPojamId = $nizPojam->RedosledPojmova[$vrednost];
-     foreach($nizPojam->nizPojmova as $kljuc => $pojam){
+     
+     foreach($nizPojam->nizPojmova as $pojam){
          if($pojam['id'] == $trazeniPojamId){
              return $pojam['sadrzaj'];
          }
      }
      return 'greska';
+    } catch (\yii\base\ErrorException $e){
+        print_r($e->getMessage());
+    }
 }
     
 ?>
@@ -55,8 +61,10 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
         <div class="clearfix"></div>
     </div>
     <div class ="x_content">
-        <?php Pjax::begin()?>
-        <?php $form = ActiveForm::begin(['options' =>['style'=> 'position: relative']])?>
+        <?php Pjax::begin([
+            'enablePushState' => false
+        ])?>
+        <?php //$form = ActiveForm::begin(['options' =>['style'=> 'position: relative']])?>
             <?php
                 $modeli = $modelPolje->getModels();
                 
@@ -64,28 +72,28 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
                 ?><div id='asocijacija'>
                    <?php
                foreach ($modeli as $str){ //pravimo svako dugme ponaosob
+                    $otvoren = proveriAkoJeOtvoreno($str->naziv //ako je A1,B3 ... onda pravi dugme
+                               , $modelResAsoc, intval($sablonDimenzije), $nizPojam);
                    if($str->naziv === "Resenje"){
                        echo Html::input('text', $str->naziv, '', ['id' => 'Resenje', 'class' => 'tekstPolje']);
                        
                    }else if(preg_match('/\d/', $str->naziv)){
-                       $otvoren = proveriAkoJeOtvoreno($str->naziv //ako je A1,B3 ... onda pravi dugme
-                               , $modelResAsoc, intval($sablonDimenzije), $nizPojam);
-                       
                        $broj = implode(preg_grep('/\d/', str_split($str->naziv)));
                        $tip = implode(preg_grep('/\d/', str_split($str->naziv), PREG_GREP_INVERT));
                        echo Html::input('button', $str->naziv
                                , $otvoren 
                                ,['data-value' => $broj, 'id' => $str->naziv
-                               , 'class' => $tip]);
+                               , 'class' => $tip, 'data-pjax' => '\'1\'']);
                    }else{ //ako je samo A, B, C... onda pravi polje za unos
                        
-                       echo Html::input('text', $str->naziv, '',['id' => $str->naziv, 'class' => 'podPolje']);
+                       echo Html::input('text', $str->naziv, strcmp($otvoren, 'otvori') ? $otvoren : ''
+                               ,['id' => $str->naziv, 'class' => 'podPolje']);
                    }
                 }
                 
             ?>
                 </div>
-        <?php ActiveForm::end();
+        <?php //ActiveForm::end();
                 $this->registerCssFile('@web/css/asocijacijeIndex.css');
                 $this->registerJsFile('@web/js/igraIndex.js',['depends' => [\yii\web\JqueryAsset::className()]]);
                
