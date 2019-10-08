@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use yii\base\ErrorException;
+
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $modelAsocijacija app\models\Asocijacija*/
@@ -24,8 +24,11 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
     //echo $nazivPolja . ' '. $resenaAsocijacijaModel->otvorena_polja . ' - ';
     
     try{
-    if(!preg_match('/' .$nazivPolja . ',|'.$nazivPolja.'$/',$resenaAsocijacijaModel->otvorena_polja))
-            return 'otvori';
+    if(!preg_match('/' .$nazivPolja . ',|'.$nazivPolja.'$/',$resenaAsocijacijaModel->otvorena_polja) 
+            && strstr($resenaAsocijacijaModel->otvorena_polja, 'resenje') === false){
+                return '[otvori]';
+            }
+    
     
      // note: delim_capture se ne ponasa predvidljivo, moras dodati zagrade
      // /()/ u regex-u
@@ -36,17 +39,22 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
      $vrednost = ((ord(strtolower($polje[0])) - 97) * ($duzina + 1)) +
              (array_key_exists(1, $polje) ? intval($polje[1]) : $duzina + 1);
      echo $duzina;
-     $trazeniPojamId = $nizPojam->RedosledPojmova[$vrednost];
+     $trazeniPojamId = 0;
+     if(strstr($resenaAsocijacijaModel->otvorena_polja, 'resenje') !== false && $nazivPolja === 'Resenje'){
+         $trazeniPojamId = $nizPojam->RedosledPojmova[0];
+     }else{
+         $trazeniPojamId = $nizPojam->RedosledPojmova[$vrednost];
+     }
      
      foreach($nizPojam->nizPojmova as $pojam){
-         if($pojam['id'] == $trazeniPojamId){
+         if(($pojam['id'] == $trazeniPojamId)){
              return $pojam['sadrzaj'];
          }
      }
-     return 'greska';
     } catch (\yii\base\ErrorException $e){
-        print_r($e->getMessage());
+     return 'greska';
     }
+     
 }
     
 ?>
@@ -65,6 +73,13 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
             'enablePushState' => false
         ])?>
         <?php //$form = ActiveForm::begin(['options' =>['style'=> 'position: relative']])?>
+        
+        <?php if(strstr($modelResAsoc->otvorena_polja, 'resenje')):?>
+        <div id='cestitka'>
+            <h1>Cestitamo, resili ste asocijaciju!</h1>
+        </div>
+        <?php endif;?>
+        
             <?php
                 $modeli = $modelPolje->getModels();
                 
@@ -75,7 +90,7 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
                     $otvoren = proveriAkoJeOtvoreno($str->naziv //ako je A1,B3 ... onda pravi dugme
                                , $modelResAsoc, intval($sablonDimenzije), $nizPojam);
                    if($str->naziv === "Resenje"){
-                       echo Html::input('text', $str->naziv, '', ['id' => 'Resenje', 'class' => 'tekstPolje']);
+                       echo Html::input('text', $str->naziv, strcmp($otvoren, '[otvori]') ? $otvoren : '' , ['id' => 'Resenje', 'class' => 'tekstPolje']);
                        
                    }else if(preg_match('/\d/', $str->naziv)){
                        $broj = implode(preg_grep('/\d/', str_split($str->naziv)));
@@ -86,7 +101,7 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
                                , 'class' => $tip, 'data-pjax' => '\'1\'']);
                    }else{ //ako je samo A, B, C... onda pravi polje za unos
                        
-                       echo Html::input('text', $str->naziv, strcmp($otvoren, 'otvori') ? $otvoren : ''
+                       echo Html::input('text', $str->naziv, strcmp($otvoren, '[otvori]') ? $otvoren : ''
                                ,['id' => $str->naziv, 'class' => 'podPolje']);
                    }
                 }

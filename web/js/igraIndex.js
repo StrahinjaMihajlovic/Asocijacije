@@ -20,6 +20,7 @@ function posaljiPostTekst(){
 
 
 $('#Resenje').css({'top': $('#Resenje').parent().height()/2,'left': $('#Resenje').parent().width()/2.5});
+$('#Resenje').on('focusout', posaljiPostTekst);
 
 $('#A').css({'top': ($('#Resenje').position().top - $('#Resenje').outerHeight(true)), 
     'left': ($('#Resenje').position().left - 0.8 * $('#A').width())});

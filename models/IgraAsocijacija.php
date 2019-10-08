@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+use yii\base\ErrorException;
 use Yii;
 
 /**
@@ -64,9 +64,25 @@ class IgraAsocijacija extends \yii\db\ActiveRecord
         return $this->hasOne(Igra::className(), ['id' => 'igra_id']);
     }
     
-    public function vratiAsocPovezanuSaIgrom($igraId, $nizResAsoc){
+    public function vratiAsocPovezanuSaIgrom($igraId, $nizResAsoc, $dalje = false){
         $query = IgraAsocijacija::find()->select('asocijacija_id')
                 ->from('igra_asocijacija')->where('igra_id = ' . $igraId)->all(); //vracamo kao obican niz activeRecord-a
-        return $query[stripos($nizResAsoc, '0')]; // vraca prvu nedovrsenu asocijaciju povezanu sa igrom
+        try{
+        return $query[intval($dalje ? $nizResAsoc : $nizResAsoc - 1)]; // vraca prvu nedovrsenu asocijaciju povezanu sa igrom (ako je dugme "dalje" kliknuto)
+        } catch (\yii\base\ErrorException $e){
+            return array_pop($query); //vraca zadnju asocijaciju ako je igra resena
+        }
+    }
+    
+    public function vratiSveAsocijacije($igraId){
+        $query = self::find()->select('*')->from('igra_asocijacija')
+                ->rightJoin('asocijacija',
+                        'igra_asocijacija.asocijacija_id = asocijacija.id')
+                ->where('igra_id = ' . $igraId);
+        $provider = new \yii\data\ActiveDataProvider([
+            'query' => $query
+        ]);
+        
+        return $provider;
     }
 }

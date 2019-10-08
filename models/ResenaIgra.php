@@ -72,6 +72,11 @@ class ResenaIgra extends \yii\db\ActiveRecord
         
         $this->igra_id = $igra;
         $this->korisnik_id = $korisnik;
+        /*$query = self::find()->select('count(id) as broj')->from('asocijacija')->leftJoin('igra_asocijacija', 'asocijacija_id = id')
+                ->where('igra_id = '. $igra);
+        str_repeat('0', $query->one()->getAttribute('broj')); 
+         * ako trigger u bazi ne radi kako treba
+         */
         return $this->save(true) ? $this : false;
     }
     
@@ -82,5 +87,14 @@ class ResenaIgra extends \yii\db\ActiveRecord
            'query' => $query 
         ]);
         return $provider->getModels()[0];
+    }
+    
+    public function vratiSveReseneIgre($idKorisnika){
+         $query = self::find()->select('*')->from('resena_igra')
+                ->where('korisnik_id = ' . $idKorisnika);
+        $provider = new \yii\data\ActiveDataProvider([
+           'query' => $query 
+        ]);
+        return $provider->getModels();
     }
 }

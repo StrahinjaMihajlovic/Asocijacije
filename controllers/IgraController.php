@@ -37,7 +37,9 @@ class IgraController extends \yii\web\Controller
         
         $TrenutnaAsocijacija = $this->vratiAsocijaciju( // odaberi odredjenu asocijaciju
                   $modelResena_igra->igra->id
-                , $modelResena_igra->resene_asocijacije);
+                , intval($modelResena_igra->resene_asocijacije)); 
+        
+        
         
         $resenaAsocijacija = (new \app\models\ResenaAsocijacija()) //napravi ili preuzmi model resene asocijacije
                 ->proveriVezu($TrenutnaAsocijacija->asocijacija_id
@@ -53,18 +55,32 @@ class IgraController extends \yii\web\Controller
        
         if(\yii::$app->request->post('polje', false) && \yii::$app->request->post('unos', false)){
             $unos = [\yii::$app->request->post('polje') , \yii::$app->request->post('unos')];
+            if($unos[0] === 'Resenje'){
+                $resenaAsocijacija->proveriKonacnoResenje($unos[1]
+                        , $Nosilac, $modelResena_igra
+                 );
+            }else{
             $this->otvoriPodResenje($unos[0], $unos[1]
                     , $resenaAsocijacija, $sablon_igreDimenzije, $Nosilac);
+            }
             $this->refresh();
            
         }
+        
+        
+        
         return $this->render('index'
                 ,['modelPolje' =>  $polje, 'nizPojam' => $Nosilac, 'modelResAsoc'
                     => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
                 , 'idIgre' => $igra->vratiIgru($modelResena_igra->igra->id)]);
     }
     
-    
+    public function actionMojeigre(){
+        $reseneIgreModeli = (new \app\models\ResenaIgra)->vratiSveReseneIgre(\yii::$app->user->id);
+        $igraAsocijacijeObjekt = new \app\models\IgraAsocijacija();
+        return $this->render('mojeIgre',['reseneIgreModeli' => $reseneIgreModeli
+                ,'igraAsocijacije' => $igraAsocijacijeObjekt]);
+    }
      
     private function poveziNepovezanuIgru($igra, $korisnik_id){
         $nepovezanaIgra = $igra->vratiNepovezaneIgre($korisnik_id)
@@ -82,7 +98,10 @@ class IgraController extends \yii\web\Controller
     
     private function vratiAsocijaciju($igraId, $nizResAsoc){ // vraca asocijaciju povezanu sa igrom
         $IgraAsoc = new IgraAsocijacija();
-        return $IgraAsoc->vratiAsocPovezanuSaIgrom($igraId, $nizResAsoc);
+        
+        return \yii::$app->request->post('dalje') 
+                ? $IgraAsoc->vratiAsocPovezanuSaIgrom($igraId, $nizResAsoc)
+                : $IgraAsoc->vratiAsocPovezanuSaIgrom($igraId, $nizResAsoc, true);
     }
     
     private function otvoriPodResenje($nazivPolja, $unosKorisnika, &$resenaAsocijacijaModel, $sablonDimenzija, $nosilac){

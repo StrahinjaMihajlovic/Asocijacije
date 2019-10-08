@@ -115,6 +115,11 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
             if ($pojam['id'] == $nosilac->RedosledPojmova[$vrednost] 
                     &&  (strcasecmp($pojam['sadrzaj'], $unosKorisnika)) === 0){
                 $vrednost = true;
+                
+                for($i = 1; $i<=$sablonDimenzija[0]; $i++){
+                    $this->dodajOtvorenoPolje($nazivPolja . $i); // dodajemo sva neotvorena podpolja kao otvorena jer je resenje tacno
+                }
+                
                 break;
             }
         }
@@ -125,7 +130,7 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
             $this->otvorena_polja .= ', ' . $nazivPolja;
         }
         
-        return $this->save() ? 1 : 0;
+        return $this->save() ? $this : 0;
         
     }
     
@@ -140,5 +145,25 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
      $vrednost = ((ord(strtolower($polje)) - 96) * ($duzina[0] + 1));
     
      return $vrednost;
+    }
+    
+    public function proveriKonacnoResenje($unosKorisnika, $nosilac, &$ResenaIgra){
+        if(strstr($this->otvorena_polja, 'resenje') !== false)
+                return 0;
+        foreach($nosilac->nizPojmova as $pojam){
+            
+            if ($pojam['id'] == $nosilac->RedosledPojmova[0] 
+                    &&  (strcasecmp($pojam['sadrzaj'], $unosKorisnika)) === 0){
+                
+                if($this->otvorena_polja === ''){
+                     $this->otvorena_polja .= 'resenje';
+                 }else{
+                     $this->otvorena_polja .= ', ' . 'resenje';
+                 }
+                 $ResenaIgra->resene_asocijacije = strval(intval($ResenaIgra->resene_asocijacije) + 1);
+                 $ResenaIgra->save();
+                return $this->save() ? 1 : 0; // vracamo int 1 ako je resenje tacno i potvrdjeno
+            }
+        }
     }
 }
