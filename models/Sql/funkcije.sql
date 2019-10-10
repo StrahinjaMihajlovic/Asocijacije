@@ -13,9 +13,3 @@ BEGIN
  CALL popuni_pojmove_asocijacije(NEW.pojam_id, NEW.asocijacija_id);
 END;
 
-DROP TRIGGER IF EXISTS popuni_resenje_asocijacije;
-CREATE TRIGGER popuni_resenje_asocijacije BEFORE INSERT ON asocijacija
-FOR EACH ROW
-BEGIN
-    SET new.pojmovi_ids = new.resenje_id;
-END;

@@ -116,6 +116,18 @@ class Pojam extends \yii\db\ActiveRecord
     private function ukloni_zapete($value){ //koristi se par linija gore, ne uklanjati!
         return $value === ',' ? false : true;
     }
+    
+    public function daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId){ //proverava da li vec postoji pojam sa istim sadrzajem i dodaje novi ako nije. U suprotnom vraca nadjeni
+        $query = self::find()->select('id')->from('pojam')
+                ->where('sadrzaj = \'' . $sadrzaj .'\'')->one();
+        if($query === null){
+            $modelPojma = new Pojam();
+            $modelPojma->setAttributes(['kreator_id' => $korisnikId
+                    , 'sadrzaj' => $sadrzaj], false);
+            return $modelPojma->save() ? $modelPojma->getAttribute('id') : $modelPojma->errors;
+        }
+        return $query->getAttribute('id');
+    }
 }
 
 class nosilacPodatka{

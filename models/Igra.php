@@ -174,5 +174,10 @@ class Igra extends \yii\db\ActiveRecord
     
     }
     
-    
+    public function stvoriIgruUBazi($idKorisnika){
+        $this->setAttributes(['kreator_id' => $idKorisnika, 'opis' => 'test'
+            , 'naziv' => 'test', 'kategorija_id' => 1, 'aktivna' => 0
+            , 'broj_igranja' => 0, 'sablon_igre_id' => 2]);
+        return $this->save() ? $this : false;
+    }
 }

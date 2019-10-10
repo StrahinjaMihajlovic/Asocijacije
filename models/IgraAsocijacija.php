@@ -85,4 +85,9 @@ class IgraAsocijacija extends \yii\db\ActiveRecord
         
         return $provider;
     }
+    
+    public function napraviUBazi($igraId, $asocijacijaId){
+        $this->setAttributes(['igra_id' => $igraId, 'asocijacija_id' => $asocijacijaId],false);
+        return $this->save() ? $this :false ;
+    }
 }

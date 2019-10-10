@@ -64,4 +64,13 @@ class Polje extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SablonIgre::className(), ['resenje' => 'id']);
     }
+    
+    public function vratiSvaPoljaSablona($idSablona){
+        $query = self::find()->select('id, naziv')->from('polje')
+                ->where('sablon_igre_id = '.$idSablona);
+        $provider = new \yii\data\ActiveDataProvider([
+            'query' => $query
+        ]);
+        return $provider->getModels();
+    }
 }

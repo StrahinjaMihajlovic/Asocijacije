@@ -1,0 +1,35 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 8, 2019, 2:16:27 PM
+    Author     : strahinja
+*/
+
+#asocijacija-form>input{
+    position:absolute;
+}
+#asocijacija-form{
+    position: relative;
+    width: 80vw;
+    min-height: 100vh;
+    
+}
+
+div.Resenje{
+    margin: 1% 1% 1% 1%;
+}
+div.A{
+    margin: 1% 1% 1% 1%;
+}
+
+div.B{
+    margin: 1% 1% 1% 1%; 
+}
+
+.pojamwrap{
+    display: inline;
+    position: absolute;
+}

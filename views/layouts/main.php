@@ -38,6 +38,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
+            ['label' => 'Napravi asocijaciju', 'url' => \yii\helpers\Url::to(['korisnicki-alati/kreiranjeigre'])],
             ['label' => 'Moje igre', 'url' => \yii\helpers\Url::to(['igra/mojeigre'])],
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],

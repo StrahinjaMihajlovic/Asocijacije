@@ -123,5 +123,14 @@ class Asocijacija extends \yii\db\ActiveRecord
         return $this->hasMany(Korisnik::className(), ['id' => 'korisnik_id'])->viaTable('resena_asocijacija', ['asocijacija_id' => 'id']);
     }
     
-    
+    public function dodajAsocijacijuUBazi($pojmoviIds, $korisnikId){
+        $pojmoviIdsTekst = '';
+        foreach ($pojmoviIds as $pojamTekst){
+        $pojmoviIdsTekst .= $pojmoviIdsTekst === '' ? $pojamTekst: ', ' .$pojamTekst; 
+        }
+        $this->setAttribute('kreator_id' , $korisnikId);
+        $this->setAttribute('pojmovi_ids', $pojmoviIdsTekst);
+        $this->resenje_id = $pojmoviIds[0];
+        return $this->save() ? $this : false;
+    }
 }
