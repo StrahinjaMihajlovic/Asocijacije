@@ -11,7 +11,10 @@
 /* @var $igraAsocijacije \app\models\IgraAsocijacija */ 
 
 use yii\helpers\Html;
+$this->title = 'Moje igre';
+
 ?>
+
 <div id='kontenerIgara'>
 <?php
     foreach ($reseneIgreModeli as $igra):

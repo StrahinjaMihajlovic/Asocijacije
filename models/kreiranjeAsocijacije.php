@@ -55,8 +55,10 @@ class kreiranjeAsocijacije extends \yii\base\Model{
                return false;
            }
        }
-       $this->asocijacija->dodajAsocijacijuUBazi($pojamNizIds, $korisnikId);
-       return (new IgraAsocijacija())->napraviUBazi($this->igra->id, $this->asocijacija->id);
+       $rezultatAsoc = $this->asocijacija->dodajAsocijacijuUBazi($pojamNizIds, $korisnikId);
+       //vraca true ako su se i asocijacija i veza igre i asocijacije napravile u bazi podataka
+       return (new IgraAsocijacija())->napraviUBazi
+               ($this->igra->id, $this->asocijacija->id) && ($rezultatAsoc);
    }
     
 }

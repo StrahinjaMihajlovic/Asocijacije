@@ -150,7 +150,7 @@ class Igra extends \yii\db\ActiveRecord
          return $provider;
     }
     
-    public function vratiNepovezaneIgre($korisnik_id){ //implementirati da igrac ne moze da igra sopstvene igre sa korisnik_id
+    public function vratiNepovezaneIgre($korisnik_id){ // TODO implementirati da igrac ne moze da igra sopstvene igre sa korisnik_id
         $query = Igra::find()->select('*')->from('igra')->leftJoin('resena_igra', 'igra.id ='
                 . 'resena_igra.igra_id')->where('resena_igra.igra_id is null ');
         
@@ -175,8 +175,7 @@ class Igra extends \yii\db\ActiveRecord
     }
     
     public function stvoriIgruUBazi($idKorisnika){
-        $this->setAttributes(['kreator_id' => $idKorisnika, 'opis' => 'test'
-            , 'naziv' => 'test', 'kategorija_id' => 1, 'aktivna' => 0
+        $this->setAttributes(['kreator_id' => $idKorisnika,  'aktivna' => 0
             , 'broj_igranja' => 0, 'sablon_igre_id' => 2]);
         return $this->save() ? $this : false;
     }

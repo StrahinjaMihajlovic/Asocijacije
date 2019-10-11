@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 /* @var $this \yii\web\View */
-/* @var $polja app\models\Polje */
-/* @var $pojam app\models\Pojam*/
+/* @var $igra app\models\Igra */
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,56 +18,16 @@ use yii\widgets\ActiveForm;
  */
 
 ?>
-
-<div id='asocijacija'>
-    <?php $form = ActiveForm::begin(['id' => 'asocijacija-form',
-        'enableClientScript' => false]) ?>
-                   <?php
-                   $field = $form->field($polja[0], 'naziv[]');
-                   
-                   
-               foreach ($polja as $str){ //pravimo svako dugme ponaosob
-                  
-                   $field->model = $str;
-                     $field->options = ['class' => 'pojamwrap '];
-                   $field->label($str->naziv);
-                   if($str->naziv === 'Resenje'){
-                       $field->options = ['class' => 'Resenje pojamwrap'];
-                     echo  $field->textInput(
-                               ['id' => 'Resenje', 'class' => 'tekstPolje'
-                                   ,'value' => '']);
-                       
-                   }else if(preg_match('/\d/', $str->naziv)){
-                       $broj = implode(preg_grep('/\d/', str_split($str->naziv)));
-                       $tip = implode(preg_grep('/\d/', str_split($str->naziv), PREG_GREP_INVERT));
-                       $field->options = ['class' => 'pojamwrap '. $tip, 
-                        'data-value' => $broj];
-                      echo $field->textInput
-                               (['data-value' => $broj
-                               , 'id' => $str->naziv
-                               , 'class' => $tip
-                               , 'value' => '']);
-                   }else{ //ako je samo A, B, C... onda pravi polje za unos
-                       
-                       $field->options = [
-                           'class' => 'pojamwrap',
-                           'id' => $str->naziv
-                       ];
-                        echo  $field->textInput([
-                            'id' => $str->naziv,
-                            'class' => 'podpolje',
-                            'value' => ''
-                        ]);      
-                   }
-                }
-                echo Html::submitButton('Unos', ['class' => 'btn btn-primary']);
-                ActiveForm::end(); 
-            ?>
-  </div>
-<?php 
+<div id='interfejsKreiranje'>
+    <?php if($igra->getAttribute('naziv')) :?>
+    <h1 style ='color:red'>Igra nije uspesno kreirana, proverite svoj unos</h1>
     
-    $this->registerJsFile('@web/js/korisnicki-alati/kreiranjeIgre.js',
-            ['depends' => [\yii\web\JqueryAsset::className()]]);
-    $this->registerCssFile('@web/css/korisnicki-alati/kreiranjeIgre.css');
-
-
+    <?php endif;
+    $form = ActiveForm::begin()?>
+    <?= $form->field($igra, 'kategorija_id')->dropDownList($kategorije,['prompt'
+        => 'Unesite kategoriju'])?>
+    <?= $form->field($igra, 'naziv')->textInput(['class' => 'polje'])->label('Naziv igre: ')?>
+    <?= $form->field($igra, 'opis')->textarea(['class' => 'tekst polje'])->label('Opis igre:')?>
+    <?= Html::submitButton('Napravi igru',['class' => 'btn btn-primary'])?>    
+    <?php ActiveForm::end()?>
+</div>

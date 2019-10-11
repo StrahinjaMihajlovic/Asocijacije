@@ -13,26 +13,46 @@ use app\models\kreiranjeAsocijacije;
 
 class KorisnickiAlatiController extends \yii\web\Controller
 {
-    public function actionKreiranjeigre($trenIgra = false){
+    public function actionKreiranjeigre(){
+        $igra = new \app\models\Igra();
+        $kategorija = new \app\models\Kategorija();
+        
+        if(\yii::$app->request->post('Igra')){
+            $igra->attributes = \yii::$app->request->post('Igra'); 
+            //probaj kreirati igru u bazi i ako ne uspe, ostani na stranici, u suprotnom idi na intefejz za kreiranje 
+            //asocijacija
+            return $igra->stvoriIgruUBazi(\yii::$app->user->id) ? $this->redirect(\yii\helpers\Url::to(['kreiranjeasocijacije'
+                    , 'trenIgra' => $igra->getAttribute('id'), 'nova' => true])) 
+                    : $this->render('kreiranjeIgre', ['igra' => $igra ,'kategorije' 
+                    => $kategorija->vratiKategorijeNiz()]);
+        }
+        
+        return $this->render('kreiranjeIgre', ['igra' => $igra ,'kategorije' => $kategorija->vratiKategorijeNiz()]); 
+    }
+    
+    public function actionKreiranjeasocijacije($trenIgra = false, $nova = false){
+        if($nova && $trenIgra > -1){
+            return $this->redirect(\yii\helpers\Url::to(['kreiranjeasocijacije' , 'trenIgra' => $trenIgra]));
+        }
         if($trenIgra === false){
-            $trenIgra = (new \app\models\Igra())->stvoriIgruUBazi(\yii::$app->user->id);
-            return $trenIgra === false ? $this->redirect('site/index')
-                    : $this->redirect(\yii\helpers\Url::to(['kreiranjeigre' , 'trenIgra' => $trenIgra->id]));
-            
+            return $this->redirect(\yii\helpers\Url::to(['kreiranjeigre']));
         }
         $sablon = (new SablonIgre())->vratiSablon(2);
         $nizPolja = (new Polje())->vratiSvaPoljaSablona($sablon->id);
         $pojam = new \app\models\Pojam();
         $igra = (new \app\models\Igra())->vratiIgru($trenIgra)->getModels()[0];
+        
         $kreiranjeAsocijacije = new kreiranjeAsocijacije();
         $kreiranjeAsocijacije->igra = $igra;
         $kreiranjeAsocijacije->asocijacija = (new \app\models\Asocijacija());
+        $rezultatUpisaUBazu = '';
         if(\yii::$app->request->post('Polje',false)){
             $kreiranjeAsocijacije->sadrzajPoljaNiz = \yii::$app->request->post('Polje')['naziv'];
-            $kreiranjeAsocijacije->stvoriAsocijacijuUBazi(\yii::$app->user->id);
+            $rezultatUpisaUBazu = $kreiranjeAsocijacije
+                    ->stvoriAsocijacijuUBazi(\yii::$app->user->id);
         }
         
-        return $this->render('kreiranjeIgre', ['polja' => $nizPolja,
-            'sablon' => $sablon, 'pojam' => $pojam]);
+        return $this->render('kreiranjeAsocijacije', ['polja' => $nizPolja,
+            'sablon' => $sablon, 'pojam' => $pojam, 'uspesnost' => $rezultatUpisaUBazu, 'nova' => $nova]);
     }
 }

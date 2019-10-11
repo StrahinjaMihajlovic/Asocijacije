@@ -77,4 +77,24 @@ class Kategorija extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Kategorija::className(), ['roditelj_id' => 'id']);
     }
+    
+    public function vratiKategorijeNiz(){ //vraca niz za dropdownlist u view 'kreiranjeigre'
+        //$query je dvostruki niz [][id / naziv / roditelj_id]
+        $query = self::find()->select('id, naziv, roditelj_id')->from('kategorija')->orderBy('id')->asArray(true)->all();
+        $niz = array();
+        
+        foreach ($query as $kategorija){
+            if($kategorija['roditelj_id'] !== null){ //da li postoji nadkatergorija
+                $nizId = array_search($kategorija['roditelj_id'], array_column($query, 'id')); //trazi indeks(ne id!) roditeljske kategorije u $query
+                unset($niz[$query[$nizId]['id']]); // Sklanja roditeljsku kategoriju iz niza $niz.
+                
+                $niz[$query[$nizId]['naziv']][$kategorija['id']] // ubacuje u podniz sa id-jevima naziv podkategorije
+                          = $kategorija['naziv']; 
+            }else{
+            $niz[intval($kategorija['id'])] = $kategorija['naziv'];// tretiraj kao kliknuto
+            }
+        }
+        return $niz;
+    }
+   
 }
