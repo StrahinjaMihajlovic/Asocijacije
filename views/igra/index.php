@@ -77,6 +77,9 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
         <?php if(strstr($modelResAsoc->otvorena_polja, 'resenje')):?>
         <div id='cestitka'>
             <h1>Cestitamo, resili ste asocijaciju!</h1>
+            <a href="<?php echo \yii\helpers\Url::to(['igra/index']);?>">
+                <button class="btn btn-dark">Predji na novu igru</button>
+            </a>
         </div>
         <?php endif;?>
         

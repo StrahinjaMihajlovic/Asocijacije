@@ -22,12 +22,16 @@ class IgraController extends \yii\web\Controller
                 ? (new \app\models\ResenaIgra())
                 ->vratiResenuIgru($Igra, $korisnik_id)
                 : $this->poveziNepovezanuIgru($igra, $korisnik_id);
-        if(!$Igra){
+        
+        if($modelResena_igra === false){
+            return $this->render('sveResene');
+        }
+
+         if(!$Igra){
             return $this->redirect(
                     ['igra/index', 'Igra' => $modelResena_igra->igra->id]);
         }
         
-
         $sablon_igreDimenzije = (new SablonIgre())
                 ->vratiSablon($igra->vratiIgru($modelResena_igra->igra->id)->getModels()[0]->sablon_igre_id)
                 ->vratiSablonKaoNiz();
@@ -87,6 +91,10 @@ class IgraController extends \yii\web\Controller
                 ->getModels();
         //prvo uzimamo sve igre koje nisu povezane sa trenutnim korisnikom i onda
         // izaberemo slucajno jednu od njih.
+        if(empty($nepovezanaIgra)){
+            return false;
+        }
+        
         
         $nepovezanaIgra = $nepovezanaIgra[array_rand($nepovezanaIgra)];
         
