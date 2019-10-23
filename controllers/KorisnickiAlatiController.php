@@ -2,7 +2,7 @@
 namespace app\controllers;
 use app\models\Polje;
 use \app\models\SablonIgre;
-use app\models\kreiranjeAsocijacije;
+use app\models\posebni_modeli\kreiranjeAsocijacije;
 
 /* 
  * To change this license header, choose License Headers in Project Properties.

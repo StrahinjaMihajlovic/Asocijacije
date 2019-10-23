@@ -1,7 +1,10 @@
 <?php
+namespace app\models\posebni_modeli;
 
 use Yii;
-namespace app\models;
+use \app\models\Pojam;
+use \app\models\IgraAsocijacija;
+
 
 
 
