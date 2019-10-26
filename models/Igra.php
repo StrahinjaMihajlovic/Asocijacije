@@ -179,4 +179,15 @@ class Igra extends \yii\db\ActiveRecord
             , 'broj_igranja' => 0, 'sablon_igre_id' => 2]);
         return $this->save() ? $this : false;
     }
+    
+    public function vratiSopstveneIgre($idKorisnika){
+        $query = self::find()->select('*')->from('igra')
+                ->where('kreator_id = ' . $idKorisnika);
+       
+        $provider = new ActiveDataProvider([
+                'query' => $query
+                ]);
+            
+        return $provider->getModels();
+    }
 }

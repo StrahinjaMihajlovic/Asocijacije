@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 /* @var $this \yii\web\View */
 /* @var $polja app\models\Polje */
 /* @var $pojam app\models\Pojam*/
+/* @var $kreiranjeAsocijacije app\models\posebni_modeli\kreiranjeAsocijacije*/ 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,7 +19,21 @@ use yii\widgets\ActiveForm;
  */
 
 ?>
-
+<div id="navigacijaAsoc">
+    <?php echo !isset($kreiranjeAsocijacije->asocijacija->id) 
+            || (nadjiPozicijuAsoc($kreiranjeAsocijacije->asocijacija, $kreiranjeAsocijacije) > 1) 
+    ? Html::button('Nazad', ['id' => 'nazad'])  :  ""?>
+    
+    <p><?php echo isset($kreiranjeAsocijacije->asocijacija->id) //pratimo na kojoj asocijaciji po redu smo trenutno
+            ? nadjiPozicijuAsoc($kreiranjeAsocijacije->asocijacija, $kreiranjeAsocijacije) 
+            . '/' . count($kreiranjeAsocijacije->AsocijacijeUIgri)
+            : 'nova'
+            ?></p>
+    
+    <?php echo isset($kreiranjeAsocijacije->asocijacija->id) 
+    ? Html::button('Napred', ['id' => 'napred']) : ''?>
+    
+</div>
 <div id='asocijacija'>
     <?php if($nova):?>
     <h1>Igra je uspesno kreirana, sad mozete napraviti prvu asocijaciju u toj igri!</h1>
@@ -36,10 +51,21 @@ use yii\widgets\ActiveForm;
         'enableClientScript' => false]) ?>
                    <?php
                    $field = $form->field($polja[0], 'naziv[]');
-                   
+                   $poljeRedosledIter = false;
+                   if(isset($kreiranjeAsocijacije->popunjenaPolja)){
+                   $poljeRedosledIter= new ArrayIterator($kreiranjeAsocijacije->popunjenaPolja->RedosledPojmova);
+                   $nizPojmova = $kreiranjeAsocijacije->popunjenaPolja->nizPojmova;
+                   }
                    
                foreach ($polja as $str){ //pravimo svako dugme ponaosob
-                  
+                   $popunjenoPolje = '';
+                   if(isset($kreiranjeAsocijacije->asocijacija->id) 
+                           && $poljeRedosledIter !== false){
+                   $popunjenoPolje = $nizPojmova[array_search($poljeRedosledIter->current(),
+                           array_column($nizPojmova, 'id'))]['sadrzaj'];
+                   $poljeRedosledIter->next();
+                   }
+                   
                    $field->model = $str;
                      $field->options = ['class' => 'pojamwrap '];
                    $field->label($str->naziv);
@@ -47,7 +73,7 @@ use yii\widgets\ActiveForm;
                        $field->options = ['class' => 'Resenje pojamwrap'];
                      echo  $field->textInput(
                                ['id' => 'Resenje', 'class' => 'tekstPolje'
-                                   ,'value' => '']);
+                                   ,'value' => $popunjenoPolje]);
                        
                    }else if(preg_match('/\d/', $str->naziv)){
                        $broj = implode(preg_grep('/\d/', str_split($str->naziv)));
@@ -58,7 +84,7 @@ use yii\widgets\ActiveForm;
                                (['data-value' => $broj
                                , 'id' => $str->naziv
                                , 'class' => $tip
-                               , 'value' => '']);
+                               , 'value' => $popunjenoPolje]);
                    }else{ //ako je samo A, B, C... onda pravi polje za unos
                        
                        $field->options = [
@@ -68,7 +94,7 @@ use yii\widgets\ActiveForm;
                         echo  $field->textInput([
                             'id' => $str->naziv,
                             'class' => 'podpolje',
-                            'value' => ''
+                            'value' => $popunjenoPolje
                         ]);      
                    }
                 }
@@ -81,5 +107,19 @@ use yii\widgets\ActiveForm;
     $this->registerJsFile('@web/js/korisnicki-alati/kreiranjeIgre.js',
             ['depends' => [\yii\web\JqueryAsset::className()]]);
     $this->registerCssFile('@web/css/korisnicki-alati/kreiranjeIgre.css');
+    $this->registerJs("$('#nazad').on('click', function(){"
+            . "$.post(window.location, {nazad: 1}).fail("
+            . "function(xhr, status, error){"
+            . "console.log(xhr);"
+            . "})});"
+            . "$('#napred').on('click', function(){"
+            . "$.post(window.location, {napred: 1}).fail("
+            . "function(xhr, status, error){"
+            . "console.log(xhr);"
+            . "})});");
 
-
+/* @var $asocijacija app\models\asocijacija */
+function nadjiPozicijuAsoc($asocijacija, $kreiranjeAsocijacije){
+    return array_search($asocijacija->id
+            , array_column($kreiranjeAsocijacije->AsocijacijeUIgri, 'id')) + 1;
+}

@@ -41,9 +41,7 @@ class IgraController extends \yii\web\Controller
         
         $TrenutnaAsocijacija = $this->vratiAsocijaciju( // odaberi odredjenu asocijaciju
                   $modelResena_igra->igra->id
-                , intval($modelResena_igra->resene_asocijacije)); 
-        
-        
+                , intval($modelResena_igra->resene_asocijacije));
         
         $resenaAsocijacija = (new \app\models\ResenaAsocijacija()) //napravi ili preuzmi model resene asocijacije
                 ->proveriVezu($TrenutnaAsocijacija->asocijacija_id
@@ -70,9 +68,6 @@ class IgraController extends \yii\web\Controller
             $this->refresh();
            
         }
-        
-        
-        
         return $this->render('index'
                 ,['modelPolje' =>  $polje, 'nizPojam' => $Nosilac, 'modelResAsoc'
                     => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
@@ -82,10 +77,16 @@ class IgraController extends \yii\web\Controller
     public function actionMojeigre(){
         $reseneIgreModeli = (new \app\models\ResenaIgra)->vratiSveReseneIgre(\yii::$app->user->id);
         $igraAsocijacijeObjekt = new \app\models\IgraAsocijacija();
+        $sopstveneIgre = $this->vratiSopstveneIgre();
         return $this->render('mojeIgre',['reseneIgreModeli' => $reseneIgreModeli
-                ,'igraAsocijacije' => $igraAsocijacijeObjekt]);
+                ,'igraAsocijacije' => $igraAsocijacijeObjekt
+                , 'sopstveneIgre' =>$sopstveneIgre]);
     }
      
+    private function vratiSopstveneIgre(){
+        return (new Igra)->vratiSopstveneIgre(\yii::$app->user->id);
+    }
+    
     private function poveziNepovezanuIgru($igra, $korisnik_id){
         $nepovezanaIgra = $igra->vratiNepovezaneIgre($korisnik_id)
                 ->getModels();

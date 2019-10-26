@@ -133,4 +133,14 @@ class Asocijacija extends \yii\db\ActiveRecord
         $this->resenje_id = $pojmoviIds[0];
         return $this->save() ? $this : false;
     }
+    
+    public function vratiSveAsocijacijeIgre($igraId){
+        $query = self::find()->select('asocijacija.*')->from('asocijacija')
+                ->leftJoin('igra_asocijacija', 'asocijacija.id = asocijacija_id')
+                ->where('igra_id = ' . $igraId)->orderBy('id');
+        $provider = new \yii\data\ActiveDataProvider([
+            'query' => $query
+        ]);
+        return $provider->getModels();
+    }
 }

@@ -30,8 +30,8 @@ class KorisnickiAlatiController extends \yii\web\Controller
         return $this->render('kreiranjeIgre', ['igra' => $igra ,'kategorije' => $kategorija->vratiKategorijeNiz()]); 
     }
     
-    public function actionKreiranjeasocijacije($trenIgra = false, $nova = false){
-        if($nova && $trenIgra > -1){
+    public function actionKreiranjeasocijacije($trenIgra = false, $nova = false, $trenAsoc = false){
+        if($nova && $trenIgra > 0){
             return $this->redirect(\yii\helpers\Url::to(['kreiranjeasocijacije' , 'trenIgra' => $trenIgra]));
         }
         if($trenIgra === false){
@@ -45,14 +45,48 @@ class KorisnickiAlatiController extends \yii\web\Controller
         $kreiranjeAsocijacije = new kreiranjeAsocijacije();
         $kreiranjeAsocijacije->igra = $igra;
         $kreiranjeAsocijacije->asocijacija = (new \app\models\Asocijacija());
+        $kreiranjeAsocijacije->AsocijacijeUIgri = $kreiranjeAsocijacije
+                ->asocijacija->vratiSveAsocijacijeIgre($igra->id);
+        
+        if(\yii::$app->request->post('nazad' , 0) === '1'){ 
+            /*ako je dugme nazad kliknuto, izvrsi preusmerenje sa get 
+             * parametrima u skladu sa koje asocijacije je korisnik dosao*/
+            $trenAsoc = $kreiranjeAsocijacije
+                    ->nadjiRedAsocijacije($trenAsoc, 'nazad');
+            return $this->redirect(\yii\helpers\Url::to(
+                    ['kreiranjeasocijacije' , 'trenIgra' 
+                         => $trenIgra, ('' . $trenAsoc !== false 
+                            ? 'trenAsoc' : '') => $trenAsoc]));
+        }else if(\yii::$app->request->post('napred' , 0) === '1'){
+            
+             $trenAsoc = $kreiranjeAsocijacije
+                    ->nadjiRedAsocijacije($trenAsoc, 'napred');
+            return $this->redirect(\yii\helpers\Url::to(
+                     ['kreiranjeasocijacije' , 'trenIgra' => $trenIgra
+                    , ('' . $trenAsoc !== false ? 'trenAsoc' : '') 
+                         => $trenIgra, 'trenAsoc' => $trenAsoc]));
+        }
+        
+        if($trenAsoc){
+            $kreiranjeAsocijacije->popunjenaPolja = $pojam->traziPojmove($trenAsoc);
+            $kreiranjeAsocijacije->asocijacija = (new \app\models\Asocijacija)
+                    ->findOne($trenAsoc);
+        }
+        
         $rezultatUpisaUBazu = '';
         if(\yii::$app->request->post('Polje',false)){
             $kreiranjeAsocijacije->sadrzajPoljaNiz = \yii::$app->request->post('Polje')['naziv'];
             $rezultatUpisaUBazu = $kreiranjeAsocijacije
                     ->stvoriAsocijacijuUBazi(\yii::$app->user->id);
+            unset($kreiranjeAsocijacije->asocijacija);
+           
         }
         
+        
+        
         return $this->render('kreiranjeAsocijacije', ['polja' => $nizPolja,
-            'sablon' => $sablon, 'pojam' => $pojam, 'uspesnost' => $rezultatUpisaUBazu, 'nova' => $nova]);
+            'sablon' => $sablon, 'pojam' => $pojam
+                , 'uspesnost' => $rezultatUpisaUBazu, 'nova' => $nova
+                , 'kreiranjeAsocijacije' => $kreiranjeAsocijacije]);
     }
 }
