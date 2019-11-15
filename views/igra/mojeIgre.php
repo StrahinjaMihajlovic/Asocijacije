@@ -29,7 +29,12 @@ $this->title = 'Moje igre';
             $osobine = $igra->attributes;
         ?>
         <div id ='<?php echo $osobine['naziv']?>' class="igre">
-            <h2><?php echo $osobine['naziv']?></h2>
+            <h2 style='display: inline'><?php echo $osobine['naziv']?></h2>
+            <?php echo Html::a('Dopuni ili izmeni', yii\helpers\Url::to(
+                    ['korisnicki-alati/kreiranjeasocijacije'
+                        , 'trenIgra' => $osobine['id']])
+                    , ['class' => "btn btn-default"]); 
+            ?>
         <p>Kategorija: <?php echo $igra->kategorija->naziv ?></p>
         <p>Aktivna: <?php echo $osobine['aktivna'] ?></p>
         <p>Broj igranja: <?php echo $osobine['broj_igranja'] ?></p>

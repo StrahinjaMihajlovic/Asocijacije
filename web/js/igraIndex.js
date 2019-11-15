@@ -5,7 +5,9 @@
  */
 function posaljiPost(nazivPolja){
     console.log(nazivPolja.data.nazivPolja);
-    $.post(window.location, {kliknuto : nazivPolja.data.nazivPolja});
+    $.post(window.location, {kliknuto : nazivPolja.data.nazivPolja}).done(function(data){
+         $('.x_panel').parent().html(data);
+    });
 }
 
 function posaljiPostTekst(){
@@ -13,11 +15,10 @@ function posaljiPostTekst(){
     console.log(a);
      $.post(window.location, {polje : a["polje"], unos : a["unos"]}).fail(function(xhr, status, error){
          console.log(xhr); // note za sebe: ovako se prikazuje greska kad php nece da je prikaze
-     }).done(function(xhr){
-         console.log(xhr);
+     }).done(function(data){
+         $('.container').parent().html(data);
      });
 }
-
 
 $('#Resenje').css({'top': $('#Resenje').parent().height()/2,'left': $('#Resenje').parent().width()/2.5});
 $('#Resenje').on('focusout', posaljiPostTekst);

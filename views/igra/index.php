@@ -69,20 +69,17 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
         <div class="clearfix"></div>
     </div>
     <div class ="x_content">
-        <?php Pjax::begin([
-            'enablePushState' => false
-        ])?>
+        
         <?php //$form = ActiveForm::begin(['options' =>['style'=> 'position: relative']])?>
         
         <?php if(strstr($modelResAsoc->otvorena_polja, 'resenje')):?>
         <div id='cestitka'>
             <h1>Cestitamo, resili ste asocijaciju!</h1>
-            <a href="<?php echo \yii\helpers\Url::to(['igra/index']);?>">
+            <a href="<?php echo \yii\helpers\Url::to(['igra/index', 'Igra' => $modelIgra->id]);?>">
                 <button class="btn btn-dark">Predji na novu igru</button>
             </a>
         </div>
         <?php endif;?>
-        
             <?php
                 $modeli = $modelPolje->getModels();
                 
@@ -116,6 +113,6 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
                 $this->registerJsFile('@web/js/igraIndex.js',['depends' => [\yii\web\JqueryAsset::className()]]);
                
                 ?>
-        <?php Pjax::end()?>
+       
     </div>
  </div>

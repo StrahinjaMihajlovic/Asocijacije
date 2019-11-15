@@ -33,7 +33,7 @@ class IgraController extends \yii\web\Controller
         }
         
         $sablon_igreDimenzije = (new SablonIgre())
-                ->vratiSablon($igra->vratiIgru($modelResena_igra->igra->id)->getModels()[0]->sablon_igre_id)
+                ->vratiSablon($igra->vratiIgru($modelResena_igra->igra->id)->sablon_igre_id)
                 ->vratiSablonKaoNiz();
         
         $pojam = new \app\models\Pojam();
@@ -51,8 +51,7 @@ class IgraController extends \yii\web\Controller
                 $TrenutnaAsocijacija->asocijacija_id);
         
         if(\yii::$app->request->post('kliknuto', false)){
-            $this->Kliknuto(\yii::$app->request->post('kliknuto'), $resenaAsocijacija); 
-            $this->refresh();
+            $this->Kliknuto(\yii::$app->request->post('kliknuto'), $resenaAsocijacija);
         }
        
         if(\yii::$app->request->post('polje', false) && \yii::$app->request->post('unos', false)){
@@ -65,13 +64,19 @@ class IgraController extends \yii\web\Controller
             $this->otvoriPodResenje($unos[0], $unos[1]
                     , $resenaAsocijacija, $sablon_igreDimenzije, $Nosilac);
             }
-            $this->refresh();
-           
         }
+        if(\yii::$app->request->isAjax){/*
+            return $this->renderAjax('index'
+                ,['modelPolje' =>  $polje, 'nizPojam' => $Nosilac, 'modelResAsoc'
+                    => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
+                , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id)]);*/
+            return $this->refresh();
+        }
+        
         return $this->render('index'
                 ,['modelPolje' =>  $polje, 'nizPojam' => $Nosilac, 'modelResAsoc'
                     => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
-                , 'idIgre' => $igra->vratiIgru($modelResena_igra->igra->id)]);
+                , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id)]);
     }
     
     public function actionMojeigre(){

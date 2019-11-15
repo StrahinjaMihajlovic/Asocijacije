@@ -164,13 +164,13 @@ class Igra extends \yii\db\ActiveRecord
     
     public function vratiIgru($igra_id){
         //TODO dodati proveru da li je igra povezana sa ulogovanim korisnikom
-         $query = Igra::find()->select('*')->from('igra')->where('id = ' . $igra_id);
+         $query = Igra::find()->select('*')->from('igra')->where('id = ' . $igra_id)->one();
         
         $provider = new ActiveDataProvider([
                 'query' => $query
                 ]);
             
-         return $provider;
+         return $query;
     
     }
     

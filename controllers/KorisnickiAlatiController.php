@@ -40,7 +40,7 @@ class KorisnickiAlatiController extends \yii\web\Controller
         $sablon = (new SablonIgre())->vratiSablon(2);
         $nizPolja = (new Polje())->vratiSvaPoljaSablona($sablon->id);
         $pojam = new \app\models\Pojam();
-        $igra = (new \app\models\Igra())->vratiIgru($trenIgra)->getModels()[0];
+        $igra = (new \app\models\Igra())->vratiIgru($trenIgra);
         
         $kreiranjeAsocijacije = new kreiranjeAsocijacije();
         $kreiranjeAsocijacije->igra = $igra;
