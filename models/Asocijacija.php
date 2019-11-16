@@ -124,10 +124,7 @@ class Asocijacija extends \yii\db\ActiveRecord
     }
     
     public function dodajAsocijacijuUBazi($pojmoviIds, $korisnikId){
-        $pojmoviIdsTekst = '';
-        foreach ($pojmoviIds as $pojamTekst){
-        $pojmoviIdsTekst .= $pojmoviIdsTekst === '' ? $pojamTekst: ', ' .$pojamTekst; 
-        }
+        $pojmoviIdsTekst = $this->srediIdPojmovaKaoTekst($pojmoviIds);
         $this->setAttribute('kreator_id' , $korisnikId);
         $this->setAttribute('pojmovi_ids', $pojmoviIdsTekst);
         $this->resenje_id = $pojmoviIds[0];
@@ -142,5 +139,19 @@ class Asocijacija extends \yii\db\ActiveRecord
             'query' => $query
         ]);
         return $provider->getModels();
+    }
+    
+    public function azurirajTrenAsoc($pojmoviIds){
+        $pojmoviIdsTekst = $this->srediIdPojmovaKaoTekst($pojmoviIds);
+        $this->setAttribute('pojmovi_ids', $pojmoviIdsTekst);
+        return $this->save() ? $this : false;
+    }
+    
+    protected function srediIdPojmovaKaoTekst($pojmoviIds){
+        $pojmoviIdsTekst = '';
+        foreach ($pojmoviIds as $pojamTekst){
+            $pojmoviIdsTekst .= $pojmoviIdsTekst === '' ? $pojamTekst: ', ' .$pojamTekst; 
+        }
+        return $pojmoviIdsTekst;
     }
 }

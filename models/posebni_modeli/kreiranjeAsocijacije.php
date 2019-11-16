@@ -43,23 +43,22 @@ class kreiranjeAsocijacije extends \yii\base\Model{
        $this->addError($attribute, 'Ista takva asocijacija vec postoji');*/
    }
    
+   public function azurirajAsocUBazi($korisnikId,$idAsoc = false){
+       $pojamNizIds = $this->srediUnetaPolja($korisnikId);
+       if($pojamNizIds === false){
+           return false;
+       }
+       return $this->asocijacija->azurirajTrenAsoc($pojamNizIds);
+   }
+   
    public function stvoriAsocijacijuUBazi($korisnikId){
-       $pojamModel = new Pojam();
-       $pojamNizIds = array();
        
-       if(array_search('', $this->sadrzajPoljaNiz) !== false){//proverava da li su sva polja uneta, privremeno, ukloniti posle
+       $pojamNizIds = $this->srediUnetaPolja($korisnikId);
+       
+       if($pojamNizIds === false){
            return false;
        }
        
-       foreach ($this->sadrzajPoljaNiz as $sadrzaj){
-           $postoji =$pojamModel->daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId);
-           
-           if($postoji){
-               array_push($pojamNizIds, $postoji);
-           }else{
-               return false;
-           }
-       }
        $rezultatAsoc = $this->asocijacija->dodajAsocijacijuUBazi($pojamNizIds, $korisnikId);
        //vraca true ako su se i asocijacija i veza igre i asocijacije napravile u bazi podataka
        return (new IgraAsocijacija())->napraviUBazi
@@ -90,5 +89,23 @@ class kreiranjeAsocijacije extends \yii\base\Model{
        }
        return $rez;
    }
-    
+    protected function srediUnetaPolja($korisnikId){
+        $pojamModel = new Pojam();
+        $pojamNizIds = array();
+       
+       if(array_search('', $this->sadrzajPoljaNiz) !== false){//proverava da li su sva polja uneta, privremeno, ukloniti posle
+           return false;
+       }
+       
+       foreach ($this->sadrzajPoljaNiz as $sadrzaj){
+           $postoji =$pojamModel->daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId);
+           
+           if($postoji){
+               array_push($pojamNizIds, $postoji);
+           }else{
+               return false;
+           }
+       }
+       return $pojamNizIds;
+    }
 }

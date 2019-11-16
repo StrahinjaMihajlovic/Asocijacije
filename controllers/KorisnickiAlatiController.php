@@ -75,11 +75,18 @@ class KorisnickiAlatiController extends \yii\web\Controller
         
         $rezultatUpisaUBazu = '';
         if(\yii::$app->request->post('Polje',false)){
-            $kreiranjeAsocijacije->sadrzajPoljaNiz = \yii::$app->request->post('Polje')['naziv'];
-            $rezultatUpisaUBazu = $kreiranjeAsocijacije
+            $kreiranjeAsocijacije->sadrzajPoljaNiz 
+                    = \yii::$app->request->post('Polje')['naziv'];
+            $rezultatUpisaUBazu = \yii::$app->request->get('trenAsoc', false) 
+                    ? $kreiranjeAsocijacije
+                    ->azurirajAsocUBazi(\yii::$app->user->id)
+                    : $kreiranjeAsocijacije
                     ->stvoriAsocijacijuUBazi(\yii::$app->user->id);
-            unset($kreiranjeAsocijacije->asocijacija);
-           
+            if(!$trenAsoc){
+                unset($kreiranjeAsocijacije->asocijacija);
+            }else{
+                return $this->refresh();
+            }
         }
         
         
