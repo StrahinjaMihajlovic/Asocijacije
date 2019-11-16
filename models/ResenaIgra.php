@@ -89,7 +89,18 @@ class ResenaIgra extends \yii\db\ActiveRecord
         return $provider->getModels()[0];
     }
     
-    public function vratiSveReseneIgre($idKorisnika){
+    public function vratiBrojResenihIgara($idKorisnika){
+        $modeli = $this->vratiSveReseneIgreModeli($idKorisnika);
+        $igraAsocijacije = new IgraAsocijacija;
+        foreach ($modeli as $kljuc => $resena_igra){
+            if(intval($resena_igra->resene_asocijacije) === $igraAsocijacije->vratiSveAsocijacije($resena_igra->igra_id)->getCount()){
+                $modeli[$kljuc] = new \yii\helpers\UnsetArrayValue(); // radi unset a zatim array_merge
+            }
+        }
+        return count($modeli);
+    }
+    
+    public function vratiSveReseneIgreModeli($idKorisnika){
          $query = self::find()->select('*')->from('resena_igra')
                 ->where('korisnik_id = ' . $idKorisnika);
         $provider = new \yii\data\ActiveDataProvider([

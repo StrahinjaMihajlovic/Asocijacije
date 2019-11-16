@@ -47,3 +47,10 @@ $('.B').each(function(){
     });
     $(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
 });
+
+$('.container').on('click', '#novaIgra',function(){
+   $.post(window.location, {novaIgra : true}).done(function(data){
+       $('.x_panel').parent().html(data);
+       
+   });
+});

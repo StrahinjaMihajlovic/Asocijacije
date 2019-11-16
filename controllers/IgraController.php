@@ -18,13 +18,14 @@ class IgraController extends \yii\web\Controller
         $korisnik_id = \yii::$app->user->id 
                 ? \yii::$app->user->id : 0;
         
-        $modelResena_igra = $Igra
+        $modelResena_igra = $Igra && !\yii::$app->request->post('novaIgra', false)
                 ? (new \app\models\ResenaIgra())
                 ->vratiResenuIgru($Igra, $korisnik_id)
                 : $this->poveziNepovezanuIgru($igra, $korisnik_id);
         
         if($modelResena_igra === false){
-            return $this->render('sveResene');
+            return \yii::$app->request->isAjax ? $this->renderAjax('sveResene')
+                    : $this->render('sveResene');
         }
 
          if(!$Igra){
@@ -80,7 +81,7 @@ class IgraController extends \yii\web\Controller
     }
     
     public function actionMojeigre(){
-        $reseneIgreModeli = (new \app\models\ResenaIgra)->vratiSveReseneIgre(\yii::$app->user->id);
+        $reseneIgreModeli = (new \app\models\ResenaIgra)->vratiSveReseneIgreModeli(\yii::$app->user->id);
         $igraAsocijacijeObjekt = new \app\models\IgraAsocijacija();
         $sopstveneIgre = $this->vratiSopstveneIgre();
         return $this->render('mojeIgre',['reseneIgreModeli' => $reseneIgreModeli
