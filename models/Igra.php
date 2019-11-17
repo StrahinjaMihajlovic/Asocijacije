@@ -191,7 +191,7 @@ class Igra extends \yii\db\ActiveRecord
         return $provider->getModels();
     }
     
-    public function  proveriDaLiSuSveIgreResene($korisnik_id){
+    public function  proveriDaLiSuSveIgreResene($korisnik_id){ //za sad nema funkciju u aplikaciji, moze biti korisno za kasnije
         $brojIgara = intval(self::find()->select('*')->where('kreator_id <> '. $korisnik_id)->count());
         $brojResenihIgara = (new ResenaIgra)->vratiBrojResenihIgara($korisnik_id);
         return $brojIgara >= $brojResenihIgara;

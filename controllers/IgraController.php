@@ -27,7 +27,11 @@ class IgraController extends \yii\web\Controller
             return \yii::$app->request->isAjax ? $this->renderAjax('sveResene')
                     : $this->render('sveResene');
         }
-
+        
+        if($Igra !== $modelResena_igra->igra_id){
+            return $this->redirect(\yii\helpers\Url::to(['igra/index', 'Igra' => $modelResena_igra->igra_id]));
+        }
+        
          if(!$Igra){
             return $this->redirect(
                     ['igra/index', 'Igra' => $modelResena_igra->igra->id]);
