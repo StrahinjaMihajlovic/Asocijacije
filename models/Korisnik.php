@@ -13,6 +13,7 @@ use Yii;
  * @property string $email
  * @property string $reset_kod
  * @property string $auth_key
+ * @property int    $aktivan
  */
 class Korisnik extends \yii\db\ActiveRecord
 {
@@ -50,8 +51,15 @@ class Korisnik extends \yii\db\ActiveRecord
             'email' => 'Email',
             'reset_kod' => 'Reset Kod',
             'auth_key' => 'Auth Key',
+            'aktivan' => 'Aktivan'
         ];
         
+    }
+    
+    public function scenarios() {
+       $scenariji = parent::scenarios();
+       $scenariji['signup'] = ['korisnicko_ime', 'lozinka', 'email'];
+       return $scenariji;
     }
     
     public function beforeSave($insert)
@@ -59,9 +67,12 @@ class Korisnik extends \yii\db\ActiveRecord
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
                 $this->auth_key = Yii::$app->security->generateRandomString();
+                $this->aktivan = 0;
             }
             return true;
         }
         return false;
     }
+    
+    
 }

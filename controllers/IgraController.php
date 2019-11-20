@@ -70,6 +70,7 @@ class IgraController extends \yii\web\Controller
                     , $resenaAsocijacija, $sablon_igreDimenzije, $Nosilac);
             }
         }
+        
         if(\yii::$app->request->isAjax){/*
             return $this->renderAjax('index'
                 ,['modelPolje' =>  $polje, 'nizPojam' => $Nosilac, 'modelResAsoc'

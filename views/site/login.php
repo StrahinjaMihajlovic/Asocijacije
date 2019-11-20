@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php ActiveForm::end(); ?>
 
     <div class="col-lg-offset-1" style="color:#999;">
-        Ako nemate nalog, mozete ga napraviti klikom na <a href="<?php yii\helpers\Url::to() ?>">link</a>.<br>
+        Ako nemate nalog, mozete ga napraviti klikom na <a href="<?php echo yii\helpers\Url::to(['site/signup']); ?>">link</a>.<br>
        
     </div>
 </div>

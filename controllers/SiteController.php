@@ -125,4 +125,13 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+    
+    public function actionSignup(){
+        $korisnik = new \app\models\Korisnik();
+        $korisnik->scenario = 'signup';
+        if($korisnik->load(\yii::$app->request->post('korisnik')) && $korisnik->save()){
+            return $this->render('signup_uspeh');
+        }
+        return $this->render('signup', ['model' => $korisnik]);
+    }
 }
