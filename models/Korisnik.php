@@ -34,7 +34,7 @@ class Korisnik extends \yii\db\ActiveRecord
             [['korisnicko_ime', 'lozinka', 'email'], 'required'],
             [['reset_kod', 'auth_key'], 'string'],
             [['korisnicko_ime', 'email'], 'string', 'max' => 30],
-            [['lozinka'], 'string', 'max' => 50],
+            [['lozinka'], 'string', 'max' => 60],
             [['email'], 'unique'],
         ];
     }
@@ -58,7 +58,7 @@ class Korisnik extends \yii\db\ActiveRecord
     
     public function scenarios() {
        $scenariji = parent::scenarios();
-       $scenariji['signup'] = ['korisnicko_ime', 'lozinka', 'email'];
+       $scenariji['signup'] = ['korisnicko_ime', 'email'];
        return $scenariji;
     }
     
@@ -74,5 +74,16 @@ class Korisnik extends \yii\db\ActiveRecord
         return false;
     }
     
+    public function noviAuthKod(){
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
     
+    public function noviResetKod(){
+        $this->reset_kod = \yii::$app->security->generateRandomString();
+    }
+    
+    public function novaLozinka($lozinka){
+        $this->lozinka = \yii::$app->security
+                    ->generatePasswordHash($lozinka);
+    }
 }

@@ -75,7 +75,7 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
-        $model = new LoginForm();
+        $model = new LoginForm;
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
@@ -126,12 +126,80 @@ class SiteController extends Controller
         return $this->render('about');
     }
     
-    public function actionSignup(){
+    public function actionSignup($kod = false){
         $korisnik = new \app\models\Korisnik();
+        
+        if(strlen($kod) > 32){
+            $unos = str_split($kod,32);
+            $korisnik = $korisnik->findOne($unos[1]);
+            if($unos[0] === $korisnik->auth_key){
+                $korisnik->aktivan = 1;
+                $korisnik->noviAuthKod();
+                if($korisnik->save()){
+                    \yii::$app->user->login(\app\models\User::findOne($unos[1]));
+                }
+                return $this->redirect(\yii\helpers\Url::toRoute(['site/index']));
+            }
+        }
+        
+        
         $korisnik->scenario = 'signup';
-        if($korisnik->load(\yii::$app->request->post('korisnik')) && $korisnik->save()){
+        if($korisnik->load(\yii::$app->request->post())){
+            $korisnik->novaLozinka($korisnik->lozinka);
+            if(!$korisnik->save()){
+                return $this->render('signup', ['model' => new \app\models\Korisnik()]);
+            }
+             \yii::$app->mailer->compose()->setFrom('strale.develop@gmail.com')
+                    ->setTo($korisnik->email)->setSubject('Registracija')
+                    ->setTextBody("Hvala na registraciji,\n "
+                            . "Registrujte se na sledecem linku: " 
+                            . (new \yii\web\UrlManager)->createAbsoluteUrl(['site/signup', 'kod' 
+                                => $korisnik->auth_key.$korisnik->id]))->send();
+            
             return $this->render('signup_uspeh');
         }
-        return $this->render('signup', ['model' => $korisnik]);
+        return $this->render('signup', ['model' => new \app\models\Korisnik()]);
+    }
+    
+    public function actionResetLozinke($kod = false){
+        $unos = $kod ? str_split($kod,32)
+                :\yii::$app->request->post('Korisnik', false);
+        if(!$unos){
+            return $this->render('reset-lozinke',['potvrdjeno' => 0, 'model' => new \app\models\Korisnik()]);
+        }
+        
+        if(isset(\yii::$app->request->post('Korisnik')['lozinka'])){
+            $korisnik = new \app\models\Korisnik();
+            $korisnik = $korisnik->findOne($unos[1]);
+            if($unos[0] === $korisnik->reset_kod){
+                $korisnik->novaLozinka(\yii::$app->request->post('Korisnik')['lozinka']);
+                $korisnik->noviResetKod();
+                $korisnik->update(true, ['lozinka', 'reset_kod']);
+                return $this->redirect(\yii\helpers\Url::to(['site/login']));
+            }
+            return $this->redirect(\yii\helpers\Url::to(['index']));
+        }
+        
+        if($kod){
+            $korisnik = \app\models\User::findOne($unos[1]);
+            if($korisnik->reset_kod === $unos[0]){
+                return $this->render('reset-lozinke', ['potvrdjeno' => false
+                    , 'novaLozinka' => true, 'model' => new \app\models\Korisnik()]);
+            }
+            return $this->render('reset-lozinke',['kodNevazeci' => true]);
+        }
+        
+        $korisnik = \app\models\Korisnik::findOne(['email' => $unos]);
+        if(!$korisnik->reset_kod){
+            $korisnik->noviResetKod();
+            $korisnik->update();
+        }
+        $uspesnost = \yii::$app->mailer->compose()->setFrom('strale.develop@gmail.com')
+                    ->setTo($korisnik->email)->setSubject('Reset lozinke')
+                    ->setTextBody("Zahtevali ste promenu lozinke,\n "
+                            . "Resetujte lozinku na sledecem linku: " 
+                            . (new \yii\web\UrlManager)->createAbsoluteUrl(['site/reset-lozinke', 'kod' 
+                                => $korisnik->reset_kod . $korisnik->id]))->send();
+        return $this->render('reset-lozinke', ['potvrdjeno' => $uspesnost]);
     }
 }

@@ -37,11 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
         </div>
-
     <?php ActiveForm::end(); ?>
 
     <div class="col-lg-offset-1" style="color:#999;">
         Ako nemate nalog, mozete ga napraviti klikom na <a href="<?php echo yii\helpers\Url::to(['site/signup']); ?>">link</a>.<br>
-       
+        Zaboravili lozinku? Resetujte istu na sledecem <a href="<?php echo yii\helpers\Url::to(['site/reset-lozinke']); ?>">linku</a>
     </div>
 </div>
