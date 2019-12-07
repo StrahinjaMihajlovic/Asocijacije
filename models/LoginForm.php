@@ -65,7 +65,7 @@ class LoginForm extends Model
         return false;
     }
 
-    public function proveriAktiviranost(){
+    public function proveriAktiviranost(){ //aktiviranost korisnika, neke radnje treba da se zabrane. Koristi se u login funkciji gore
         if($this->getUser()->aktivan)
             return true;
         return false;

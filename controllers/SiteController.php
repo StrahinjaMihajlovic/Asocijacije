@@ -164,13 +164,13 @@ class SiteController extends Controller
     public function actionResetLozinke($kod = false){
         $unos = $kod ? str_split($kod,32)
                 :\yii::$app->request->post('Korisnik', false);
-        if(!$unos){
+        if(!$unos){ //korisnik zahtevai interfejs za reset lozinke
             return $this->render('reset-lozinke',['potvrdjeno' => 0, 'model' => new \app\models\Korisnik()]);
         }
         
-        if(isset(\yii::$app->request->post('Korisnik')['lozinka'])){
+        if(isset(\yii::$app->request->post('Korisnik')['lozinka'])){ // ako je nova lozinka uneta
             $korisnik = new \app\models\Korisnik();
-            $korisnik = $korisnik->findOne($unos[1]);
+            $korisnik = $korisnik->findOne($unos[1]); //link mora da je sa mail-a
             if($unos[0] === $korisnik->reset_kod){
                 $korisnik->novaLozinka(\yii::$app->request->post('Korisnik')['lozinka']);
                 $korisnik->noviResetKod();
@@ -180,7 +180,7 @@ class SiteController extends Controller
             return $this->redirect(\yii\helpers\Url::to(['index']));
         }
         
-        if($kod){
+        if($kod){ // kliknut je link sa korisnikov mail-a
             $korisnik = \app\models\User::findOne($unos[1]);
             if($korisnik->reset_kod === $unos[0]){
                 return $this->render('reset-lozinke', ['potvrdjeno' => false
@@ -190,7 +190,7 @@ class SiteController extends Controller
         }
         
         $korisnik = \app\models\Korisnik::findOne(['email' => $unos]);
-        if(!$korisnik->reset_kod){
+        if(!$korisnik->reset_kod){ //definise reset kod ako je null
             $korisnik->noviResetKod();
             $korisnik->update();
         }

@@ -7,6 +7,7 @@ function posaljiPost(nazivPolja){
     console.log(nazivPolja.data.nazivPolja);
     $.post(window.location, {kliknuto : nazivPolja.data.nazivPolja}).done(function(data){
          $('.x_panel').parent().html(data);
+         podesavanjeElemenata();
     });
 }
 
@@ -16,12 +17,16 @@ function posaljiPostTekst(){
      $.post(window.location, {polje : a["polje"], unos : a["unos"]}).fail(function(xhr, status, error){
          console.log(xhr); // note za sebe: ovako se prikazuje greska kad php nece da je prikaze
      }).done(function(data){
-         $('.container').parent().html(data);
+         $('.x_panel').parent().html(data);
+         podesavanjeElemenata();
      });
 }
 
+podesavanjeElemenata();
+
+function podesavanjeElemenata(){
 $('#Resenje').css({'top': $('#Resenje').parent().height()/2,'left': $('#Resenje').parent().width()/2.5});
-$('#Resenje').on('focusout', posaljiPostTekst);
+$('#Resenje').on('focusout',posaljiPostTekst);
 
 $('#A').css({'top': ($('#Resenje').position().top - $('#Resenje').outerHeight(true)), 
     'left': ($('#Resenje').position().left - 0.8 * $('#A').width())});
@@ -30,7 +35,7 @@ $('#A').on('focusout', posaljiPostTekst);
 
 $('#B').css({'top': ($('#Resenje').position().top -  $('#Resenje').outerHeight(true)), 
     'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
-$('#B').on('focusout', posaljiPostTekst);
+$('#B').on('focusout',posaljiPostTekst);
 $('.A').each(function(){
     $(this).css({
        'top' : $('#A').position().top -( $(this).data('value') * $(this).outerHeight(true)),
@@ -54,3 +59,4 @@ $('.container').on('click', '#novaIgra',function(){
        
    });
 });
+}

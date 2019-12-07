@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 /* @var $modelPojam yii\data\ActiveDataProvider */
 /* @var $nizPojam app\models\Pojam\nosilacPodatka */
 /* @var $modelResAsoc app\models\ResenaAsocijacija */
+/* @var $modelResIgra app\models\ResenaIgra*/
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -72,12 +73,18 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
         
         <?php //$form = ActiveForm::begin(['options' =>['style'=> 'position: relative']])?>
         
-        <?php if(strstr($modelResAsoc->otvorena_polja, 'resenje')):?>
+        <?php if(strstr($modelResAsoc->otvorena_polja, 'resenje') && (isset($modelResIgra)
+                && (count($modelIgra->getAsocijacijas()->all()) === intval($modelResIgra->resene_asocijacije)))):?>
+        <div id='cestitka'>
+            <h1>Cestitamo, resili ste ovu igru!</h1>
+             <button  class="btn btn-dark" id ='novaIgra'>Predji na novu igru</button>
+          
+        </div>
+        <?php elseif(strstr($modelResAsoc->otvorena_polja, 'resenje')):?>
         <div id='cestitka'>
             <h1>Cestitamo, resili ste asocijaciju!</h1>
             
-                <button class="btn btn-dark" id ='novaIgra'>Predji na novu igru</button>
-          
+            <a href="" class='btn btn-info' id='novaAsoc'>Predji na novu asocijaciju</a>
         </div>
         <?php endif;?>
             <?php

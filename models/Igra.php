@@ -97,7 +97,7 @@ class Igra extends \yii\db\ActiveRecord
      */
     public function getIgraAsocijacijas()
     {
-        return $this->hasMany(IgraAsocijacija::className(), ['igra_id' => 'id']);
+        return $this-hasMany(IgraAsocijacija::className(), ['igra_id' => 'id']);
     }
 
     /**

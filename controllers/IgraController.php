@@ -28,7 +28,7 @@ class IgraController extends \yii\web\Controller
                     : $this->render('sveResene');
         }
         
-        if($Igra !== $modelResena_igra->igra_id){
+        if(($Igra !== $modelResena_igra->igra_id) && \yii::$app->request->post('sledecaAsoc', false)){
             return $this->redirect(\yii\helpers\Url::to(['igra/index', 'Igra' => $modelResena_igra->igra_id]));
         }
         
@@ -71,18 +71,20 @@ class IgraController extends \yii\web\Controller
             }
         }
         
-        if(\yii::$app->request->isAjax){/*
+        if(\yii::$app->request->isAjax){
             return $this->renderAjax('index'
                 ,['modelPolje' =>  $polje, 'nizPojam' => $Nosilac, 'modelResAsoc'
                     => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
-                , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id)]);*/
-            return $this->refresh();
+                , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id)
+                    , 'modelResIgra' => $modelResena_igra]);
+           
         }
         
         return $this->render('index'
                 ,['modelPolje' =>  $polje, 'nizPojam' => $Nosilac, 'modelResAsoc'
                     => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
-                , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id)]);
+                , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id),
+                    'modelResIgra' => $modelResena_igra]);
     }
     
     public function actionMojeigre(){
