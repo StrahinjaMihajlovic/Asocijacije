@@ -40,7 +40,9 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Napravi novu igru', 'url' => ['/korisnicki-alati/kreiranjeigre']],
             ['label' => 'Moje igre', 'url' => ['/igra/mojeigre']],
-            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Administracija', 'url' 
+                => (new yii\web\UrlManager())
+                ->createAbsoluteUrl('administratorske-alatke/default/index')],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (

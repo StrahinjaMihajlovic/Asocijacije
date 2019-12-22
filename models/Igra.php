@@ -150,9 +150,11 @@ class Igra extends \yii\db\ActiveRecord
          return $provider;
     }
     
-    public function vratiNepovezaneIgre($korisnik_id){ // TODO implementirati da igrac ne moze da igra sopstvene igre sa korisnik_id
+    public function vratiNepovezaneIgre($korisnik_id){ // biramo igru koju igrac nije pre igrao i koja nije njegova
         $query = Igra::find()->select('*')->from('igra')->leftJoin('resena_igra', 'igra.id ='
-                . 'resena_igra.igra_id')->where('resena_igra.igra_id is null and kreator_id <> ' . $korisnik_id);
+                . 'resena_igra.igra_id')->where('not exists(select '
+                        . "* from resena_igra where resena_igra.korisnik_id = $korisnik_id)"
+                        .' and igra.kreator_id <> ' . $korisnik_id);
         
          $provider = new ActiveDataProvider([
                 'query' => $query,

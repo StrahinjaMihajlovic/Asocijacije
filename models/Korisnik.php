@@ -86,4 +86,11 @@ class Korisnik extends \yii\db\ActiveRecord
         $this->lozinka = \yii::$app->security
                     ->generatePasswordHash($lozinka);
     }
+    
+    public function vratiSveKorisnikeSemSebe($korisnik_id){
+        $query = self::find()->select('')->where("id <> $korisnik_id");
+        return (new \yii\data\ActiveDataProvider([
+            'query' => $query
+        ]));
+    }
 }
