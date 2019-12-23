@@ -37,5 +37,20 @@ class KorisniciController extends \yii\web\Controller {
         
         return $this->render('izmeni', ['clan' => $korisnik]);
     }
+    public function actionKreiraj(){
+        $korisnik = new Korisnik();
+        $korisnik->setScenario('kreiranjeKorisnika');
+        if($korisnik->load(\yii::$app->request->post()) && $korisnik->validate()){
+            $korisnik->novaLozinka($korisnik->lozinka_uneta);
+            $korisnik->noviAuthKod();
+            $korisnik->noviResetKod();
+             return $korisnik->save() ? $this->redirect(['pregledaj', 'id' => $korisnik->id])
+                :$this->render('kreiraj',['korisnik'=>$korisnik]);
+        }
+        
+        return $this->render('kreiraj',['korisnik' => $korisnik]);
+        
+       
+    }
 }
 

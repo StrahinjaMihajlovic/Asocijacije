@@ -38,7 +38,9 @@ class Korisnik extends \yii\db\ActiveRecord
             [['korisnicko_ime', 'email'], 'string', 'max' => 30],
             [['lozinka'], 'string', 'max' => 60],
             [['email'], 'unique'],
-            [['lozinka_uneta'], 'string']
+            [['email'], 'email'],
+            [['lozinka_uneta'], 'string'],
+            [['lozinka_uneta'],'required', 'on' => 'kreiranjeKorisnika']
             
         ];
     }
@@ -65,6 +67,7 @@ class Korisnik extends \yii\db\ActiveRecord
        $scenariji = parent::scenarios();
        $scenariji['signup'] = ['korisnicko_ime', 'email'];
        $scenariji['promenaPodatakaAdmin'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan'];
+       $scenariji['kreiranjeKorisnika'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan'];
        return $scenariji;
     }
     

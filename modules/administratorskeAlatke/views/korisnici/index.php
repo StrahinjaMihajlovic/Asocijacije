@@ -11,6 +11,8 @@ $url = yii::$app->getAssetManager()->publish( yii::getAlias("@adminAlatke")
 
 ?>
 
+<?= Html::a('Kreiraj novog korisnika', ['kreiraj'], ['class' => 'btn btn-success'])?>
+
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
