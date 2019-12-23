@@ -30,9 +30,12 @@ $url = yii::$app->getAssetManager()->publish( yii::getAlias("@adminAlatke")
                 },
                 'izbrisi' => function ($url, $model, $key){
                     return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-trash']), $url,['title' => 'Izbrisi', 'data-method' => 'post']);
+                },
+                'izmeni'=> function ($url, $model, $key){
+                    return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-pencil']), $url,['title' => 'Izmeni', 'target' => '_blank']);
                 }
             ],
-                    'template' => '{pregledaj} {izbrisi}'
+                    'template' => '{pregledaj} {izmeni} {izbrisi}'
         ]
     ],
 ])?>

@@ -20,6 +20,8 @@ class Korisnik extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public $lozinka_uneta; // za prikaz trenutne lozinke kod admina i korisnika
+    
     public static function tableName()
     {
         return 'korisnik';
@@ -36,6 +38,8 @@ class Korisnik extends \yii\db\ActiveRecord
             [['korisnicko_ime', 'email'], 'string', 'max' => 30],
             [['lozinka'], 'string', 'max' => 60],
             [['email'], 'unique'],
+            [['lozinka_uneta'], 'string']
+            
         ];
     }
 
@@ -51,7 +55,8 @@ class Korisnik extends \yii\db\ActiveRecord
             'email' => 'Email',
             'reset_kod' => 'Reset Kod',
             'auth_key' => 'Auth Key',
-            'aktivan' => 'Aktivan'
+            'aktivan' => 'Aktivan',
+            'lozinka_uneta' => 'Lozinka'
         ];
         
     }
@@ -59,6 +64,7 @@ class Korisnik extends \yii\db\ActiveRecord
     public function scenarios() {
        $scenariji = parent::scenarios();
        $scenariji['signup'] = ['korisnicko_ime', 'email'];
+       $scenariji['promenaPodatakaAdmin'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan'];
        return $scenariji;
     }
     

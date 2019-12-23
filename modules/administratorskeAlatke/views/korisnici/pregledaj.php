@@ -19,7 +19,8 @@ use yii\widgets\DetailView;
             'korisnicko_ime',
             'email',
             'reset_kod',
-            'auth_key'
+            'auth_key',
+            'aktivan'
         ]
     ]) ?>
     

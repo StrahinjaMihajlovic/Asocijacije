@@ -23,5 +23,19 @@ class KorisniciController extends \yii\web\Controller {
                 ->renderAjax('pregledaj', ['model' => $korisnik])
                 :$this->render('pregledaj', ['model' => $korisnik]);
     }
+    public function actionIzmeni($id){
+        $korisnik = Korisnik::findOne($id);
+        $korisnik->setScenario('promenaPodatakaAdmin');
+        if(\yii::$app->request->post()){ 
+            $korisnik->load(\yii::$app->request->post());
+            if(isset($korisnik->lozinka_uneta) && $korisnik->lozinka_uneta !== ''){
+                $korisnik->novaLozinka($korisnik->lozinka_uneta);
+            }
+            $korisnik->update(true, ['korisnicko_ime', 'email', 'aktivan', 'lozinka']);
+            return $this->render('pregledaj',['model' => $korisnik]);
+        }
+        
+        return $this->render('izmeni', ['clan' => $korisnik]);
+    }
 }
 
