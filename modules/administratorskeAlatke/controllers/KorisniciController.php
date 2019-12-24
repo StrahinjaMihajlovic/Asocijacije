@@ -8,8 +8,10 @@ use yii\web\Controller;
 class KorisniciController extends \yii\web\Controller {
     
     public function actionIndex(){
-         $korisnici = (new \app\models\Korisnik())->vratiSveKorisnikeSemSebe(\yii::$app->user->getId()); //dataProvider
-        return $this->render('index',['dataProvider' => $korisnici]);
+         
+         $dataFilter = new \app\models\KorisnikSearch();
+         $korisnici = $dataFilter->searchSemSebe(\yii::$app->user->getId(), \yii::$app->request->get()); //dataProvider
+        return $this->render('index',['dataProvider' => $korisnici, 'dataFilter' => $dataFilter]);
     }
     public function actionIzbrisi($id){
         $korisnik = (new Korisnik())->findOne($id);

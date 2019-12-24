@@ -15,6 +15,7 @@ $url = yii::$app->getAssetManager()->publish( yii::getAlias("@adminAlatke")
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
+    'filterModel' => $dataFilter,
     'columns' => [
         'id',
         'korisnicko_ime',
