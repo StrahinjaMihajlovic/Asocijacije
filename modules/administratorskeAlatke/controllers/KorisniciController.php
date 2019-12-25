@@ -8,7 +8,7 @@ use yii\web\Controller;
 class KorisniciController extends \yii\web\Controller {
     
     public function actionIndex(){
-         
+        
          $dataFilter = new \app\models\KorisnikSearch();
          $korisnici = $dataFilter->searchSemSebe(\yii::$app->user->getId(), \yii::$app->request->get()); //dataProvider
         return $this->render('index',['dataProvider' => $korisnici, 'dataFilter' => $dataFilter]);

@@ -16,6 +16,7 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $rememberMe = true;
+    private $zabranjenoLogovanje;
 
     private $_user = false;
 
@@ -46,9 +47,12 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+            
+            if(!$user){
+                 $this->addError($attribute, 'Pogresna lozinka ili korisnicko ime.');
+            }elseif (!$user->validatePassword($this->password)) {
+                $this->addError($attribute, 'Pogresna lozinka ili korisnicko ime.');
+                $user->vratiPokusajLogovanja()->promeniBroj();
             }
         }
     }
@@ -59,9 +63,11 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if ($this->validate() && $this->proveriAktiviranost()) {
+        if ($this->validate() && $this->proveriAktiviranost() && !$this->getZabranjenoLogovanje()) {
+            
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         }
+        
         return false;
     }
 
@@ -83,5 +89,25 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+    
+    public function getZabranjenoLogovanje(){
+        if($this->getUser() === null){
+            return false;
+        }
+        
+        $pokusajLogovanjaModel = $this->getUser()->vratiPokusajLogovanja();
+        $datumStamp = time();
+        
+        if($pokusajLogovanjaModel->getAttribute('broj_pokusaja') >= 3 
+                && ($datumStamp - strtotime($pokusajLogovanjaModel
+                        ->getAttribute('vreme_zadnjeg')) ) < 30){
+            $this->zabranjenoLogovanje = true;
+        }else if($pokusajLogovanjaModel->getAttribute('broj_pokusaja') >=3){
+            $this->zabranjenoLogovanje = false;
+        }else{
+            $this->zabranjenoLogovanje = false;
+        }
+        return $this->zabranjenoLogovanje;
     }
 }

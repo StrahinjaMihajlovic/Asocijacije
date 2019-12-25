@@ -102,4 +102,13 @@ class Korisnik extends \yii\db\ActiveRecord
             'query' => $query
         ]));
     }
+    
+    public function vratiPokusajLogovanja(){
+        if($this->hasOne(PokusajiLogovanja::className()
+                , ['id' => 'id'])->one() === null){
+                    (new PokusajiLogovanja())->ubaciUBazu($this->id);
+                }
+       return $this->hasOne(PokusajiLogovanja::className()
+                , ['korisnik_id' => 'id'])->one();
+    }
 }

@@ -77,6 +77,7 @@ class SiteController extends Controller
 
         $model = new LoginForm;
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $model->getUser()->vratiPokusajLogovanja()->resetujBrojac();
             return $this->goBack();
         }
 

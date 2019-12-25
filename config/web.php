@@ -56,6 +56,14 @@ $config = [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                     'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'categories' => ['pokusaj_logovanja'],
+                    'exportInterval' => 1,
+                    'logFile' => '@runtime/logs/pokusaji_logovanja.log',
+                    
+                ]
             ],
         ],
         'db' => $db,
