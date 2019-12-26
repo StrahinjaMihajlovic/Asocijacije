@@ -20,6 +20,7 @@ class KorisnikSearch extends Korisnik{
         $dataProvider = new \yii\data\ActiveDataProvider([
             'query' => $query
         ]);
+        $query->andWhere('id <> '. $korisnikId);
         //uciraj unete podatke sa gridview-a i validiraj ih
         if(!($this->load($params) && ($this->validate()))){
             return $dataProvider;
@@ -28,8 +29,6 @@ class KorisnikSearch extends Korisnik{
         $query->andFilterWhere(['like', 'korisnicko_ime', $this->korisnicko_ime]);
         $query->andFilterWhere(['like', "email", $this->email]);
         $query->andFilterWhere(['aktivan' => $this->aktivan]);
-        $query->andFilterWhere(['not', 'id' =>$korisnikId]);
-        
         return $dataProvider;
     }
 }

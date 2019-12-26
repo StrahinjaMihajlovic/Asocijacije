@@ -13,27 +13,31 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+    <p>Popunite sledece informacije da bi ste se ulogovali!</p>
 
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',
         'layout' => 'horizontal',
         'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
+            'template' => "{label}\n<div class=\"col-sm-3 \">{input}</div>\n<div class=\"col-sm-8\">{error}</div>",
+            'labelOptions' => ['class' => 'col-sm-2 control-label'],
         ],
     ]); ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+        <?php echo $form->field($model, 'username')->textInput(['autofocus' => true,
+            
+            ])->label('Korisnicko ime <br> ili e-mail'); ?>
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
+        <?= $form->field($model, 'password')->passwordInput([
+            
+        ])->label('lozinka') ?>
 
         <?= $form->field($model, 'rememberMe')->checkbox([
             'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ]) ?>
+        ])->label('zapamti me') ?>
 
         <div class="form-group has-error">
-            <div class="col-lg-offset-1 col-lg-1">
+            <div class="col-lg-offset-1 col-lg-1 ">
                 <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
                 </div>
                 <div class='col-lg-8'>

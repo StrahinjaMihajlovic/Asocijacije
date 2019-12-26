@@ -16,8 +16,7 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $rememberMe = true;
-    private $zabranjenoLogovanje;
-
+    private $_zabranjenoLogovanje;
     private $_user = false;
 
 
@@ -64,7 +63,6 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate() && $this->proveriAktiviranost() && !$this->getZabranjenoLogovanje()) {
-            
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         }
         
@@ -85,7 +83,11 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            if(filter_var($this->username, FILTER_VALIDATE_EMAIL) !== false){
+                $this->_user = User::findOne(['email' => $this->username]);
+            }else{
+                $this->_user = User::findByUsername($this->username);
+            }    
         }
 
         return $this->_user;
@@ -102,12 +104,12 @@ class LoginForm extends Model
         if($pokusajLogovanjaModel->getAttribute('broj_pokusaja') >= 3 
                 && ($datumStamp - strtotime($pokusajLogovanjaModel
                         ->getAttribute('vreme_zadnjeg')) ) < 30){
-            $this->zabranjenoLogovanje = true;
+            $this->_zabranjenoLogovanje = true;
         }else if($pokusajLogovanjaModel->getAttribute('broj_pokusaja') >=3){
-            $this->zabranjenoLogovanje = false;
+            $this->_zabranjenoLogovanje = false;
         }else{
-            $this->zabranjenoLogovanje = false;
+            $this->_zabranjenoLogovanje = false;
         }
-        return $this->zabranjenoLogovanje;
+        return $this->_zabranjenoLogovanje;
     }
 }
