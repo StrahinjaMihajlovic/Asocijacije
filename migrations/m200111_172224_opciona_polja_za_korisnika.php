@@ -12,7 +12,10 @@ class m200111_172224_opciona_polja_za_korisnika extends Migration
      */
     public function safeUp()
     {
-
+        $this->addColumn('korisnik', 'prebivaliste', 'varchar(20)');
+        $this->addColumn('korisnik', 'pol', 'boolean');
+        $this->addColumn('korisnik', 'datum_rodjenja', 'date');
+        $this->addColumn('korisnik', 'zanimanje', 'varchar(20)');
     }
 
     /**
@@ -20,9 +23,11 @@ class m200111_172224_opciona_polja_za_korisnika extends Migration
      */
     public function safeDown()
     {
-        echo "m200111_172224_opciona_polja_za_korisnika cannot be reverted.\n";
-
-        return false;
+        $this->execute('alter table korisnik '
+                . 'drop column prebivaliste,'
+                . 'drop column pol,'
+                . 'drop column datum_rodjenja,'
+                . 'drop column zanimanje');
     }
 
     /*
