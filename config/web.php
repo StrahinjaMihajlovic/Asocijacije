@@ -17,6 +17,15 @@ $config = [
             'class' => 'app\modules\administratorskeAlatke\administratorskeAlatke',
             // ... other configurations for the module ...
         ],
+        'reportico' => [
+           // 'class' => 'app\modules\reportico\Modul' ,
+            'class' => 'reportico\reportico\Module',
+            'controllerMap' => [
+                            'reportico' => 'reportico\reportico\controllers\ReporticoController',
+                            'mode' => 'reportico\reportico\controllers\ModeController',
+                            'ajax' => 'reportico\reportico\controllers\AjaxController',
+                        ]
+            ],
     ],
     
     'components' => [
@@ -67,6 +76,9 @@ $config = [
             ],
         ],
         'db' => $db,
+        
+        
+        
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

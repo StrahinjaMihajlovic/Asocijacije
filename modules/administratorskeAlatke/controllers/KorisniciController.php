@@ -3,7 +3,7 @@
 namespace app\modules\administratorskeAlatke\controllers;
 
 use app\models\Korisnik;
-use yii\web\Controller;
+
 
 class KorisniciController extends \yii\web\Controller {
     
