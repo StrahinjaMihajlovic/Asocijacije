@@ -10,6 +10,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        //'@reportico' => '@vendor/reportico/yii2-reportico/controllers'
     ],
     
     'modules' => [
@@ -24,8 +25,10 @@ $config = [
                             'reportico' => 'reportico\reportico\controllers\ReporticoController',
                             'mode' => 'reportico\reportico\controllers\ModeController',
                             'ajax' => 'reportico\reportico\controllers\AjaxController',
-                        ]
+                        ],
+            // 'defaultRoute' => '@reportico/default/index',
             ],
+       
     ],
     
     'components' => [
