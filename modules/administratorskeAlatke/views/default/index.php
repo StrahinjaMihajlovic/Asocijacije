@@ -1,7 +1,7 @@
 <?php 
 /* @var $this yii\web\View */
 use yii\helpers\Html;
-$modul = \yii::$app->getModule('reportico');
+
 ?>
 
 <div id="sadrzaj">

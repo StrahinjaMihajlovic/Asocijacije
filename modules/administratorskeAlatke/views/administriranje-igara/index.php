@@ -1,36 +1,40 @@
-<?php 
-use yii\helpers\Html;
+<?php
 use yii\grid\GridView;
+use yii\helpers\Html;
 use yii\bootstrap\Modal;
-/*
- @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $this yii\web\View */
-//ukljucujemo u assetBundle sledeci js fajl, da bi mogli pristupiti istom. Ukloniti force copy kasnije
-/*$url = yii::$app->getAssetManager()->publish( yii::getAlias("@adminAlatke")
-        . '/assets',['forceCopy' => 1])[1].'/js/Gridview-modal-index.js';*/
 
-     app\modules\administratorskeAlatke\assets\gridviewAdminAsset::register($this);
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+app\modules\administratorskeAlatke\assets\gridviewAdminAsset::register(yii::$app->view);
 ?>
 
-<?= Html::a('Kreiraj novog korisnika', ['kreiraj'], ['class' => 'btn btn-success'])?>
-
-<?= GridView::widget([
-    'dataProvider' => $dataProvider,
-    'filterModel' => $dataFilter,
+<?=
+GridView::widget([
+    'dataProvider' => $modelIgra,
     'columns' => [
         'id',
-        'korisnicko_ime',
-        'email',
-        'aktivan',
+        'naziv',
+        'opis',
+        [
+            'attribute' => 'kategorija.naziv',
+            'label' => 'Kategorija'
+        ],
+        [
+            'attribute'=>'kreator.korisnicko_ime',
+            'label' => 'Autor'
+        ],
         [
             'class' => yii\grid\ActionColumn::class,
-            'buttons' => [
+                       'buttons' => [
                 'pregledaj' => function ($url, $model, $key){
                     return Html::a(Html::tag('span', ''
                             , ['class' => 'glyphicon glyphicon-eye-open']), $url
                             ,['class' => 'pregledaj','title' => 'Pregledaj'
                                 , 'data-toggle' => 'modal'
-                                , 'data-target' => '#prikazClana']);
+                                , 'data-target' => '#prikazIgre']);
                 },
                 'izbrisi' => function ($url, $model, $key){
                     return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-trash']), $url,['title' => 'Izbrisi', 'data-method' => 'post']);
@@ -44,14 +48,8 @@ use yii\bootstrap\Modal;
     ],
 ])?>
  <?php Modal::begin([
-        'header' => 'Detaljan prikaz za clana ',
-     'id' => 'prikazClana'
+        'header' => 'Detaljan prikaz igre ',
+     'id' => 'prikazIgre'
     ]); ?>
 
 <?php Modal::end()?>
-<?php
-
-//$this->registerJsFile($url, ['depends' => yii\web\JqueryAsset::class]);
- 
-
-

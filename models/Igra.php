@@ -125,7 +125,7 @@ class Igra extends \yii\db\ActiveRecord
     }
     
     public function  trazi(){
-        $query = Igra::find()->select('*')->from('igra')->all();
+        $query = Igra::find()->select('*')->from('igra');
         
         $provider = new ActiveDataProvider([
                 'query' => $query,
@@ -133,7 +133,6 @@ class Igra extends \yii\db\ActiveRecord
                     'pageSize' => 10,
                     ],
             ]);
-            
          return $provider;
     }
     
