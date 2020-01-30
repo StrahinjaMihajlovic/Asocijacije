@@ -136,11 +136,16 @@ class Igra extends \yii\db\ActiveRecord
          return $provider;
     }
     
-    public function traziPolja($id_igre){
+    public function traziPolja($id_igre = false){
+        if($id_igre){
         $query = Igra::find()->select('polje.naziv')->from('polje')
                 ->innerJoin('igra','polje.sablon_igre_id = igra.sablon_igre_id')
                 ->where('igra.id = ' . strval($id_igre));
-        
+        }else{
+         $query = Igra::find()->select('polje.naziv')->from('polje')
+                ->innerJoin('igra','polje.sablon_igre_id = igra.sablon_igre_id')
+                ->where('igra.id = ' . $this->id);
+        }
         $provider = new ActiveDataProvider([
                 'query' => $query,
                 

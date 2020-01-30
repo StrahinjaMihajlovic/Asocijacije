@@ -46,7 +46,7 @@ class KorisnickiAlatiController extends \yii\web\Controller
         $kreiranjeAsocijacije->igra = $igra;
         $kreiranjeAsocijacije->asocijacija = (new \app\models\Asocijacija());
         $kreiranjeAsocijacije->AsocijacijeUIgri = $kreiranjeAsocijacije
-                ->asocijacija->vratiSveAsocijacijeIgre($igra->id);
+                ->asocijacija->vratiSveAsocijacijeIgre($igra->id)->getModels();
         
         if(\yii::$app->request->post('nazad' , 0) === '1'){ 
             /*ako je dugme nazad kliknuto, izvrsi preusmerenje sa get 

@@ -15,8 +15,10 @@ echo \yii\widgets\DetailView::widget([
         'kreator.korisnicko_ime',
         [
             'label' => 'Broj asocijacija',
-            'value' => count($igra->asocijacijas) . Html::a('<span class = \'glyphicon glyphicon-th-large\'></span>', '',['target' => '_blank']),
-            'format' => 'Html'
+            'value' => count($igra->asocijacijas) 
+            . Html::a('<span class = \'glyphicon glyphicon-cog\'></span>', yii\helpers\Url::to(['asocijacije-igre', 'igraId' => $igra->id], true)
+                    ,['data-pjax' => "0",'target' => '_blank', 'rel'=>"noopener noreferrer"]),
+            'format' => 'raw' // mozda nije bas sigurno?
         ]
     ]
 ]);

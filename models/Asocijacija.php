@@ -138,7 +138,14 @@ class Asocijacija extends \yii\db\ActiveRecord
         $provider = new \yii\data\ActiveDataProvider([
             'query' => $query
         ]);
-        return $provider->getModels();
+        return $provider;
+    }
+    
+    public function vratiVezuPojamAsocijacijaPolje($idAsoc = false){
+        if($idAsoc){
+           return $this->hasMany(PojamPoljeAsocijacija::class, ['id_asocijacije' => $idAsoc]);
+        }
+        return $this->hasMany(PojamPoljeAsocijacija::class, ['id_asocijacije' => 'id']);
     }
     
     public function azurirajTrenAsoc($pojmoviIds){
