@@ -202,4 +202,13 @@ class Igra extends \yii\db\ActiveRecord
         $brojResenihIgara = (new ResenaIgra)->vratiBrojResenihIgara($korisnik_id);
         return $brojIgara >= $brojResenihIgara;
     }
+    
+    public static function vratiNeaktivneIgre($jedna = false){
+    if($jedna){
+        return self::findOne(['aktivna'=> 0]);
+    }else{
+        return self::findAll(['aktivna' => 0]);
+        
+    }
+    }
 }

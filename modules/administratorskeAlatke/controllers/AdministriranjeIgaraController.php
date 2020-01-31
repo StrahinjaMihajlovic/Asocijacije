@@ -32,4 +32,9 @@ class AdministriranjeIgaraController extends \yii\web\Controller{
         $asocijacije = (new \app\models\Asocijacija)->vratiSveAsocijacijeIgre($igraId);
         return $this->render('asocijacijaIgre',['asocijacije' => $asocijacije]);
     }
+    
+    public function actionOdobravanjeAsocijacija(){
+        $modeliIgara = Igra::vratiNeaktivneIgre(true);
+        return $this->render('kontrolaIgara',['modeliIgara' => $modeliIgara]);
+    }
 }
