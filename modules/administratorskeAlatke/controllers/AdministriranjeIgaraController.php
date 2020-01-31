@@ -28,6 +28,16 @@ class AdministriranjeIgaraController extends \yii\web\Controller{
         return $this->render('pregledaj', ['igra' => $igra]);
     }
     
+    public function actionIzbrisi($id){
+        $igra = Igra::findOne(preg_grep('/[0-9]+/', [$id])); //zbog sigurnosti, uzmi samo brojeve
+        if(isset($igra)){
+            $igra->delete();
+        }
+        return $this->redirect(['index']);
+        
+    }
+        
+    
     public function actionAsocijacijeIgre($igraId){
         $asocijacije = (new \app\models\Asocijacija)->vratiSveAsocijacijeIgre($igraId);
         return $this->render('asocijacijaIgre',['asocijacije' => $asocijacije]);
