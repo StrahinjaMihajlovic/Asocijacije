@@ -15,6 +15,11 @@ $('div#A').css({'top': ($('#Resenje').parent().position().top - $('#Resenje').pa
 $('div#B').css({'top': ($('#Resenje').parent().position().top -  $('#Resenje').parent().outerHeight(true)), 
     'left': ($('#Resenje').parent().position().left + 0.9 * $('#A').width())});
 
+$('div#C').css({'top': ($('#Resenje').parent().position().top +  $('#Resenje').parent().outerHeight(true)), 
+    'left': ($('#Resenje').parent().position().left - 0.9 * $('#A').width())});
+
+$('div#D').css({'top': ($('#Resenje').parent().position().top +  $('#Resenje').parent().outerHeight(true)), 
+    'left': ($('#Resenje').parent().position().left + 0.9 * $('#A').width())});
 
 $('div.A').each(function(){
     $(this).css({
@@ -29,5 +34,19 @@ $('.B').each(function(){
     $(this).css({
        'top' : $('#B').position().top -( $(this).data('value') * $(this).outerHeight(true)),
        'left' : $('#B').position().left + $('#B').outerWidth() - $(this).outerWidth(true)
+    });
+});
+
+$('.C').each(function(){
+    $(this).css({
+       'top' : $('#C').position().top +( $(this).data('value') * $(this).outerHeight(true)),
+       'left' : $('#C').position().left 
+    });
+});
+
+$('.D').each(function(){
+    $(this).css({
+       'top' : $('#D').position().top +( $(this).data('value') * $(this).outerHeight(true)),
+       'left' : $('#D').position().left + $('#D').outerWidth() - $(this).outerWidth(true)
     });
 });

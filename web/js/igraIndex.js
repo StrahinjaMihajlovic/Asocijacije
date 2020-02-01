@@ -36,6 +36,15 @@ $('#A').on('focusout', posaljiPostTekst);
 $('#B').css({'top': ($('#Resenje').position().top -  $('#Resenje').outerHeight(true)), 
     'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
 $('#B').on('focusout',posaljiPostTekst);
+
+$('#C').css({'top': ($('#Resenje').position().top +  $('#Resenje').outerHeight(true)), 
+    'left': ($('#Resenje').position().left - 0.9 * $('#A').width())});
+$('#C').on('focusout',posaljiPostTekst);
+
+$('#D').css({'top': ($('#Resenje').position().top +  $('#Resenje').outerHeight(true)), 
+    'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
+$('#D').on('focusout',posaljiPostTekst);
+
 $('.A').each(function(){
     $(this).css({
        'top' : $('#A').position().top -( $(this).data('value') * $(this).outerHeight(true)),
