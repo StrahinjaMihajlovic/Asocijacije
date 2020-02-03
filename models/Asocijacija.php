@@ -144,7 +144,7 @@ class Asocijacija extends \yii\db\ActiveRecord
     
     public function vratiVezuPojamAsocijacijaPolje($idAsoc = false){
         if($idAsoc){
-           return $this->hasMany(PojamPoljeAsocijacija::class, ['id_asocijacije' => $idAsoc]);
+           return PojamPoljeAsocijacija::findAll(['id_asocijacije' => $idAsoc]);
         }
         return $this->hasMany(PojamPoljeAsocijacija::class, ['id_asocijacije' => 'id']);
     }
