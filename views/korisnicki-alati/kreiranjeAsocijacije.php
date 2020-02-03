@@ -3,9 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 /* @var $this \yii\web\View */
-/* @var $polja app\models\Polje */
+/* @var $polja app\models\PojamPoljeAsocijacija[] */
 /* @var $pojam app\models\Pojam*/
 /* @var $kreiranjeAsocijacije app\models\posebni_modeli\kreiranjeAsocijacije*/ 
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -50,49 +51,64 @@ use yii\widgets\ActiveForm;
     $form = ActiveForm::begin(['id' => 'asocijacija-form',
         'enableClientScript' => false]) ?>
                    <?php
-                   $field = $form->field($polja[0], 'naziv[]');
-                   $poljeRedosledIter = false;
+                  $field = $form->field($polja[0], 'naziv[]');
+                   /*$poljeRedosledIter = false;
                    if(isset($kreiranjeAsocijacije->popunjenaPolja)){
                    $poljeRedosledIter= new ArrayIterator($kreiranjeAsocijacije->popunjenaPolja->RedosledPojmova);
                    $nizPojmova = $kreiranjeAsocijacije->popunjenaPolja->nizPojmova;
-                   }
+                   }*/
                    
-               foreach ($polja as $str){ //pravimo svako dugme ponaosob
+               foreach ($polja as $poljeVeza){ //pravimo svako dugme ponaosob
                    $popunjenoPolje = '';
-                   if(isset($kreiranjeAsocijacije->asocijacija->id) 
+                  /* if(isset($kreiranjeAsocijacije->asocijacija->id) 
                            && $poljeRedosledIter !== false){
                    $popunjenoPolje = $nizPojmova[array_search($poljeRedosledIter->current(),
                            array_column($nizPojmova, 'id'))]['sadrzaj'];
                    $poljeRedosledIter->next();
                    }
+                   */
                    
-                   $field->model = $str;
+                   if(isset($kreiranjeAsocijacije->asocijacija->id)){
+                       $popunjenoPolje = $poljeVeza->pojam->sadrzaj;
+                   }
+                   
+                   $polje = '';
+                   if($poljeVeza->getIsNewRecord()){
+                       $polje = (\app\models\Polje::findOne(['id' => $poljeVeza->id_polja]));
+                   }else{
+                       $polje = $poljeVeza->polje;
+                   }
+                   
+                   $field->model = $polje;
                      $field->options = ['class' => 'pojamwrap '];
-                   $field->label($str->naziv);
-                   if($str->naziv === 'Resenje'){
+                   $field->label($polje->naziv);
+                   
+                   
+                   
+                   if($polje->naziv === 'Resenje'){
                        $field->options = ['class' => 'Resenje pojamwrap'];
                      echo  $field->textInput(
                                ['id' => 'Resenje', 'class' => 'tekstPolje'
                                    ,'value' => $popunjenoPolje]);
                        
-                   }else if(preg_match('/\d/', $str->naziv)){
-                       $broj = implode(preg_grep('/\d/', str_split($str->naziv)));
-                       $tip = implode(preg_grep('/\d/', str_split($str->naziv), PREG_GREP_INVERT));
+                   }else if(preg_match('/\d/', $polje->naziv)){
+                       $broj = implode(preg_grep('/\d/', str_split($polje->naziv)));
+                       $tip = implode(preg_grep('/\d/', str_split($polje->naziv), PREG_GREP_INVERT));
                        $field->options = ['class' => 'pojamwrap '. $tip, 
                         'data-value' => $broj];
                       echo $field->textInput
                                (['data-value' => $broj
-                               , 'id' => $str->naziv
+                               , 'id' => $polje->naziv
                                , 'class' => $tip
                                , 'value' => $popunjenoPolje]);
                    }else{ //ako je samo A, B, C... onda pravi polje za unos
                        
                        $field->options = [
                            'class' => 'pojamwrap',
-                           'id' => $str->naziv
+                           'id' => $polje->naziv
                        ];
                         echo  $field->textInput([
-                            'id' => $str->naziv,
+                            'id' => $polje->naziv,
                             'class' => 'podpolje',
                             'value' => $popunjenoPolje
                         ]);      

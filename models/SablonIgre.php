@@ -90,4 +90,16 @@ class SablonIgre extends \yii\db\ActiveRecord
         return preg_split('/[x]/', $this->naziv);
         
     }
+    
+    public function vratiSvaPoljaPoRedu(){
+        $poljaQuery = $this->poljes;
+        /*$poljaNizModel = $poljaQuery->orderBy('naziv')->all();
+        $poljaNiz =$poljaQuery->asArray(true)->orderBy('naziv')->all();
+        $kljucResenja = array_search('resenje', array_column($poljaNiz, 'naziv'));
+        $poljeResenja = $poljaNizModel[$kljucResenja];
+        $poljaNizModel[$kljucResenja] = $poljaNizModel[0];
+        $poljaNizModel[0] = $poljeResenja;
+        return $poljaNizModel;*/
+        return $poljaQuery;
+    }
 }

@@ -7,7 +7,6 @@ use \app\models\IgraAsocijacija;
 
 
 
-
 /**
  * Description of kreiranjeAsocijacije
  *
@@ -24,6 +23,8 @@ class kreiranjeAsocijacije extends \yii\base\Model{
    //koristi se u slucaju da se manipulise postojecim asocijacama u nekoj igri
    public $AsocijacijeUIgri; 
    public $popunjenaPolja; 
+   /*@var app\models\SablonIgre $sablon*/
+   public $sablon;
    
    public function rules() {
       return [
@@ -59,7 +60,12 @@ class kreiranjeAsocijacije extends \yii\base\Model{
            return false;
        }
        
+       $poljaModeliNiz = $this->sablon->vratiSvaPoljaPoRedu();
+       
        $rezultatAsoc = $this->asocijacija->dodajAsocijacijuUBazi($pojamNizIds, $korisnikId);
+       if($rezultatAsoc){
+           \app\models\PojamPoljeAsocijacija::stvoriVeze($this->asocijacija->id, $poljaModeliNiz, $pojamNizIds);
+       }
        //vraca true ako su se i asocijacija i veza igre i asocijacije napravile u bazi podataka
        return (new IgraAsocijacija())->napraviUBazi
                ($this->igra->id, $this->asocijacija->id) && ($rezultatAsoc);
@@ -97,6 +103,8 @@ class kreiranjeAsocijacije extends \yii\base\Model{
            return false;
        }
        
+       
+       
        foreach ($this->sadrzajPoljaNiz as $sadrzaj){
            $postoji =$pojamModel->daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId);
            
@@ -106,6 +114,7 @@ class kreiranjeAsocijacije extends \yii\base\Model{
                return false;
            }
        }
+       
        return $pojamNizIds;
     }
 }

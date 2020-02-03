@@ -37,7 +37,7 @@ class Asocijacija extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['resenje_id', 'kreator_id', 'pojmovi_ids'], 'required'],
+            [['resenje_id', 'kreator_id'], 'required'],
             [['resenje_id', 'kreator_id'], 'integer'],
             [['pojmovi_ids'], 'string', 'max' => 255],
             [['pojmovi_ids'], 'unique'],
@@ -88,7 +88,7 @@ class Asocijacija extends \yii\db\ActiveRecord
      */
     public function getPojams()
     {
-        return $this->hasMany(Pojam::className(), ['id' => 'pojam_id'])->viaTable('asocijacija_pojam', ['asocijacija_id' => 'id']);
+        return $this->hasMany(Pojam::className(), ['id' => 'id_pojma'])->viaTable('pojam_polje_asocijacija', ['id_asocijacije' => 'id']);
     }
 
     /**
@@ -126,9 +126,10 @@ class Asocijacija extends \yii\db\ActiveRecord
     public function dodajAsocijacijuUBazi($pojmoviIds, $korisnikId){
         $pojmoviIdsTekst = $this->srediIdPojmovaKaoTekst($pojmoviIds);
         $this->setAttribute('kreator_id' , $korisnikId);
-        $this->setAttribute('pojmovi_ids', $pojmoviIdsTekst);
+        //$this->setAttribute('pojmovi_ids', $pojmoviIdsTekst);
         $this->resenje_id = $pojmoviIds[0];
-        return $this->save() ? $this : false;
+        $rez = $this->save();
+        return $rez ? $this : false;
     }
     
     public function vratiSveAsocijacijeIgre($igraId){

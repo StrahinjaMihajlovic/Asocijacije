@@ -69,8 +69,25 @@ class PojamPoljeAsocijacija extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPolja()
+    public function getPolje()
     {
         return $this->hasOne(Polje::className(), ['id' => 'id_polja']);
+    }
+    
+    public static function stvoriVeze($asocijacija_id, $modeliPolja, $nizPojmova){
+        foreach ($nizPojmova as $kljucPojma => $pojam ){
+            //dodati dve razlicite procedure u zavisnosti od tipa nizPojmova
+            $veza = new PojamPoljeAsocijacija();
+            $veza->setAttributes([
+                'id_asocijacije' => $asocijacija_id,
+                'id_pojma' => $pojam,
+                'id_polja' => $modeliPolja[$kljucPojma]->id,
+            ]);
+            if(!$veza->save()){
+                return false;
+            }
+        }
+        return true;
+        
     }
 }

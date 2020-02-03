@@ -37,13 +37,15 @@ class KorisnickiAlatiController extends \yii\web\Controller
         if($trenIgra === false){
             return $this->redirect(\yii\helpers\Url::to(['kreiranjeigre']));
         }
-        $sablon = (new SablonIgre())->vratiSablon(2);
-        $nizPolja = (new Polje())->vratiSvaPoljaSablona($sablon->id);
-        $pojam = new \app\models\Pojam();
+        
+        /*$nizPolja = (new Polje())->vratiSvaPoljaSablona($sablon->id);
+        $pojam = new \app\models\Pojam();*/
         $igra = (new \app\models\Igra())->vratiIgru($trenIgra);
+        
         
         $kreiranjeAsocijacije = new kreiranjeAsocijacije();
         $kreiranjeAsocijacije->igra = $igra;
+        $kreiranjeAsocijacije->sablon = (new SablonIgre())->vratiSablon(2);
         $kreiranjeAsocijacije->asocijacija = (new \app\models\Asocijacija());
         $kreiranjeAsocijacije->AsocijacijeUIgri = $kreiranjeAsocijacije
                 ->asocijacija->vratiSveAsocijacijeIgre($igra->id)->getModels();
@@ -67,14 +69,18 @@ class KorisnickiAlatiController extends \yii\web\Controller
                          => $trenIgra, 'trenAsoc' => $trenAsoc]));
         }
         
-        if($trenAsoc){
-            $kreiranjeAsocijacije->popunjenaPolja = $pojam->traziPojmove($trenAsoc);
+        $nizPolja = array();
+        if($trenAsoc){//popunjavamo polja sa vezom pojam_polje_asocijacija
+            $nizPolja = (\app\models\PojamPoljeAsocijacija::findAll(['id_asocijacije'
+            => intval($trenAsoc)]));
+            $kreiranjeAsocijacije->popunjenaPolja = $nizPolja;
             $kreiranjeAsocijacije->asocijacija = (new \app\models\Asocijacija)
                     ->findOne($trenAsoc);
         }
         
+        
         $rezultatUpisaUBazu = '';
-        if(\yii::$app->request->post('Polje',false)){
+        if(\yii::$app->request->post('Polje',false)){ //upisujemo u bazu korisnicke izmene
             $kreiranjeAsocijacije->sadrzajPoljaNiz 
                     = \yii::$app->request->post('Polje')['naziv'];
             $rezultatUpisaUBazu = \yii::$app->request->get('trenAsoc', false) 
@@ -84,15 +90,25 @@ class KorisnickiAlatiController extends \yii\web\Controller
                     ->stvoriAsocijacijuUBazi(\yii::$app->user->id);
             if(!$trenAsoc){
                 unset($kreiranjeAsocijacije->asocijacija);
+               
             }else{
                 return $this->refresh();
             }
         }
         
+        /*$nizPolja = (\app\models\PojamPoljeAsocijacija::findAll(['id_asocijacije'
+            => isset($kreiranjeAsocijacije->asocijacija->id) ? $kreiranjeAsocijacije->asocijacija->id:0]));*/
+        if(empty($nizPolja)){ //smestamo default prazne modele ako ne postoje ili ako je nova asocijacija
+            foreach ($kreiranjeAsocijacije->sablon->poljes as $polje){
+                $modelPojamPoljeAsoc = new \app\models\PojamPoljeAsocijacija();
+                $modelPojamPoljeAsoc->id_polja = $polje->id;
+                array_push($nizPolja, $modelPojamPoljeAsoc);
+            }
+        }
+         
         
-        
-        return $this->render('kreiranjeAsocijacije', ['polja' => $nizPolja,
-            'sablon' => $sablon, 'pojam' => $pojam
+        return $this->render('kreiranjeAsocijacije', ['polja' => $nizPolja
+            //',sablon' => $sablon, 'pojam' => $pojam
                 , 'uspesnost' => $rezultatUpisaUBazu, 'nova' => $nova
                 , 'kreiranjeAsocijacije' => $kreiranjeAsocijacije]);
     }

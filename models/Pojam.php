@@ -107,6 +107,7 @@ class Pojam extends \yii\db\ActiveRecord
          $wrapper->nizPojmova = $providerPojmova->getModels();
          
          return $wrapper;
+        
     }
     
     public function vratiSadrzajPojma($id){
