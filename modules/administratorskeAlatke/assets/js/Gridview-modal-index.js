@@ -13,7 +13,7 @@ $('.pregledaj').each(function(){$(this).on('click', function(event){
     $.post(this.href).done(function(data){
         $('.modal-body').html(data);
         console.log(data);
-    }).fail(function(data,dada,xhr){
+    }).fail(function(data,data2,xhr){
         console.log(xhr);
     });
 })})

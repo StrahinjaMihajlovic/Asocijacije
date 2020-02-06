@@ -44,7 +44,20 @@ class AdministriranjeIgaraController extends \yii\web\Controller{
     }
     
     public function actionOdobravanjeAsocijacija(){
-        $modeliIgara = Igra::vratiNeaktivneIgre(true);
+        
+        $postData = \yii::$app->request->post();
+        if(isset($postData['igra']) && isset($postData['odobreno'])){
+            $igra = Igra::vratiIgru($postData['igra']);
+            $igra->aktivna = 1;
+            $igra->save();
+        }else if(isset($postData['igra']) && isset($postData['odbijeno'])){
+            $igra = Igra::vratiIgru($postData['igra']);
+            $igra->aktivna = -1;
+            $igra->save();
+        }
+        $modeliIgara = Igra::vratiNeaktivneIgre(true); //vraca samo jednu od neaktivnih igara
+        
+        
         return $this->render('kontrolaIgara',['modeliIgara' => $modeliIgara]);
     }
 }
