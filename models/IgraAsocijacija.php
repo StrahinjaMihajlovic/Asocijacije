@@ -68,9 +68,9 @@ class IgraAsocijacija extends \yii\db\ActiveRecord
         $query = IgraAsocijacija::find()->select('asocijacija_id')
                 ->from('igra_asocijacija')->where('igra_id = ' . $igraId)->all(); //vracamo kao obican niz activeRecord-a
         try{
-        return $query[intval($dalje ? $nizResAsoc : $nizResAsoc - 1)]; // vraca prvu nedovrsenu asocijaciju povezanu sa igrom (ako je dugme "dalje" kliknuto)
+        return $query[intval($dalje ? $nizResAsoc : $nizResAsoc - 1)]->asocijacija; // vraca prvu nedovrsenu asocijaciju povezanu sa igrom (ako je dugme "dalje" kliknuto)
         } catch (\yii\base\ErrorException $e){
-            return array_pop($query); //vraca zadnju asocijaciju ako je igra resena
+            return array_pop($query)->asocijacija; //vraca zadnju asocijaciju ako je igra resena
         }
     }
     

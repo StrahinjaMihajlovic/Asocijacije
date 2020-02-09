@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $form yii\widgets\ActiveForm */
 /* @var $modelAsocijacija app\models\Asocijacija*/
 /* @var $modelIgra app\models\Igra */
-/* @var $modelPolje yii\data\ActiveDataProvider */
+/* @var $modelPoljeVeza app\models\PojamPoljeAsocijacija */
 /* @var $modelPojam yii\data\ActiveDataProvider */
 /* @var $nizPojam app\models\Pojam\nosilacPodatka */
 /* @var $modelResAsoc app\models\ResenaAsocijacija */
@@ -21,39 +21,14 @@ use yii\widgets\Pjax;
 
 ?>
 <?php
-function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $nizPojam){
-    //echo $nazivPolja . ' '. $resenaAsocijacijaModel->otvorena_polja . ' - ';
-    
-    try{
-    if(!preg_match('/' .$nazivPolja . ',|'.$nazivPolja.'$/',$resenaAsocijacijaModel->otvorena_polja) 
-            && strstr($resenaAsocijacijaModel->otvorena_polja, 'resenje') === false){
-                return '[otvori]';
-            }
-    
-    
-     // note: delim_capture se ne ponasa predvidljivo, moras dodati zagrade
-     // /()/ u regex-u
-     $polje = preg_split('/([\d])/', $nazivPolja, 0,PREG_SPLIT_DELIM_CAPTURE); 
-     //izracunamo vrednost slova kao a = 0, b = 1... pa onda dodamo broj koji 
-     //oznacava redosled polja da bi dobili poziciju tog polja iz kolone
-     //"pojmovi ids" u tabeli "asocijacija"
-     $vrednost = ((ord(strtolower($polje[0])) - 97) * ($duzina + 1)) +
-             (array_key_exists(1, $polje) ? intval($polje[1]) : $duzina + 1);
-     echo $duzina;
-     $trazeniPojamId = 0;
-     if(strstr($resenaAsocijacijaModel->otvorena_polja, 'resenje') !== false && $nazivPolja === 'Resenje'){
-         $trazeniPojamId = $nizPojam->RedosledPojmova[0];
-     }else{
-         $trazeniPojamId = $nizPojam->RedosledPojmova[$vrednost];
-     }
-     
-     foreach($nizPojam->nizPojmova as $pojam){
-         if(($pojam['id'] == $trazeniPojamId)){
-             return $pojam['sadrzaj'];
-         }
-     }
-    } catch (\yii\base\ErrorException $e){
-     return 'greska';
+function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
+    $idPolja = $poljeVeza->polje->id;
+    if(preg_match("/^$idPolja|[^\d]$idPolja"."[^\d]|$idPolja$/m",$resenaAsocijacijaModel->otvorena_polja)){
+        return $poljeVeza->pojam->sadrzaj;
+    }else if(preg_match('/\d/m', $poljeVeza->pojam->sadrzaj)){
+        return '[otvori]'; //vrati otvori tekst ako naziv polja sadrzi broj.
+    }else{
+        return '';
     }
      
 }
@@ -83,41 +58,37 @@ function proveriAkoJeOtvoreno($nazivPolja, $resenaAsocijacijaModel, $duzina, $ni
         <?php elseif(strstr($modelResAsoc->otvorena_polja, 'resenje')):?>
         <div id='cestitka'>
             <h1>Cestitamo, resili ste asocijaciju!</h1>
-            
             <a href="" class='btn btn-info' id='novaAsoc'>Predji na novu asocijaciju</a>
         </div>
         <?php endif;?>
-            <?php
-                $modeli = $modelPolje->getModels();
-                
-               
-                ?><div id='asocijacija'>
-                   <?php
-               foreach ($modeli as $str){ //pravimo svako dugme ponaosob
-                    $otvoren = proveriAkoJeOtvoreno($str->naziv //ako je A1,B3 ... onda pravi dugme
-                               , $modelResAsoc, intval($sablonDimenzije), $nizPojam);
-                   if($str->naziv === "Resenje"){
-                       echo Html::input('text', $str->naziv, strcmp($otvoren, '[otvori]') ? $otvoren : '' , ['id' => 'Resenje', 'class' => 'tekstPolje']);
+       
+            <div id='asocijacija'>
+         <?php
+                 foreach ($modelPoljeVeza as $model){
+                     $otvoren = proveriAkoJeOtvoreno($model, $modelResAsoc);
+                     if($model->polje->naziv === "Resenje"){
+                       echo Html::input('text', $model->polje->naziv, $otvoren , ['id' => 'Resenje', 'class' => 'tekstPolje polje']);
                        
-                   }else if(preg_match('/\d/', $str->naziv)){
-                       $broj = implode(preg_grep('/\d/', str_split($str->naziv)));
-                       $tip = implode(preg_grep('/\d/', str_split($str->naziv), PREG_GREP_INVERT));
-                       echo Html::input('button', $str->naziv
+                   }else if(preg_match('/\d/', $model->polje->naziv)){
+                       $broj = implode(preg_grep('/\d/', str_split($model->polje->naziv)));
+                       $tip = implode(preg_grep('/\d/', str_split($model->polje->naziv), PREG_GREP_INVERT));
+                       echo Html::input('button', $model->polje->naziv
                                , $otvoren 
-                               ,['data-value' => $broj, 'id' => $str->naziv
-                               , 'class' => $tip, 'data-pjax' => '\'1\'']);
+                               ,['data-value' => $broj, 'id' => $model->polje->naziv
+                               , 'class' => $tip . ' polje', 'data-pjax' => '\'1\'']);
                    }else{ //ako je samo A, B, C... onda pravi polje za unos
                        
-                       echo Html::input('text', $str->naziv, strcmp($otvoren, '[otvori]') ? $otvoren : ''
-                               ,['id' => $str->naziv, 'class' => 'podPolje']);
+                       echo Html::input('text', $model->polje->naziv, $otvoren,[ 'class' => 'podPolje pole']);
                    }
-                }
-                
+                 }
             ?>
                 </div>
-        <?php //ActiveForm::end();
+        </div>
+            <?php
+        //<?php //ActiveForm::end();
                 $this->registerCssFile('@web/css/asocijacijeIndex.css');
-                $this->registerJsFile('@web/js/igraIndex.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+                app\assets\RasporedAsocijacijeAsset::register($this);
+              //  $this->registerJsFile('@web/js/igraIndex.js',['depends' => [\yii\web\JqueryAsset::className()]]);
                
                 ?>
        

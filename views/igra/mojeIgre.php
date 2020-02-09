@@ -1,9 +1,7 @@
 <?php
 
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ View za prikaz sopstvenih igara nekog korisnika
  */
 
 /* @var $this \yii\web\View */
@@ -36,7 +34,18 @@ $this->title = 'Moje igre';
                     , ['class' => "btn btn-default"]); 
             ?>
         <p>Kategorija: <?php echo $igra->kategorija->naziv ?></p>
-        <p>Aktivna: <?php echo $osobine['aktivna'] ?></p>
+        <p style='display : inline-block'>Odobrena: <?php switch($osobine['aktivna']){
+            case 0:
+                 echo Html::tag('p',"Ceka na odobrenje",['class' => 'text-warning','style'=>'display: inline-block']);
+                break;
+            case 1:
+                echo Html::tag('p',"Odobrena",['class' => 'text-success','style'=>'display: inline-block']);
+                break;
+            case -1:
+                echo Html::tag('p',"Nije odobrena, molimo da izmenite asocijacije",['class' => 'text-danger','style'=>'display: inline-block']);
+                break;
+        } ?>
+        </p>
         <p>Broj igranja: <?php echo $osobine['broj_igranja'] ?></p>
         </div>
         <?php
