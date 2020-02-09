@@ -23,7 +23,7 @@ use yii\widgets\Pjax;
 <?php
 function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
     $idPolja = $poljeVeza->polje->id;
-    if(preg_match("/^$idPolja|[^\d]$idPolja"."[^\d]|$idPolja$/m",$resenaAsocijacijaModel->otvorena_polja)){
+    if(preg_match("/^".$idPolja."[^\d]|[^\d]$idPolja"."[^\d]|[^\d]".$idPolja."$/m",$resenaAsocijacijaModel->otvorena_polja)){
         return $poljeVeza->pojam->sadrzaj;
     }else if(preg_match('/\d/m', $poljeVeza->pojam->sadrzaj)){
         return '[otvori]'; //vrati otvori tekst ako naziv polja sadrzi broj.
@@ -78,7 +78,7 @@ function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
                                , 'class' => $tip . ' polje', 'data-pjax' => '\'1\'']);
                    }else{ //ako je samo A, B, C... onda pravi polje za unos
                        
-                       echo Html::input('text', $model->polje->naziv, $otvoren,[ 'class' => 'podPolje pole']);
+                       echo Html::input('text', $model->polje->naziv, $otvoren,['id' =>$model->polje->naziv, 'class' => 'podPolje polje']);
                    }
                  }
             ?>
@@ -88,7 +88,8 @@ function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
         //<?php //ActiveForm::end();
                 $this->registerCssFile('@web/css/asocijacijeIndex.css');
                 app\assets\RasporedAsocijacijeAsset::register($this);
-              //  $this->registerJsFile('@web/js/igraIndex.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+                $this->registerJsFile('@web/js/igraIndex.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+                $this->registerJs("");
                
                 ?>
        

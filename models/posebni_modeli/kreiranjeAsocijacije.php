@@ -106,7 +106,7 @@ class kreiranjeAsocijacije extends \yii\base\Model{
        
        
        foreach ($this->sadrzajPoljaNiz as $sadrzaj){
-           $postoji =$pojamModel->daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId);
+           $postoji =$pojamModel->daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId)->id;
            
            if($postoji){
                array_push($pojamNizIds, $postoji);

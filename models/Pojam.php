@@ -118,16 +118,20 @@ class Pojam extends \yii\db\ActiveRecord
         return $value === ',' ? false : true;
     }
     
-    public function daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId){ //proverava da li vec postoji pojam sa istim sadrzajem i dodaje novi ako nije. U suprotnom vraca nadjeni
+    public static function daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId = false){ //proverava da li vec postoji pojam sa istim sadrzajem i dodaje novi ako nije. U suprotnom vraca nadjeni
+        if($korisnikId === false){
+             $korisnikId = \yii::$app->user->getId();
+        }
+        $sadrzajUmanjen = strtolower($sadrzaj);
         $query = self::find()->select('id')->from('pojam')
-                ->where('sadrzaj = \'' . $sadrzaj .'\'')->one();
+                ->where('sadrzaj = \'' . $sadrzajUmanjen .'\'')->one();
         if($query === null){
             $modelPojma = new Pojam();
             $modelPojma->setAttributes(['kreator_id' => $korisnikId
-                    , 'sadrzaj' => $sadrzaj], false);
-            return $modelPojma->save() ? $modelPojma->getAttribute('id') : $modelPojma->errors;
+                    , 'sadrzaj' => $sadrzajUmanjen], false);
+            return $modelPojma->save() ? $modelPojma : $modelPojma->errors;
         }
-        return $query->getAttribute('id');
+        return $query;
     }
 }
 

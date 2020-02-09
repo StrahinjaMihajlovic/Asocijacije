@@ -90,4 +90,47 @@ class PojamPoljeAsocijacija extends \yii\db\ActiveRecord
         return true;
         
     }
+    
+    public static function vratiSpecVezu($idAsoc,$idPolja, $idPojma = ''){
+        return self::find()->andFilterWhere(['id_asocijacije'=> $idAsoc ,'id_pojma' => $idPojma, 'id_polja' =>  $idPolja])->one();
+    }
+    
+    public static function vratiSveVezePoKriterijumu($idAsoc = '',$idPolja = '', $idPojma = '',  $like = false){
+        $query = self::find();
+        if($like){
+            $query->andFilterWhere(['like',[
+                    'id_asocijacije',
+                    'id_pojma' ,
+                    'id_polja'
+                ], 
+                [
+                    $idAsoc,
+                    $idPojma,
+                    $idPolja
+                ]
+            ]);
+                /*->andFilterWhere(['ilike' , 'id_pojma',$idPojma])
+                -->andFilterWhere(['ilike' , 'id_polja',$idPolja]);*/
+        }else{
+            $query->andFilterWhere([
+                'id_asocijacije' => $idAsoc,
+                'id_pojma' => $idPojma,
+                'id_polja' => $idPolja
+            ]);
+        }
+        $rez = $query->all();
+        return $query->all();
+    }
+    
+    public static function vratiSveVezePolja($nazivPolja, $idAsoc){//pozivamo kad korisnik odgovori na jedno od glavnih polja, vraca sva podpolja
+        $query = self::find();
+        $query->joinWith('polje');
+       /* $query->andWhere([ 'id_asocijacije',$idAsoc ? $idAsoc : ''])
+                ->andWhere(['ilike' , 'id_pojma',$nazivPolja ? $nazivPolja : '']);*/
+        $query->where("id_asocijacije = $idAsoc");
+        $query->andWhere(['like','polje.naziv', $nazivPolja.'%', false]); //vrati sva polja stila A, A1, A2 za $nazivPolja=A
+        //false zbog znaka %
+        return $query->all();
+                
+    }
 }

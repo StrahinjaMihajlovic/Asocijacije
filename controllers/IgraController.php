@@ -62,12 +62,11 @@ class IgraController extends \yii\web\Controller
         if(\yii::$app->request->post('polje', false) && \yii::$app->request->post('unos', false)){
             $unos = [\yii::$app->request->post('polje') , \yii::$app->request->post('unos')];
             if($unos[0] === 'Resenje'){
-                $resenaAsocijacija->proveriKonacnoResenje($unos[1]
-                        , $Nosilac, $modelResena_igra
+                $resenaAsocijacija->proveriKonacnoResenje($unos[1],$TrenutnaAsocijacija,$modelResena_igra
                  );
             }else{
             $this->otvoriPodResenje($unos[0], $unos[1]
-                    , $resenaAsocijacija, $sablon_igreDimenzije, $Nosilac);
+                    , $resenaAsocijacija, $poljeVeza);
             }
         }
         
@@ -87,30 +86,7 @@ class IgraController extends \yii\web\Controller
                     'modelResIgra' => $modelResena_igra]);
     }
     
-    public function index($Igra = FALSE){
-         $igra = new Igra();
-        $korisnik_id = \yii::$app->user->id 
-                ? \yii::$app->user->id : 0;
-        
-        $modelResena_igra = $Igra && !\yii::$app->request->post('novaIgra', false)
-                ? (new \app\models\ResenaIgra())
-                ->vratiResenuIgru($Igra, $korisnik_id)
-                : $this->poveziNepovezanuIgru($igra, $korisnik_id);
-        
-        if($modelResena_igra === false){
-            return \yii::$app->request->isAjax ? $this->renderAjax('sveResene')
-                    : $this->render('sveResene');
-        }
-        
-        if(($Igra !== $modelResena_igra->igra_id) && \yii::$app->request->post('sledecaAsoc', false)){
-            return $this->redirect(\yii\helpers\Url::to(['igra/index', 'Igra' => $modelResena_igra->igra_id]));
-        }
-        
-        if(!$Igra){
-            return $this->redirect(
-                    ['igra/index', 'Igra' => $modelResena_igra->igra->id]);
-        }
-    }
+    
     
     public function actionMojeigre(){
         $reseneIgreModeli = (new \app\models\ResenaIgra)->vratiSveReseneIgreModeli(\yii::$app->user->id);
@@ -151,13 +127,14 @@ class IgraController extends \yii\web\Controller
                 : $IgraAsoc->vratiAsocPovezanuSaIgrom($igraId, $nizResAsoc, true);
     }
     
-    private function otvoriPodResenje($nazivPolja, $unosKorisnika, &$resenaAsocijacijaModel, $sablonDimenzija, $nosilac){
-        return $resenaAsocijacijaModel->proveriPodResenjeIDodaj($nazivPolja, $unosKorisnika, $sablonDimenzija, $nosilac);
+    private function otvoriPodResenje($nazivPolja, $unosKorisnika, &$resenaAsocijacijaModel, $veza){
+        $poljeModel = Polje::findOne(['naziv' => $nazivPolja]);
+        return $resenaAsocijacijaModel->proveriPodResenjeIDodaj($poljeModel->id, $unosKorisnika, $veza);
     }
     
     private function Kliknuto($nazivPolja, &$resenaAsocijacijaModel){
-       
-        $resenaAsocijacijaModel->dodajOtvorenoPolje($nazivPolja);
+       $poljeModel = Polje::findOne(['naziv' => $nazivPolja]);
+        $resenaAsocijacijaModel->dodajOtvorenoPolje($poljeModel->id);
         
     }
 }

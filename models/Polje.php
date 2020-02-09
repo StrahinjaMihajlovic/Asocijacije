@@ -65,6 +65,10 @@ class Polje extends \yii\db\ActiveRecord
         return $this->hasOne(SablonIgre::className(), ['resenje' => 'id']);
     }
     
+    public function getPojamPoljeAsocijacije(){
+        return $this->hasMany(PojamPoljeAsocijacija::class, ['id_polja' => 'id']);
+    }
+    
     public function vratiSvaPoljaSablona($idSablona){
         $query = self::find()->select('id, naziv')->from('polje')
                 ->where('sablon_igre_id = '.$idSablona);

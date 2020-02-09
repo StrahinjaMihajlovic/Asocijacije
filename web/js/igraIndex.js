@@ -25,47 +25,49 @@ function posaljiPostTekst(){
 podesavanjeElemenata();
 
 function podesavanjeElemenata(){
-$('#Resenje').css({'top': $('#Resenje').parent().height()/2,'left': $('#Resenje').parent().width()/2.5});
+//$('#Resenje').css({'top': $('#Resenje').parent().height()/2,'left': $('#Resenje').parent().width()/2.5});
 $('#Resenje').on('focusout',posaljiPostTekst);
-
-$('#A').css({'top': ($('#Resenje').position().top - $('#Resenje').outerHeight(true)), 
+$('#A').on('focusout', posaljiPostTekst);
+$('#B').on('focusout',posaljiPostTekst);
+$('#C').on('focusout',posaljiPostTekst);
+$('#D').on('focusout',posaljiPostTekst);
+$('.A').each(function(){
+$(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
+});
+$('.B').each(function(){
+$(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
+});
+$('.container').on('click', '#novaIgra',function(){
+    $.post(window.location, {novaIgra : true}).done(function(data){
+    $('.x_panel').parent().html(data);
+    });
+});
+/*$('#A').css({'top': ($('#Resenje').position().top - $('#Resenje').outerHeight(true)), 
     'left': ($('#Resenje').position().left - 0.8 * $('#A').width())});
 
-$('#A').on('focusout', posaljiPostTekst);
+
 
 $('#B').css({'top': ($('#Resenje').position().top -  $('#Resenje').outerHeight(true)), 
     'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
-$('#B').on('focusout',posaljiPostTekst);
+
 
 $('#C').css({'top': ($('#Resenje').position().top +  $('#Resenje').outerHeight(true)), 
     'left': ($('#Resenje').position().left - 0.9 * $('#A').width())});
-$('#C').on('focusout',posaljiPostTekst);
+
 
 $('#D').css({'top': ($('#Resenje').position().top +  $('#Resenje').outerHeight(true)), 
     'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
-$('#D').on('focusout',posaljiPostTekst);
 
-$('.A').each(function(){
     $(this).css({
        'top' : $('#A').position().top -( $(this).data('value') * $(this).outerHeight(true)),
        'left' : $('#A').position().left
     });
     console.log(this.id);
-    $(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
-});
 
-$('.B').each(function(){
     $(this).css({
        'top' : $('#B').position().top -( $(this).data('value') * $(this).outerHeight(true)),
        'left' : $('#B').position().left + $('#B').outerWidth() - $(this).outerWidth(true)
     });
-    $(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
-});
+    */
 
-$('.container').on('click', '#novaIgra',function(){
-   $.post(window.location, {novaIgra : true}).done(function(data){
-       $('.x_panel').parent().html(data);
-       
-   });
-});
 }
