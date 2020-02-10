@@ -87,7 +87,7 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
     }
     
     public function dodajOtvorenoPolje($poljeId){
-        if(preg_match('/^'.$poljeId.'[^\d]|[^\d]'.$poljeId.'[^\d]|[^\d]'.$poljeId.'$/m',$this->otvorena_polja))
+        if(preg_match("/^$poljeId$|^".$poljeId.'[^\d]|[^\d]'.$poljeId.'[^\d]|[^\d]'.$poljeId.'$/m',$this->otvorena_polja))
             return false;
         
         if($this->otvorena_polja === ''){
@@ -105,7 +105,7 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
     }
     
     public function proveriPodResenjeIDodaj($idPolja, $unosKorisnika, $poljePojamAsocVeze){
-        if(preg_match('/^'.$idPolja.'[^\d]|[^\d]'.$idPolja.'[^\d]|[^\d]'.$idPolja.'$/m',$this->otvorena_polja))
+        if(preg_match("/^$idPolja$|^".$idPolja.'[^\d]|[^\d]'.$idPolja.'[^\d]|[^\d]'.$idPolja.'$/m',$this->otvorena_polja))
             return false;
        
         //$vrednost = $this->konvertujPoljeUBroj($nazivPolja, $sablonDimenzija);

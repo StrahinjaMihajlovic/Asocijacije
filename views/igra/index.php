@@ -23,9 +23,9 @@ use yii\widgets\Pjax;
 <?php
 function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
     $idPolja = $poljeVeza->polje->id;
-    if(preg_match("/^".$idPolja."[^\d]|[^\d]$idPolja"."[^\d]|[^\d]".$idPolja."$/m",$resenaAsocijacijaModel->otvorena_polja)){
+    if(preg_match("/^$idPolja$|^".$idPolja."[^\d]|[^\d]$idPolja"."[^\d]|[^\d]".$idPolja."$/m",$resenaAsocijacijaModel->otvorena_polja)){
         return $poljeVeza->pojam->sadrzaj;
-    }else if(preg_match('/\d/m', $poljeVeza->pojam->sadrzaj)){
+    }else if(preg_match('/\d/m', $poljeVeza->polje->naziv)){
         return '[otvori]'; //vrati otvori tekst ako naziv polja sadrzi broj.
     }else{
         return '';
