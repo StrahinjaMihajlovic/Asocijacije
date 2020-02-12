@@ -10,11 +10,9 @@ use Yii;
  * @property string $id
  * @property string $resenje_id
  * @property int $kreator_id
- * @property string $pojmovi_ids
- *
+ * @property DateTime $datum_kreiranja
  * @property Korisnik $kreator
  * @property Pojam $resenje
- * @property AsocijacijaPojam[] $asocijacijaPojams
  * @property Pojam[] $pojams
  * @property IgraAsocijacija[] $igraAsocijacijas
  * @property Igra[] $igras
@@ -39,8 +37,7 @@ class Asocijacija extends \yii\db\ActiveRecord
         return [
             [['resenje_id', 'kreator_id'], 'required'],
             [['resenje_id', 'kreator_id'], 'integer'],
-            [['pojmovi_ids'], 'string', 'max' => 255],
-            [['pojmovi_ids'], 'unique'],
+            [['datum_kreiranja'], 'datetime'],
             [['kreator_id'], 'exist', 'skipOnError' => true, 'targetClass' => Korisnik::className(), 'targetAttribute' => ['kreator_id' => 'id']],
             [['resenje_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pojam::className(), 'targetAttribute' => ['resenje_id' => 'id']],
         ];
@@ -55,7 +52,7 @@ class Asocijacija extends \yii\db\ActiveRecord
             'id' => 'ID',
             'resenje_id' => 'Resenje ID',
             'kreator_id' => 'Kreator ID',
-            'pojmovi_ids' => 'Pojmovi Ids',
+            'datum_kreiranja' => 'Datum kreiranja'
         ];
     }
 
@@ -75,13 +72,7 @@ class Asocijacija extends \yii\db\ActiveRecord
         return $this->hasOne(Pojam::className(), ['id' => 'resenje_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAsocijacijaPojams()
-    {
-        return $this->hasMany(AsocijacijaPojam::className(), ['asocijacija_id' => 'id']);
-    }
+    
 
     /**
      * @return \yii\db\ActiveQuery
@@ -124,9 +115,7 @@ class Asocijacija extends \yii\db\ActiveRecord
     }
     
     public function dodajAsocijacijuUBazi($pojmoviIds, $korisnikId){
-        $pojmoviIdsTekst = $this->srediIdPojmovaKaoTekst($pojmoviIds);
         $this->setAttribute('kreator_id' , $korisnikId);
-        //$this->setAttribute('pojmovi_ids', $pojmoviIdsTekst);
         $this->resenje_id = $pojmoviIds[0];
         $rez = $this->save();
         return $rez ? $this : false;
@@ -150,8 +139,8 @@ class Asocijacija extends \yii\db\ActiveRecord
     }
     
     public function azurirajTrenAsoc($pojmoviIds){
-        $pojmoviIdsTekst = $this->srediIdPojmovaKaoTekst($pojmoviIds);
-        $this->setAttribute('pojmovi_ids', $pojmoviIdsTekst);
+        $this->resenje_id = $pojmoviIds[0];
+        $this->datum_kreiranja = \DateTime::createFromFormat('Y-m-d H:i:s', time());
         return $this->save() ? $this : false;
     }
     
