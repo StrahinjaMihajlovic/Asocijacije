@@ -87,7 +87,7 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
     }
     
     public function dodajOtvorenoPolje($poljeId){
-        if(preg_match("/^$poljeId$|^".$poljeId.'[^\d]|[^\d]'.$poljeId.'[^\d]|[^\d]'.$poljeId.'$/m',$this->otvorena_polja))
+        if(preg_match(self::vratiRegexZaAsocijaciju($poljeId),$this->otvorena_polja))
             return false;
         
         if($this->otvorena_polja === ''){
@@ -105,7 +105,7 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
     }
     
     public function proveriPodResenjeIDodaj($idPolja, $unosKorisnika, $poljePojamAsocVeze){
-        if(preg_match("/^$idPolja$|^".$idPolja.'[^\d]|[^\d]'.$idPolja.'[^\d]|[^\d]'.$idPolja.'$/m',$this->otvorena_polja))
+        if(preg_match(self::vratiRegexZaAsocijaciju($idPolja),$this->otvorena_polja))
             return false;
        
         //$vrednost = $this->konvertujPoljeUBroj($nazivPolja, $sablonDimenzija);
@@ -120,25 +120,12 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
                 }
             }
         }
-        
-        /*if($this->otvorena_polja === '' && is_bool($vrednost)){
-            $this->otvorena_polja .= $idPolja;
-        }else if($vrednost === true){
-            $this->otvorena_polja .= ',' . $idPolja;
-        }*/
-        
         return  $this;
         
     }
     
     private function konvertujPoljeUBroj($nazivPolja ,$duzina){ //prekopirano iz views/igra/index fajla izmenjen regex
      $polje = substr($nazivPolja, 0, 1);
-        
-        
-     //$polje = preg_split('/([\D]?)/', $nazivPolja, 0,PREG_SPLIT_DELIM_CAPTURE); 
-     //izracunamo vrednost slova kao a = 0, b = 1... pa onda dodamo broj koji 
-     //oznacava redosled polja da bi dobili poziciju tog polja iz kolone
-     //"pojmovi ids" u tabeli "asocijacija"
      $vrednost = ((ord(strtolower($polje)) - 96) * ($duzina[0] + 1));
     
      return $vrednost;
@@ -149,32 +136,31 @@ class ResenaAsocijacija extends \yii\db\ActiveRecord
         $poljeResenje = $igra->sablonIgre->resenje0; //trazimo model polja "resenje" datog sablona
         $pojamPoljeAsocVeza = PojamPoljeAsocijacija
                 ::vratiSpecVezu($asocijacija->id, $poljeResenje->id);
-        if($pojamPoljeAsocVeza->pojam->sadrzaj == strtolower($unosKorisnika)){
+        if($pojamPoljeAsocVeza->pojam->sadrzaj == strtolower($unosKorisnika)){ // opet sigurnost!
             foreach (PojamPoljeAsocijacija::vratiSveVezePoKriterijumu($asocijacija->id) as $poljeVeza){
                 if($this->dodajOtvorenoPolje($poljeVeza->polje->id) === 0){
                     return false;
                 }
             }
-           
+           $resenaIgra->resene_asocijacije = intval($resenaIgra->resene_asocijacije + 1);
+           if(!$resenaIgra->save()){
+               return false;
+           }
         }
         
          return 1;
-       /* if(strstr($this->otvorena_polja, 'resenje') !== false)
-                return 0;
-        foreach($nosilac->nizPojmova as $pojam){
-            
-            if ($pojam['id'] == $nosilac->RedosledPojmova[0] 
-                    &&  (strcasecmp($pojam['sadrzaj'], $unosKorisnika)) === 0){
-                
-                if($this->otvorena_polja === ''){
-                     $this->otvorena_polja .= 'resenje';
-                 }else{
-                     $this->otvorena_polja .= ', ' . 'resenje';
-                 }
-                 $ResenaIgra->resene_asocijacije = strval(intval($ResenaIgra->resene_asocijacije) + 1);
-                 $ResenaIgra->save();
-                return $this->save() ? 1 : 0; // vracamo int 1 ako je resenje tacno i potvrdjeno
-            }
-        }*/
+    }
+    
+    public static function vratiRegexZaAsocijaciju($poljeId){ //ovaj regex proverava da li se id polja nalazi u datom nizu
+        return "/^$poljeId$|^".$poljeId.'[^\d]|[^\d]'.$poljeId.'[^\d]|[^\d]'.$poljeId.'$/m';
+    }
+    
+    public function proveriDaLiJeResena(){
+        $sablon = $this->asocijacija->vratiVezuPojamAsocijacijaPolje()->one()->polje->sablonIgre;
+        $poljeResenje = $sablon->resenje0;
+        if(preg_match($this->vratiRegexZaAsocijaciju($poljeResenje->id), $this->otvorena_polja)){
+            return true;
+        }
+        return false;
     }
 }

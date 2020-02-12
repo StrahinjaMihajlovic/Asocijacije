@@ -23,7 +23,7 @@ use yii\widgets\Pjax;
 <?php
 function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
     $idPolja = $poljeVeza->polje->id;
-    if(preg_match("/^$idPolja$|^".$idPolja."[^\d]|[^\d]$idPolja"."[^\d]|[^\d]".$idPolja."$/m",$resenaAsocijacijaModel->otvorena_polja)){
+    if(preg_match($resenaAsocijacijaModel->vratiRegexZaAsocijaciju($idPolja),$resenaAsocijacijaModel->otvorena_polja)){
         return $poljeVeza->pojam->sadrzaj;
     }else if(preg_match('/\d/m', $poljeVeza->polje->naziv)){
         return '[otvori]'; //vrati otvori tekst ako naziv polja sadrzi broj.
@@ -48,17 +48,21 @@ function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
         
         <?php //$form = ActiveForm::begin(['options' =>['style'=> 'position: relative']])?>
         
-        <?php if(strstr($modelResAsoc->otvorena_polja, 'resenje') && (isset($modelResIgra)
-                && (count($modelIgra->getAsocijacijas()->all()) === intval($modelResIgra->resene_asocijacije)))):?>
+        <?php if((isset($modelResIgra) && (count($modelIgra->getAsocijacijas()->all()) 
+                === intval($modelResIgra->resene_asocijacije)))&&
+                $modelResAsoc->proveriDaLiJeResena()):?>
         <div id='cestitka'>
             <h1>Cestitamo, resili ste ovu igru!</h1>
              <button  class="btn btn-dark" id ='novaIgra'>Predji na novu igru</button>
           
         </div>
-        <?php elseif(strstr($modelResAsoc->otvorena_polja, 'resenje')):?>
+        <?php elseif($modelResAsoc->proveriDaLiJeResena()):?>
         <div id='cestitka'>
             <h1>Cestitamo, resili ste asocijaciju!</h1>
-            <a href="" class='btn btn-info' id='novaAsoc'>Predji na novu asocijaciju</a>
+            <button class='btn btn-info' id='sledecaAsoc'>Predji na novu asocijaciju</button>
+            <?php $this->registerJs("$('#sledecaAsoc').on('click', function(){"
+                    . "$.post(window.location, {sledecaAsoc : 1})"
+                    . "})"); ?>
         </div>
         <?php endif;?>
        

@@ -7,9 +7,9 @@ use Yii;
 /**
  * This is the model class for table "resena_igra".
  *
- * @property string $igra_id
+ * @property int $igra_id
  * @property int $korisnik_id
- * @property string $resene_asocijacije
+ * @property int $resene_asocijacije
  *
  * @property Igra $igra
  * @property Korisnik $korisnik
@@ -31,8 +31,7 @@ class ResenaIgra extends \yii\db\ActiveRecord
     {
         return [
             [['igra_id', 'korisnik_id'], 'required'],
-            [['igra_id', 'korisnik_id'], 'integer'],
-            [['resene_asocijacije'], 'string', 'max' => 255],
+            [['igra_id', 'korisnik_id', 'resene_asocijacije'], 'integer'],
             [['igra_id', 'korisnik_id'], 'unique', 'targetAttribute' => ['igra_id', 'korisnik_id']],
             [['igra_id'], 'exist', 'skipOnError' => true, 'targetClass' => Igra::className(), 'targetAttribute' => ['igra_id' => 'id']],
             [['korisnik_id'], 'exist', 'skipOnError' => true, 'targetClass' => Korisnik::className(), 'targetAttribute' => ['korisnik_id' => 'id']],
@@ -72,6 +71,7 @@ class ResenaIgra extends \yii\db\ActiveRecord
         
         $this->igra_id = $igra;
         $this->korisnik_id = $korisnik;
+        $this->resene_asocijacije = 0;
         /*$query = self::find()->select('count(id) as broj')->from('asocijacija')->leftJoin('igra_asocijacija', 'asocijacija_id = id')
                 ->where('igra_id = '. $igra);
         str_repeat('0', $query->one()->getAttribute('broj')); 

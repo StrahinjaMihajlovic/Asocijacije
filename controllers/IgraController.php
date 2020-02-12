@@ -28,20 +28,15 @@ class IgraController extends \yii\web\Controller
                     : $this->render('sveResene');
         }
         
-        if(($Igra !== $modelResena_igra->igra_id) && \yii::$app->request->post('sledecaAsoc', false)){
-            return $this->redirect(\yii\helpers\Url::to(['igra/index', 'Igra' => $modelResena_igra->igra_id]));
-        }
+        
         
          if(!$Igra){
             return $this->redirect(
                     ['igra/index', 'Igra' => $modelResena_igra->igra->id]);
         }
         
-        $sablon_igreDimenzije = (new SablonIgre())
-                ->vratiSablon($igra->vratiIgru($modelResena_igra->igra->id)->sablon_igre_id)
-                ->vratiSablonKaoNiz();
-        
-        $pojam = new \app\models\Pojam();
+        $sablonIgre = (new SablonIgre())
+                ->vratiSablon($igra->vratiIgru($modelResena_igra->igra->id)->sablon_igre_id);
         
         
         $TrenutnaAsocijacija = $this->vratiAsocijaciju( // odaberi odredjenu asocijaciju
@@ -51,9 +46,12 @@ class IgraController extends \yii\web\Controller
         $resenaAsocijacija = (new \app\models\ResenaAsocijacija()) //napravi ili preuzmi model resene asocijacije
                 ->proveriVezu($TrenutnaAsocijacija->id
                  , $korisnik_id );
-        
-        $Nosilac = $pojam->traziPojmove( // vraca objekat klase "NosilacPodataka" u modelu "Pojam"
-                $TrenutnaAsocijacija->id);
+       
+        if(\yii::$app->request->post('sledecaAsoc', false) && $resenaAsocijacija->proveriDaLiJeResena()){ // predji na sledecu asocijaciju
+            $modelResena_igra->resene_asocijacije++;
+            $modelResena_igra->save();
+            return $this->redirect(\yii\helpers\Url::to(['igra/index', 'Igra' => $modelResena_igra->igra_id]));
+        }
         
         if(\yii::$app->request->post('kliknuto', false)){
             $this->Kliknuto(\yii::$app->request->post('kliknuto'), $resenaAsocijacija);
@@ -72,16 +70,16 @@ class IgraController extends \yii\web\Controller
         
         if(\yii::$app->request->isAjax){
             return $this->renderAjax('index'
-                ,['modelPoljeVeza' =>  $poljeVeza, 'nizPojam' => $Nosilac, 'modelResAsoc'
-                    => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
+                ,['modelPoljeVeza' =>  $poljeVeza, 'modelResAsoc'
+                    => $resenaAsocijacija, 'sablonIgre' => $sablonIgre
                 , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id)
                     , 'modelResIgra' => $modelResena_igra]);
            
         }
         
         return $this->render('index'
-                ,['modelPoljeVeza' =>  $poljeVeza, 'nizPojam' => $Nosilac, 'modelResAsoc'
-                    => $resenaAsocijacija, 'sablonDimenzije' => $sablon_igreDimenzije[0]
+                ,['modelPoljeVeza' =>  $poljeVeza,'modelResAsoc'
+                    => $resenaAsocijacija, 'sablonIgre' => $sablonIgre
                 , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id),
                     'modelResIgra' => $modelResena_igra]);
     }
@@ -115,7 +113,7 @@ class IgraController extends \yii\web\Controller
         
         $modelResena_igra = new \app\models\ResenaIgra;
         $modelResena_igra->kreirajVezu($korisnik_id
-                , $nepovezanaIgra->id);
+                , intval($nepovezanaIgra->id));
         return $modelResena_igra;
     }
     

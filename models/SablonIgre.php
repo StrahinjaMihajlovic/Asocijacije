@@ -77,7 +77,7 @@ class SablonIgre extends \yii\db\ActiveRecord
     }
     
     public function vratiSablon($idSablona){
-        $query = self::find()->select('id, naziv')->from('sablon_igre')
+        $query = self::find()->from('sablon_igre')
                 ->where('id = ' . $idSablona);
         $provider = new \yii\data\ActiveDataProvider([
             'query' => $query
