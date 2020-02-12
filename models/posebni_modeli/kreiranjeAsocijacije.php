@@ -49,6 +49,12 @@ class kreiranjeAsocijacije extends \yii\base\Model{
        if($pojamNizIds === false){
            return false;
        }
+       foreach($this->popunjenaPolja as $poljeVezaKey => $poljeVeza){
+           if($poljeVeza->id_pojma != $pojamNizIds[$poljeVezaKey]){
+               $poljeVeza->id_pojma = $pojamNizIds[$poljeVezaKey];
+               $poljeVeza->save();
+           }
+       }
        return $this->asocijacija->azurirajTrenAsoc($pojamNizIds);
    }
    
