@@ -157,8 +157,9 @@ class Igra extends \yii\db\ActiveRecord
     public function vratiNepovezaneIgre($korisnik_id){ // biramo igru koju igrac nije pre igrao i koja nije njegova
         $query = Igra::find()->select('*')->from('igra')->leftJoin('resena_igra', 'igra.id ='
                 . 'resena_igra.igra_id')->where('not exists(select '
-                        . "* from resena_igra where resena_igra.korisnik_id = $korisnik_id)"
-                        .' and igra.kreator_id <> ' . $korisnik_id);
+                        . "* from resena_igra where resena_igra.korisnik_id = $korisnik_id and igra_id = igra.id)"
+                        .' and igra.kreator_id <> ' . $korisnik_id
+                        . ' and igra.aktivna > 0');
         
          $provider = new ActiveDataProvider([
                 'query' => $query,
