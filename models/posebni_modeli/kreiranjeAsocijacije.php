@@ -44,9 +44,12 @@ class kreiranjeAsocijacije extends \yii\base\Model{
        $this->addError($attribute, 'Ista takva asocijacija vec postoji');*/
    }
    
-   public function azurirajAsocUBazi($korisnikId,$idAsoc = false){
+   public function azurirajAsocUBazi($korisnikId){
        $pojamNizIds = $this->srediUnetaPolja($korisnikId);
        if($pojamNizIds === false){
+           return false;
+       }
+       if(!$this->asocijacija->azurirajTrenAsoc($pojamNizIds)){
            return false;
        }
        foreach($this->popunjenaPolja as $poljeVezaKey => $poljeVeza){
@@ -55,7 +58,7 @@ class kreiranjeAsocijacije extends \yii\base\Model{
                $poljeVeza->save();
            }
        }
-       return $this->asocijacija->azurirajTrenAsoc($pojamNizIds);
+       return true;
    }
    
    public function stvoriAsocijacijuUBazi($korisnikId){

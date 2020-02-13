@@ -37,7 +37,7 @@ class Asocijacija extends \yii\db\ActiveRecord
         return [
             [['resenje_id', 'kreator_id'], 'required'],
             [['resenje_id', 'kreator_id'], 'integer'],
-            [['datum_kreiranja'], 'datetime'],
+            [['datum_kreiranja'], 'datetime', 'format' => 'yyyy-MM-dd HH:mm:ss'],
             [['kreator_id'], 'exist', 'skipOnError' => true, 'targetClass' => Korisnik::className(), 'targetAttribute' => ['kreator_id' => 'id']],
             [['resenje_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pojam::className(), 'targetAttribute' => ['resenje_id' => 'id']],
         ];
@@ -140,8 +140,10 @@ class Asocijacija extends \yii\db\ActiveRecord
     
     public function azurirajTrenAsoc($pojmoviIds){
         $this->resenje_id = $pojmoviIds[0];
-        $this->datum_kreiranja = \DateTime::createFromFormat('Y-m-d H:i:s', time());
-        return $this->save() ? $this : false;
+        $this->datum_kreiranja = date('Y-m-d H:i:s');
+        $igraModel = $this->igras[0];
+        $igraModel->aktivna = 0;
+        return $this->save() && $igraModel->save() ? $this : false;
     }
     
     protected function srediIdPojmovaKaoTekst($pojmoviIds){
