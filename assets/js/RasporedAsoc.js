@@ -8,50 +8,6 @@
 podesavanjeElemenata();
 
 function podesavanjeElemenata(){
-/*$('.Resenje').css({'top': $('#Resenje').parent().height()/2,'left': $('#Resenje').parent().width()/2.5});
-
-
-
-$('#A').css({'top': ($('#Resenje').position().top - $('#Resenje').outerHeight(true)), 
-    'left': ($('#Resenje').position().left - 0.8 * $('#A').width())});
-
-
-
-$('#B').css({'top': ($('#Resenje').position().top -  $('#Resenje').outerHeight(true)), 
-    'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
-
-$('#C').css({'top': ($('#Resenje').parent().position().top +  $('#Resenje').outerHeight(true)), 
-    'left': ($('#Resenje').position().left - 0.9 * $('#A').width())});
-
-$('#D').css({'top': ($('#Resenje').parent().position().top +  $('#Resenje').outerHeight(true)), 
-    'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
-*/
-
-
-/*$('.B').each(function(){
-    $(this).css({
-       'top' : $('#B').position().top -( $(this).data('value') * $(this).outerHeight(true)),
-       'left' : $('#B').position().left + $('#B').outerWidth() - $(this).outerWidth(true)
-    });
-
-});
-
-$('.C').each(function(){
-    $(this).css({
-       'top' : $('#C').position().top +( $(this).data('value') * $(this).outerHeight(true)),
-       'left' : $('#C').position().left 
-    });
-});
-
-$('.D').each(function(){
-    $(this).css({
-       'top' : $('#D').position().top +( $(this).data('value') * $(this).outerHeight(true)),
-       'left' : $('#D').position().left + $('#D').outerWidth() - $(this).outerWidth(true)
-    });
-});
-
-$('#Resenje').parent().height($('#C4').position().top - $('#A4').position().top);*/
-    
     $('.tekstPolje').each(function(){
         $(this).css({'top': $(this).parent().height()/2,'left': $(this).parent().width()/2.5});
     });
@@ -101,8 +57,8 @@ $('#Resenje').parent().height($('#C4').position().top - $('#A4').position().top)
        'left' : $(this).siblings(".podPolje[name='D']").position().left + $(this).siblings(".podPolje[name='D']").outerWidth() - $(this).outerWidth(true)
     });
     });
-$('.tekstPolje').each(function(){
-            $(this).parent().height($(this).siblings(".C[name=C4]").position().top - $(this).siblings(".A[name=4]").position().top);
+/*$('.tekstPolje').each(function(){
+            $(this).parent().height($(this).siblings(".C[name=C4]").position().top - $(this).siblings(".A[name=A4]").position().top);
             
-        });
+        });*/
 }

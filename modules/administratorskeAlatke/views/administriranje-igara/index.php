@@ -27,6 +27,19 @@ GridView::widget([
             'label' => 'Autor'
         ],
         [
+            'attribute' => 'aktivna',
+            'value' => function ($model, $key, $index, $column){
+                if($model->aktivna === 1){
+                    return '<p class ="text-success">Odobrena</p>';
+                }else if($model->aktivna === 0){
+                    return '<p class ="text-warning">Ceka na odobrenje</p>';
+                }else{
+                    return '<p class ="text-danger">Nije odobrena</p>';
+                }
+            },
+            'format' => 'html'
+        ],
+        [
             'class' => yii\grid\ActionColumn::class,
                        'buttons' => [
                 'pregledaj' => function ($url, $model, $key){
@@ -39,11 +52,11 @@ GridView::widget([
                 'izbrisi' => function ($url, $model, $key){
                     return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-trash']), $url,['title' => 'Izbrisi', 'data-method' => 'post']);
                 },
-                'izmeni'=> function ($url, $model, $key){
-                    return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-pencil']), $url,['title' => 'Izmeni', 'target' => '_blank']);
+                'neodobreno'=> function ($url, $model, $key){
+                    return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-remove']), $url,['title' => 'oznaci kao neodobreno', 'data-method' => 'post']);
                 }
             ],
-                    'template' => '{pregledaj} {izmeni} {izbrisi}'
+                    'template' => '{pregledaj} {neodobreno} {izbrisi}'
         ]
     ],
 ])?>

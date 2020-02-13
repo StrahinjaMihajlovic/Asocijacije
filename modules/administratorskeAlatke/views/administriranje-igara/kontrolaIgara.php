@@ -39,17 +39,6 @@ $this->registerJs("$('#odobreno').on('click',function(){"
         . "$.post(document.location,{igra:$('#informacijeIgre').data('value'), odbijeno:1})"
         . "})");
 
-
-$this->registerCss('.wrapAsocijacije{'
-        . 'width:100%;'
-        . 'height:100vh;'
-        . '}'
-        . '.polje{'
-        . 'position:absolute;'
-        . 'display:inline;'
-        . 'margin-top:1%;'
-        . '}');
-
 ?>
 
 <?php

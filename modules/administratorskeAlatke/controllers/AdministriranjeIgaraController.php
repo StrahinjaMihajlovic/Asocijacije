@@ -37,6 +37,12 @@ class AdministriranjeIgaraController extends \yii\web\Controller{
         
     }
         
+    public function actionNeodobreno($id){
+        $igra = Igra::findOne(preg_grep('/[0-9]+/', [$id]));
+        $igra->aktivna = -1;
+        $igra->save();
+        return $this->redirect(['index']);
+    }
     
     public function actionAsocijacijeIgre($igraId){
         $asocijacije = (new \app\models\Asocijacija)->vratiSveAsocijacijeIgre($igraId);
