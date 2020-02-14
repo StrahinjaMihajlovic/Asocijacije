@@ -40,7 +40,9 @@ class Korisnik extends \yii\db\ActiveRecord
             [['email'], 'unique'],
             [['email'], 'email'],
             [['lozinka_uneta'], 'string'],
-            [['lozinka_uneta'],'required', 'on' => 'kreiranjeKorisnika']
+            [['lozinka_uneta'],'required','on' => 'kreiranjeKorisnika'],
+            [['pol'], 'integer', 'min' => 0, 'max' => 1],
+            [['datum_rodjenja'], 'date', 'format' => 'yyyy-MM-dd']
             
         ];
     }
@@ -68,6 +70,7 @@ class Korisnik extends \yii\db\ActiveRecord
        $scenariji['signup'] = ['korisnicko_ime', 'email'];
        $scenariji['promenaPodatakaAdmin'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan'];
        $scenariji['kreiranjeKorisnika'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan'];
+       $scenariji['promenaPodatakaKorisnik'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan', 'pol', 'datum_rodjenja'];
        return $scenariji;
     }
     

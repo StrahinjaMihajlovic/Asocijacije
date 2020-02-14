@@ -40,11 +40,13 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Napravi novu igru', 'url' => ['/korisnicki-alati/kreiranjeigre']],
             ['label' => 'Moje igre', 'url' => ['/igra/mojeigre']],
+            
             ['label' => 'Administracija', 'url' 
                 => (new yii\web\UrlManager())
                 ->createAbsoluteUrl('administratorske-alatke/default/index')],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Profil', 'url' => ['/korisnicki-alati/moj-profil']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

@@ -112,4 +112,15 @@ class KorisnickiAlatiController extends \yii\web\Controller
                 , 'uspesnost' => $rezultatUpisaUBazu, 'nova' => $nova
                 , 'kreiranjeAsocijacije' => $kreiranjeAsocijacije]);
     }
+    public function actionMojProfil(){
+        $korisnik = \app\models\Korisnik::findOne(\yii::$app->user->id);
+        $korisnik->setScenario('promenaPodatakaKorisnik');
+        $postData = \yii::$app->request->post('Korisnik', false);
+        if(isset($postData) && $postData!==false){
+            $korisnik->setAttributes($postData,false);
+            $korisnik->save();
+            return $this->render('mojProfil',['korisnik' => $korisnik, 'uspesnost' => empty($korisnik->errors)]);
+        }
+        return $this->render('mojProfil',['korisnik' => $korisnik]);
+    }
 }
