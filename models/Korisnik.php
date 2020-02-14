@@ -14,6 +14,7 @@ use Yii;
  * @property string $reset_kod
  * @property string $auth_key
  * @property int    $aktivan
+ * @property bool   $je_admin
  */
 class Korisnik extends \yii\db\ActiveRecord
 {
@@ -41,7 +42,7 @@ class Korisnik extends \yii\db\ActiveRecord
             [['email'], 'email'],
             [['lozinka_uneta'], 'string'],
             [['lozinka_uneta'],'required','on' => 'kreiranjeKorisnika'],
-            [['pol'], 'integer', 'min' => 0, 'max' => 1],
+            [['pol', 'je_admin'], 'integer', 'min' => 0, 'max' => 1],
             [['datum_rodjenja'], 'date', 'format' => 'yyyy-MM-dd']
             
         ];

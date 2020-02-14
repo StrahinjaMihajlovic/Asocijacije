@@ -61,6 +61,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if(\yii::$app->user->getIsGuest()){
+            return $this->render('indexNeulogovani');
+        }
         return $this->render('index');
     }
 

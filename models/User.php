@@ -80,5 +80,7 @@ class User extends Korisnik implements \yii\web\IdentityInterface
         
     }
     
-   
+   public function getIsAdministrator(){
+       return $this->je_admin ? true:false;
+   }
 }

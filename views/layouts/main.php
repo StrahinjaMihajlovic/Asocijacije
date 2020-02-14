@@ -38,15 +38,28 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Napravi novu igru', 'url' => ['/korisnicki-alati/kreiranjeigre']],
-            ['label' => 'Moje igre', 'url' => ['/igra/mojeigre']],
+            ['label' => 'Napravi novu igru'
+                , 'url' => ['/korisnicki-alati/kreiranjeigre']
+                , 'visible' => !\yii::$app->user->getIsGuest()],
+            ['label' => 'Moje igre', 'url' => ['/igra/mojeigre'],
+                'visible' => !\yii::$app->user->getIsGuest()],
             
-            ['label' => 'Administracija', 'url' 
-                => (new yii\web\UrlManager())
-                ->createAbsoluteUrl('administratorske-alatke/default/index')],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Profil', 'url' => ['/korisnicki-alati/moj-profil']],
+            ['label' => 'Administracija'
+                , 'url' => (new yii\web\UrlManager())
+                ->createAbsoluteUrl('administratorske-alatke/default/index'),
+            'visible' => (!\yii::$app->user->getIsGuest()
+                        && \app\models\User::findOne(yii::$app->user->getId())->getIsAdministrator())
+                ],
+            
+            ['label' => 'Informacije', 'items'=>
+                [['label' => 'O nama', 'url' => ['/site/about']],
+                ['label' => 'Kontakt', 'url' => ['/site/contact']]]
+                ],
+            
+            ['label' => 'Profil', 'url' => ['/korisnicki-alati/moj-profil']
+                ,'visible' => !\yii::$app->user->getIsGuest()
+            ],
+            
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
