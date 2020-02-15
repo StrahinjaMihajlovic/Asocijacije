@@ -9,11 +9,13 @@ use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
 $this->title = 'Contact';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = 'Kontakt';
 ?>
 <div class="site-contact">
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    <h1><?= 'Kontakt' ?></h1>
+    <p>
+           Za sva pitanja ili preporuke u vezi rada sajta, molimo da nas kontaktirate na mail: <?=\yii::$app->params['adminEmail']?>
+        </p>
     <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
 
         <div class="alert alert-success">
@@ -31,12 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php endif; ?>
         </p>
 
-    <?php else: ?>
+    <?php /*else: ?>
 
-        <p>
-            If you have business inquiries or other questions, please fill out the following form to contact us.
-            Thank you.
-        </p>
+        
 
         <div class="row">
             <div class="col-lg-5">
@@ -64,5 +63,5 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 
-    <?php endif; ?>
+    <?php*/ endif;?>
 </div>
