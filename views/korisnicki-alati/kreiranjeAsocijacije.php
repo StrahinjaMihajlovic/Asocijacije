@@ -114,7 +114,7 @@ use yii\widgets\ActiveForm;
                         ]);      
                    }
                 }
-                echo Html::submitButton('Unos', ['class' => 'btn btn-primary']);
+                echo Html::tag('div',Html::submitButton('Unos', ['class' => 'btn btn-primary']), ['style' => 'dipslay:block;']);
                 ActiveForm::end(); 
             ?>
   </div>
@@ -139,3 +139,5 @@ function nadjiPozicijuAsoc($asocijacija, $kreiranjeAsocijacije){
     return array_search($asocijacija->id
             , array_column($kreiranjeAsocijacije->AsocijacijeUIgri, 'id')) + 1;
 }
+
+//app\assets\RasporedAsocijacijeAsset::register($this);

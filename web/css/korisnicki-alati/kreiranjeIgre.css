@@ -15,19 +15,9 @@ and open the template in the editor.
     position: relative;
     width: 80vw;
     min-height: 100vh;
-    
+   
 }
 
-div.Resenje{
-    margin: 1% 1% 1% 1%;
-}
-div.A{
-    margin: 1% 1% 1% 1%;
-}
-
-div.B{
-    margin: 1% 1% 1% 1%; 
-}
 
 .pojamwrap{
     display: inline;

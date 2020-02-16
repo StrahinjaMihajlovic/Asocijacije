@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+$('#asocijacija-form').height($('#Resenje').outerHeight() * 13);
 
 $('div.Resenje').css({'top': $('#Resenje').parent().parent().height()/2,'left': $('#Resenje').parent().parent().width()/2.5});
 
