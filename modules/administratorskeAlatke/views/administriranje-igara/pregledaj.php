@@ -13,8 +13,9 @@ echo \yii\widgets\DetailView::widget([
         'opis',
         'kategorija.naziv',
         'kreator.korisnicko_ime',
+        'broj_igranja',
         [
-            'label' => 'Broj asocijacija',
+            'label' => 'Ukupan broj asocijacija',
             'value' => count($igra->asocijacijas) 
             . Html::a('<span class = \'glyphicon glyphicon-cog\'></span>', yii\helpers\Url::to(['asocijacije-igre', 'igraId' => $igra->id], true)
                     ,['data-pjax' => "0",'target' => '_blank', 'rel'=>"noopener noreferrer"]),

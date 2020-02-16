@@ -66,23 +66,30 @@ function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
         </div>
         <?php endif;?>
        
-            <div id='asocijacija'>
+            <div id='asocijacija' class="wrapAsocijacije">
          <?php
                  foreach ($modelPoljeVeza as $model){
                      $otvoren = proveriAkoJeOtvoreno($model, $modelResAsoc);
                      if($model->polje->naziv === "Resenje"){
-                       echo Html::input('text', $model->polje->naziv, $otvoren , ['id' => 'Resenje', 'class' => 'tekstPolje polje']);
+                       echo Html::tag('div',Html::label($model->polje->naziv
+                               , $model->polje->naziv).Html::input('text'
+                                       , $model->polje->naziv, $otvoren) 
+                               , ['id' => 'Resenje', 'class' => 'tekstPolje polje']);
                        
                    }else if(preg_match('/\d/', $model->polje->naziv)){
                        $broj = implode(preg_grep('/\d/', str_split($model->polje->naziv)));
                        $tip = implode(preg_grep('/\d/', str_split($model->polje->naziv), PREG_GREP_INVERT));
-                       echo Html::input('button', $model->polje->naziv
-                               , $otvoren 
+                       echo Html::tag('div',Html::label($model->polje->naziv
+                               , $model->polje->naziv).Html::input('button'
+                                       , $model->polje->naziv, $otvoren )
                                ,['data-value' => $broj, 'id' => $model->polje->naziv
-                               , 'class' => $tip . ' polje', 'data-pjax' => '\'1\'']);
+                               , 'class' => $tip . ' polje', 'data-pjax' => '\'1\'', 'name' => $model->polje->naziv]);
                    }else{ //ako je samo A, B, C... onda pravi polje za unos
                        
-                       echo Html::input('text', $model->polje->naziv, $otvoren,['id' =>$model->polje->naziv, 'class' => 'podPolje polje']);
+                       echo Html::tag('div',Html::label($model->polje->naziv
+                               , $model->polje->naziv).Html::input('text'
+                                       , $model->polje->naziv, $otvoren),
+                               ['id' =>$model->polje->naziv, 'class' => 'podPolje polje', 'name' => $model->polje->naziv]);
                    }
                  }
             ?>

@@ -114,6 +114,10 @@ class IgraController extends \yii\web\Controller
         $modelResena_igra = new \app\models\ResenaIgra;
         $modelResena_igra->kreirajVezu($korisnik_id
                 , intval($nepovezanaIgra->id));
+        if($modelResena_igra){
+            $nepovezanaIgra->broj_igranja++;
+            $nepovezanaIgra->save();
+        }
         return $modelResena_igra;
     }
     

@@ -118,6 +118,9 @@ class KorisnickiAlatiController extends \yii\web\Controller
         $postData = \yii::$app->request->post('Korisnik', false);
         if(isset($postData) && $postData!==false){
             $korisnik->setAttributes($postData,false);
+            if(isset($postData['lozinka_uneta'])){
+                $korisnik->novaLozinka($postData['lozinka_uneta']);
+            }
             $korisnik->save();
             return $this->render('mojProfil',['korisnik' => $korisnik, 'uspesnost' => empty($korisnik->errors)]);
         }
