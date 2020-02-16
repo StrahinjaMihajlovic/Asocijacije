@@ -4,14 +4,8 @@
  * and open the template in the editor.
  */
 
-$(function(){
-podesavanjeElemenata();
 
-$(window).resize( function(){
-    podesavanjeElemenata()
-});
-
-function podesavanjeElemenata(){
+function podesavanjeElemenataAsset(){
     $('.wrapAsocijacije').each(function(){
                        $(this).height($(this).children('.tekstPolje').height() * 13);
                        $(this).css({"min-width": ($(this).children('.tekstPolje').width() * 3)} + 'px');
@@ -155,4 +149,13 @@ function podesavanjeElemenata(){
 
                    
 }
+
+$(function(){
+podesavanjeElemenataAsset();
+
+$(window).resize( function(){
+    podesavanjeElemenataAsset()
+});
+
+
 });

@@ -52,21 +52,11 @@ use yii\widgets\ActiveForm;
         'enableClientScript' => false]) ?>
                    <?php
                   $field = $form->field($polja[0], 'naziv[]');
-                   /*$poljeRedosledIter = false;
-                   if(isset($kreiranjeAsocijacije->popunjenaPolja)){
-                   $poljeRedosledIter= new ArrayIterator($kreiranjeAsocijacije->popunjenaPolja->RedosledPojmova);
-                   $nizPojmova = $kreiranjeAsocijacije->popunjenaPolja->nizPojmova;
-                   }*/
+                   
                    
                foreach ($polja as $poljeVeza){ //pravimo svako dugme ponaosob
                    $popunjenoPolje = '';
-                  /* if(isset($kreiranjeAsocijacije->asocijacija->id) 
-                           && $poljeRedosledIter !== false){
-                   $popunjenoPolje = $nizPojmova[array_search($poljeRedosledIter->current(),
-                           array_column($nizPojmova, 'id'))]['sadrzaj'];
-                   $poljeRedosledIter->next();
-                   }
-                   */
+                  
                    
                    if(isset($kreiranjeAsocijacije->asocijacija->id)){
                        $popunjenoPolje = $poljeVeza->pojam->sadrzaj;

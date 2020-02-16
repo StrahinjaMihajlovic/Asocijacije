@@ -98,8 +98,8 @@ function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
             <?php
         //<?php //ActiveForm::end();
                 $this->registerCssFile('@web/css/asocijacijeIndex.css');
-                app\assets\RasporedAsocijacijeAsset::register($this);
-                $this->registerJsFile('@web/js/igraIndex.js',['depends' => [\yii\web\JqueryAsset::className()]]);
+                
+                $this->registerJsFile('@web/js/igraIndex.js',['depends' => [app\assets\RasporedAsocijacijeAsset::class]]);
                 $this->registerJs("");
                
                 ?>

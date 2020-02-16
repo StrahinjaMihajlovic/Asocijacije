@@ -9,6 +9,7 @@ function posaljiPost(nazivPolja){
         var element = $('.x_panel').parent();
         var vrednost = data;
         $('.x_panel').parent().html(data);
+         podesavanjeElemenataAsset();
          podesavanjeElemenata();
     });
 }
@@ -20,6 +21,7 @@ function posaljiPostTekst(){
          console.log(xhr); // note za sebe: ovako se prikazuje greska kad php nece da je prikaze
      }).done(function(data){
          $('.x_panel').parent().html(data);
+         podesavanjeElemenataAsset();
          podesavanjeElemenata();
      });
 }

@@ -69,7 +69,7 @@ class IgraController extends \yii\web\Controller
         }
         
         if(\yii::$app->request->isAjax){
-            return $this->renderAjax('index'
+            return $this->renderPartial('index'
                 ,['modelPoljeVeza' =>  $poljeVeza, 'modelResAsoc'
                     => $resenaAsocijacija, 'sablonIgre' => $sablonIgre
                 , 'modelIgra' => $igra->vratiIgru($modelResena_igra->igra->id)
