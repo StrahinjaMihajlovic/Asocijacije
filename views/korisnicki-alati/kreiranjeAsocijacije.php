@@ -25,10 +25,10 @@ use yii\widgets\ActiveForm;
             || (nadjiPozicijuAsoc($kreiranjeAsocijacije->asocijacija, $kreiranjeAsocijacije) > 1) 
     ? Html::button('Nazad', ['id' => 'nazad'])  :  ""?>
     
-    <p><?php echo isset($kreiranjeAsocijacije->asocijacija->id) //pratimo na kojoj asocijaciji po redu smo trenutno
+    <p style='display: inline-block'><?php echo isset($kreiranjeAsocijacije->asocijacija->id) //pratimo na kojoj asocijaciji po redu smo trenutno
             ? nadjiPozicijuAsoc($kreiranjeAsocijacije->asocijacija, $kreiranjeAsocijacije) 
             . '/' . count($kreiranjeAsocijacije->AsocijacijeUIgri)
-            : 'nova'
+            : 'Nova asocijacija'
             ?></p>
     
     <?php echo isset($kreiranjeAsocijacije->asocijacija->id) 

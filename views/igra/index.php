@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
-
+use yii\helpers\HtmlPurifier;
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $modelAsocijacija app\models\Asocijacija*/
@@ -49,12 +49,15 @@ function daLiJeIgraResena($modelResIgra, $modelResAsoc, $modelIgra){
         <h2><?php echo 'Asocijacija' .' broj '. ($modelResAsoc->proveriDaLiJeResena() ? 
         $modelResIgra->resene_asocijacije : ($modelResIgra->resene_asocijacije  + 1)) 
                 . '/'.(count($modelIgra->asocijacijas));?></h2>
-        <ul class="nav navbar-right panel_toolbox">
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-            </li>      
-        </ul>
-        <div class="clearfix"></div>
-    </div>
+         <p style='display: inline-block'>Vise informacija o igri:</p>
+        <a data-toggle="collapse" href='#dodatneInformacije' ><span class='caret'></span></a>
+       
+        <div id='dodatneInformacije' class='collapse'>
+            <?=('-Korisnicko ime kreatora: ' .HtmlPurifier::process($modelIgra->kreator->korisnicko_ime) ."</br>\n")?>
+            <?='-Naziv trenutne igre: ' .HtmlPurifier::process($modelIgra->naziv) ."</br>\n"?>
+            <?='-Kategorija: ' .HtmlPurifier::process($modelIgra->kategorija->naziv) ."</br>\n"?>
+            <?='-Opis: ' .HtmlPurifier::process($modelIgra->opis) ."</br>\n"?>
+        </div>
     <div class ="x_content">
         
      

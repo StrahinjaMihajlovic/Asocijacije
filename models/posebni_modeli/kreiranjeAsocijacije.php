@@ -109,17 +109,17 @@ class kreiranjeAsocijacije extends \yii\base\Model{
         $pojamModel = new Pojam();
         $pojamNizIds = array();
        
-       if(array_search('', $this->sadrzajPoljaNiz) !== false){//proverava da li su sva polja uneta, privremeno, ukloniti posle
+       if(array_search('', $this->sadrzajPoljaNiz) !== false){//proverava da li su sva polja uneta, privremeno, ukloniti kad se nadje bolje resenje
            return false;
        }
        
        
        
        foreach ($this->sadrzajPoljaNiz as $sadrzaj){
-           $postoji =$pojamModel->daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId)->id;
+           $postoji =$pojamModel->daLiPostojiSadrzajIDodaj($sadrzaj, $korisnikId);
            
            if($postoji){
-               array_push($pojamNizIds, $postoji);
+               array_push($pojamNizIds, $postoji->id);
            }else{
                return false;
            }

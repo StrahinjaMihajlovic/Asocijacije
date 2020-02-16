@@ -125,6 +125,9 @@ class Pojam extends \yii\db\ActiveRecord
         $sadrzajUmanjen = strtolower($sadrzaj);
         $query = self::find()->select('id')->from('pojam')
                 ->where('sadrzaj = \'' . $sadrzajUmanjen .'\'')->one();
+        if(\app\models\NeprimereneReci::findOne(['rec' => $sadrzajUmanjen])){
+           return false; 
+        }
         if($query === null){
             $modelPojma = new Pojam();
             $modelPojma->setAttributes(['kreator_id' => $korisnikId
