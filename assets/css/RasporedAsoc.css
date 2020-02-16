@@ -8,12 +8,14 @@ and open the template in the editor.
     Author     : strahinja
 */
 
+
 .polje{
-    position:absolute;
-    display:inline;
-    margin-top:1%
+    position: relative;
+    display:inline-block;
 }
 .wrapAsocijacije{
-        width:100%;
-        height:100vh;
+    background: #ccc;
+        
+        margin-top: 5%;
+        
 }

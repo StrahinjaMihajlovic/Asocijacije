@@ -12,20 +12,25 @@ $pojamModel = new app\models\Pojam();
 $modelVezaPojamAsocPolje = $model->vratiVezuPojamAsocijacijaPolje()->all();
 foreach($modelVezaPojamAsocPolje as $veza){
     $polje = $veza->polje;
-    
      if($polje->naziv === "Resenje"){
-        echo Html::input('text', $polje->naziv, $veza->pojam->sadrzaj,['id' => 'Resenje', 'class' => 'tekstPolje polje']);
+        
+        echo Html::tag('div',Html::label($polje->naziv, $polje->naziv) 
+                .Html::input('text', $polje->naziv, $veza->pojam->sadrzaj)
+                ,['id' => 'Resenje', 'class' => 'tekstPolje polje']);
                        
      }else if(preg_match('/\d/', $polje->naziv)){
         $broj = implode(preg_grep('/\d/', str_split($polje->naziv)));
         $tip = implode(preg_grep('/\d/', str_split($polje->naziv), PREG_GREP_INVERT));
-        echo Html::input('text', $polje->naziv, $veza->pojam->sadrzaj
+        echo Html::tag('div',Html::label($polje->naziv, $polje->naziv) 
+                .Html::input('text', $polje->naziv, $veza->pojam->sadrzaj)
                 ,['data-value' => $broj, 'id' => $polje->naziv, 'class' => $tip .' polje',
-                    'data-pjax' => '\'1\'']);
+                    'data-pjax' => '\'1\'', 'name' => $polje->naziv]);
                        
      }else{ //ako je samo A, B, C... onda pravi polje za unos
-        echo Html::input('text', $polje->naziv, $veza->pojam->sadrzaj
-                ,['id' => $polje->naziv, 'class' => 'podPolje polje']);
+        echo Html::tag('div',Html::label($polje->naziv, $polje->naziv) 
+                .Html::input('text', $polje->naziv, $veza->pojam->sadrzaj)
+                ,['id' => $polje->naziv, 'class' => 'podPolje polje',
+                    'name' => $polje->naziv]);
      }
 }
-app\assets\RasporedAsocijacijeAsset::register($this);
+

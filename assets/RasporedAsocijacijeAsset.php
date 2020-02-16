@@ -21,6 +21,6 @@ class RasporedAsocijacijeAsset extends \yii\web\AssetBundle{
     public $css = [
         'css/RasporedAsoc.css'
     ];
-    public $depends = ['yii\web\JqueryAsset'];
+    public $depends = ['yii\jui\JuiAsset'];
     public $publishOptions = ['forceCopy' => true];
 }

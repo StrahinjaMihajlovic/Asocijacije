@@ -15,3 +15,4 @@ echo ListView::widget([
         'style' => 'position:relative'
     ]
 ]);
+app\assets\RasporedAsocijacijeAsset::register($this);

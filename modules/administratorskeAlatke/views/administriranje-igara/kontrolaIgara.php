@@ -47,4 +47,5 @@ else:
 <div id='Obavestenje'>
     <h2 class="text-center text-success">Nema trenutno igara na cekanju, molimo vas da se vratite kasnije!</h2>
 </div>
-<?php endif; ?>
+<?php endif; 
+app\assets\RasporedAsocijacijeAsset::register($this);?>
