@@ -15,6 +15,10 @@ if(isset($potvrdjeno) && $potvrdjeno):?>
    
    Kod je istekao!
    
+   <?php elseif(isset($pogresanKod)):?>
+   
+   Kod nije ispravan, proverite vaš mail ponovo.
+   
    <?php elseif(isset($novaLozinka) && $novaLozinka): ?>
    
    <?php $form = yii\widgets\ActiveForm::begin()?>

@@ -30,7 +30,7 @@ class IgraController extends \yii\web\Controller
         
         
         
-         if(!$Igra){
+         if(!$Igra || \yii::$app->request->post('novaIgra', false)){
             return $this->redirect(
                     ['igra/index', 'Igra' => $modelResena_igra->igra->id]);
         }
@@ -47,7 +47,9 @@ class IgraController extends \yii\web\Controller
                 ->proveriVezu($TrenutnaAsocijacija->id
                  , $korisnik_id );
        
-        if(\yii::$app->request->post('sledecaAsoc', false) && $resenaAsocijacija->proveriDaLiJeResena()){ // predji na sledecu asocijaciju
+        if(\yii::$app->request->post('sledecaAsoc', false) 
+                && $resenaAsocijacija->proveriDaLiJeResena() 
+                && ($modelResena_igra->resene_asocijacije !== count($modelResena_igra->igra->asocijacijas))){ // predji na sledecu asocijaciju
             $modelResena_igra->resene_asocijacije++;
             $modelResena_igra->save();
             return $this->redirect(\yii\helpers\Url::to(['igra/index', 'Igra' => $modelResena_igra->igra_id]));

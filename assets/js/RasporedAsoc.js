@@ -11,7 +11,7 @@ function podesavanjeElemenataAsset(){
                        $(this).css({"min-width": ($(this).children('.tekstPolje').width() * 3)} + 'px');
     });
     $('.tekstPolje').each(function(){
-        //$(this).css({'top': $(this).parent().height()/2,'left': $(this).parent().width()/2.5});
+        
         $(this).position({
             my: "center center",
             at: "center center",
@@ -23,8 +23,7 @@ function podesavanjeElemenataAsset(){
     $('.podPolje').each(function(){
         switch($(this).attr('name')){
             case 'A':
-                /*$(this).css({'top': ($(this).siblings(".tekstPolje").position().top - $(this).siblings(".tekstPolje").outerHeight(true)), 
-                'left': ($(this).siblings(".tekstPolje").position().left - 0.8 * $(this).siblings(".tekstPolje").width())});*/
+                
                 $(this).position({
                     my: "right bottom",
                     at: "left top",
@@ -117,8 +116,8 @@ function podesavanjeElemenataAsset(){
             });
         }else{
             $(this).position({
-                            my: "center top",
-                            at: "left bottom",
+                            my: "right top",
+                            at: "center bottom",
                             of: $(this).siblings('.podPolje[name="C"]'),
                             collision: 'fit',
                             within: $(this).parent
@@ -138,8 +137,8 @@ function podesavanjeElemenataAsset(){
             });
         }else{
             $(this).position({
-                            my: "center top",
-                            at: "right bottom",
+                            my: "left top",
+                            at: "center bottom",
                             of: $(this).siblings('.podPolje[name="D"]'),
                             collision: 'fit',
                             within: $(this).parent

@@ -32,13 +32,24 @@ function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
     }
      
 }
-    
+    ?><?php
+function daLiJeIgraResena($modelResIgra, $modelResAsoc, $modelIgra){
+    if((isset($modelResIgra) && (count($modelIgra->getAsocijacijas()->all()) 
+                === intval($modelResIgra->resene_asocijacije)))&&
+                $modelResAsoc->proveriDaLiJeResena()){
+        return true;
+    }
+    return false;
+}
+
 ?>
 
 <div class="x_panel">
     <div class="x_title">
-        <h2><?= Yii::t('app', 'Asocijacija') ?></h2>
-        <ul class="nav navbar-right panel_toolbox" style="min-width: auto;">
+        <h2><?php echo 'Asocijacija' .' broj '. ($modelResAsoc->proveriDaLiJeResena() ? 
+        $modelResIgra->resene_asocijacije : ($modelResIgra->resene_asocijacije  + 1)) 
+                . '/'.(count($modelIgra->asocijacijas));?></h2>
+        <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>      
         </ul>
@@ -46,20 +57,18 @@ function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
     </div>
     <div class ="x_content">
         
-        <?php //$form = ActiveForm::begin(['options' =>['style'=> 'position: relative']])?>
+     
         
-        <?php if((isset($modelResIgra) && (count($modelIgra->getAsocijacijas()->all()) 
-                === intval($modelResIgra->resene_asocijacije)))&&
-                $modelResAsoc->proveriDaLiJeResena()):?>
+        <?php if(daLiJeIgraResena($modelResIgra, $modelResAsoc, $modelIgra)):?>
         <div id='cestitka'>
-            <h1>Cestitamo, resili ste ovu igru!</h1>
-             <button  class="btn btn-dark" id ='novaIgra'>Predji na novu igru</button>
+            <h1 class='text-success'>Čestitamo, rešili ste ovu igru!</h1>
+             <button  class="btn btn-info" id ='novaIgra'>Pređi na novu igru</button>
           
         </div>
         <?php elseif($modelResAsoc->proveriDaLiJeResena()):?>
         <div id='cestitka'>
-            <h1>Cestitamo, resili ste asocijaciju!</h1>
-            <button class='btn btn-info' id='sledecaAsoc'>Predji na novu asocijaciju</button>
+            <h1 class="text-success">Cestitamo, resili ste asocijaciju!</h1>
+            <a href=""><button class='btn btn-info' id='sledecaAsoc'>Predji na novu asocijaciju</button></a>
             <?php $this->registerJs("$('#sledecaAsoc').on('click', function(){"
                     . "$.post(window.location, {sledecaAsoc : 1})"
                     . "})"); ?>
@@ -96,9 +105,13 @@ function proveriAkoJeOtvoreno($poljeVeza, $resenaAsocijacijaModel){
                 </div>
         </div>
             <?php
-        //<?php //ActiveForm::end();
+        
                 $this->registerCssFile('@web/css/asocijacijeIndex.css');
-                
+                $this->registerCss(
+                            ".polje>input[type='button']{"
+                            . " min-width:10vw;"
+                        . "}"
+                        );
                 $this->registerJsFile('@web/js/igraIndex.js',['depends' => [app\assets\RasporedAsocijacijeAsset::class]]);
                 $this->registerJs("");
                

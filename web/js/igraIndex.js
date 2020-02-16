@@ -36,48 +36,22 @@ $('#B>input').on('focusout',posaljiPostTekst);
 $('#C>input').on('focusout',posaljiPostTekst);
 $('#D>input').on('focusout',posaljiPostTekst);
 $('.A').each(function(){
-$(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
+    $(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
 });
 $('.B').each(function(){
-$(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
+    $(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
 });
 $('.container').on('click', '#novaIgra',function(){
     $.post(window.location, {novaIgra : true}).done(function(data){
-    $('.x_panel').parent().html(data);
+        $('.x_panel').parent().html(data);
     });
 });
 $('.C').each(function(){
-$(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
+    $(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
 });
 $('.D').each(function(){
-$(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
+    $(this).on('click',{nazivPolja : $(this).attr('id')}, posaljiPost);
 });
-/*$('#A').css({'top': ($('#Resenje').position().top - $('#Resenje').outerHeight(true)), 
-    'left': ($('#Resenje').position().left - 0.8 * $('#A').width())});
 
-
-
-$('#B').css({'top': ($('#Resenje').position().top -  $('#Resenje').outerHeight(true)), 
-    'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
-
-
-$('#C').css({'top': ($('#Resenje').position().top +  $('#Resenje').outerHeight(true)), 
-    'left': ($('#Resenje').position().left - 0.9 * $('#A').width())});
-
-
-$('#D').css({'top': ($('#Resenje').position().top +  $('#Resenje').outerHeight(true)), 
-    'left': ($('#Resenje').position().left + 0.9 * $('#A').width())});
-
-    $(this).css({
-       'top' : $('#A').position().top -( $(this).data('value') * $(this).outerHeight(true)),
-       'left' : $('#A').position().left
-    });
-    console.log(this.id);
-
-    $(this).css({
-       'top' : $('#B').position().top -( $(this).data('value') * $(this).outerHeight(true)),
-       'left' : $('#B').position().left + $('#B').outerWidth() - $(this).outerWidth(true)
-    });
-    */
 
 }

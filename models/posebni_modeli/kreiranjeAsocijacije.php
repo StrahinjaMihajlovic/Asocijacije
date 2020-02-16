@@ -76,8 +76,9 @@ class kreiranjeAsocijacije extends \yii\base\Model{
            \app\models\PojamPoljeAsocijacija::stvoriVeze($this->asocijacija->id, $poljaModeliNiz, $pojamNizIds);
        }
        //vraca true ako su se i asocijacija i veza igre i asocijacije napravile u bazi podataka
+       $this->igra->aktivna = 0;
        return (new IgraAsocijacija())->napraviUBazi
-               ($this->igra->id, $this->asocijacija->id) && ($rezultatAsoc);
+               ($this->igra->id, $this->asocijacija->id) && ($rezultatAsoc) && $this->igra->save();
    }
    
    public function nadjiRedAsocijacije($trenAsoc, $dugme){

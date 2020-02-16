@@ -175,6 +175,7 @@ class SiteController extends Controller
         if(isset(\yii::$app->request->post('Korisnik')['lozinka'])){ // ako je nova lozinka uneta
             $korisnik = new \app\models\Korisnik();
             $korisnik = $korisnik->findOne($unos[1]); //link mora da je sa mail-a
+            
             if($unos[0] === $korisnik->reset_kod){
                 $korisnik->novaLozinka(\yii::$app->request->post('Korisnik')['lozinka']);
                 $korisnik->noviResetKod();
@@ -186,6 +187,9 @@ class SiteController extends Controller
         
         if($kod){ // kliknut je link sa korisnikov mail-a
             $korisnik = \app\models\User::findOne($unos[1]);
+            if($korisnik === null){
+                return $this->render('reset-lozinke',['pogresanKod' => true]);
+            }
             if($korisnik->reset_kod === $unos[0]){
                 return $this->render('reset-lozinke', ['potvrdjeno' => false
                     , 'novaLozinka' => true, 'model' => new \app\models\Korisnik()]);
