@@ -13,6 +13,25 @@ use app\models\SablonIgre;
 class IgraController extends \yii\web\Controller
 {
     
+    public function behaviors() {
+        parent::behaviors();
+        return [
+           'access' => [
+               'class' => \yii\filters\AccessControl::class,
+               'rules' => [
+                   [
+                       'allow' => false,
+                       'roles' => ['?']
+                   ],
+                   [
+                       'allow' => true,
+                       'roles' => ['@']
+                   ]
+               ]
+           ]
+        ];
+    }
+    
     public function actionIndex($Igra = FALSE){
         $igra = new Igra();
         $korisnik_id = \yii::$app->user->id 

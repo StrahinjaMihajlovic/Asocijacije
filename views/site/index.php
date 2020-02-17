@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Igra asocijacija';
 ?>
 <div class="site-index d-flex justify-content-center">
     <h1 class='text-center'>Igra asocijacija</h1>

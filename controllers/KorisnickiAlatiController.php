@@ -13,6 +13,26 @@ use app\models\posebni_modeli\kreiranjeAsocijacije;
 
 class KorisnickiAlatiController extends \yii\web\Controller
 {
+    
+    public function behaviors() {
+        parent::behaviors();
+        return [
+           'access' => [
+               'class' => \yii\filters\AccessControl::class,
+               'rules' => [
+                   [
+                       'allow' => false,
+                       'roles' => ['?']
+                   ],
+                   [
+                       'allow' => true,
+                       'roles' => ['@']
+                   ]
+               ]
+           ]
+        ];
+    }
+    
     public function actionKreiranjeigre(){
         $igra = new \app\models\Igra();
         $kategorija = new \app\models\Kategorija();
@@ -119,7 +139,7 @@ class KorisnickiAlatiController extends \yii\web\Controller
         $postData = \yii::$app->request->post('Korisnik', false);
         if(isset($postData) && $postData!==false){
             $korisnik->setAttributes($postData,false);
-            if(isset($postData['lozinka_uneta'])){
+            if(isset($postData['lozinka_uneta']) && trim($postData['lozinka_uneta']) !== ''){
                 $korisnik->novaLozinka($postData['lozinka_uneta']);
             }
             $korisnik->save();

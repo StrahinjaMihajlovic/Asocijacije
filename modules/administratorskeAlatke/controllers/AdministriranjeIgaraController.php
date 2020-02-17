@@ -14,6 +14,30 @@ use app\models\Igra;
  * @author strahinja
  */
 class AdministriranjeIgaraController extends \yii\web\Controller{
+    
+    public function behaviors() {
+        parent::behaviors();
+        return [
+           'access' => [
+               'class' => \yii\filters\AccessControl::class,
+               'rules' => [
+                    [
+                       'allow' => false,
+                       'roles' => ['?']
+                   ],
+                   [
+                       'allow' => true,
+                       'roles' => ['admin']
+                   ],
+                   [
+                        'allow' => false,
+                       'roles' => ['@']
+                   ]
+               ]
+           ]
+        ];
+    }
+    
     public function actionIndex(){
         $igraSearch = new \app\models\IgraSearch();
         $igra = $igraSearch->search(\yii::$app->request->get());

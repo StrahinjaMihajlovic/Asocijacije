@@ -16,11 +16,38 @@ use yii\widgets\DetailView;
     <?=    DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'korisnicko_ime',
+            [
+                'attribute' => 'korisnicko_ime',
+                'label' =>"Korisničko ime"
+            ],
             'email',
+            [
+                'attribute' => 'prebivaliste',
+                'label' => 'Prebivalište'
+            ],
+            'zanimanje',
+            [
+                'attribute' => 'pol',
+                'value' => function($model){
+                    if($model->pol === 0){
+                        return 'Muski';
+                    }else{
+                        return 'Ženski';
+                    }
+                }
+            ],
             'reset_kod',
-            'auth_key',
-            'aktivan'
+            [
+                'attribute' => 'aktivan',
+                'value' => function ($model){
+                    if($model->aktivan === 1){
+                        return '<p class ="text-success">Aktivan</p>';
+                    }else{
+                        return '<p class="text-danger">Nije aktivan</p>';
+                    }
+                    
+            },'format' => 'html'
+            ]
         ]
     ]) ?>
     

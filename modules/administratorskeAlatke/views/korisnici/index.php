@@ -22,9 +22,15 @@ use yii\bootstrap\Modal;
     'dataProvider' => $dataProvider,
     'filterModel' => $dataFilter,
     'columns' => [
-        'korisnicko_ime',
+        [ 
+          "attribute" => 'korisnicko_ime',
+          'label' => 'Korisničko ime'
+        ],
         'email',
-        'prebivaliste',
+        [
+            'attribute' => 'prebivaliste',
+            'label' => 'Prebivalište'
+        ],
         [
             'attribute' => 'aktivan',
             'label' => 'Aktivan',

@@ -52,7 +52,7 @@ AppAsset::register($this);
                 ],
             
             ['label' => 'Informacije', 'items'=>
-                [['label' => 'O nama', 'url' => ['/site/about']],
+                [['label' => 'O aplikaciji', 'url' => ['/site/about']],
                 ['label' => 'Kontakt', 'url' => ['/site/contact']]]
                 ],
             

@@ -32,6 +32,9 @@ $config = [
     ],
     
     'components' => [
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'zGvK_7mEg4xhq4W_7R0WlpPpvqmGtP2K',
