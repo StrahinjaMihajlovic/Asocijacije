@@ -78,7 +78,7 @@ class Kategorija extends \yii\db\ActiveRecord
         return $this->hasMany(Kategorija::className(), ['roditelj_id' => 'id']);
     }
     
-    public function vratiKategorijeNiz(){ //vraca niz za dropdownlist u view 'kreiranjeigre'
+    public static function vratiKategorijeNiz(){ //vraca niz za dropdownlist u view 'kreiranjeigre'
         //$query je dvostruki niz [][id / naziv / roditelj_id]
         $query = self::find()->select('id, naziv, roditelj_id')->from('kategorija')->orderBy('id')->asArray(true)->all();
         $niz = array();
@@ -96,5 +96,4 @@ class Kategorija extends \yii\db\ActiveRecord
         }
         return $niz;
     }
-   
 }

@@ -112,6 +112,7 @@ class KorisnickiAlatiController extends \yii\web\Controller
                 , 'uspesnost' => $rezultatUpisaUBazu, 'nova' => $nova
                 , 'kreiranjeAsocijacije' => $kreiranjeAsocijacije]);
     }
+    
     public function actionMojProfil(){
         $korisnik = \app\models\Korisnik::findOne(\yii::$app->user->id);
         $korisnik->setScenario('promenaPodatakaKorisnik');
@@ -125,5 +126,12 @@ class KorisnickiAlatiController extends \yii\web\Controller
             return $this->render('mojProfil',['korisnik' => $korisnik, 'uspesnost' => empty($korisnik->errors)]);
         }
         return $this->render('mojProfil',['korisnik' => $korisnik]);
+    }
+    
+    public function actionAzuriranjeIgre($id){
+        $igra = \app\models\Igra::findOne(intval($id));
+        if($igra->load(\yii::$app->request->post()) && $igra->save(true, ['naziv', 'opis','kategorija_id'])){
+            $this->redirect(['kreiranjeasocijacije', 'trenIgra' => $igra->id]);
+        }
     }
 }

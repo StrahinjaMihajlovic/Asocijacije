@@ -20,6 +20,24 @@ use yii\widgets\ActiveForm;
  */
 
 ?>
+<div id='Naslov'>
+    <h1 >Pregled i izmena igre ,,<?= $kreiranjeAsocijacije->igra->naziv?>"</h1>
+    <p style='display: inline-block'>Informacije o igri</p><a data-toggle='collapse' href='#collapse'><span class='caret'></span></a>
+    <div id='collapse' class='collapse'>
+        <?php $igraModel = $kreiranjeAsocijacije->igra; 
+        $formIgra = ActiveForm::begin([
+            'id' => 'igra-form',
+            'action' => \yii\helpers\Url::to(['/korisnicki-alati/azuriranje-igre', 'id' => $kreiranjeAsocijacije->igra->id], true)
+        ])?>
+        <?=$formIgra->field($igraModel, 'naziv')?>
+        <?=$formIgra->field($igraModel, 'opis')?>
+        <?=$formIgra->field($igraModel, 'kategorija_id')->dropDownList(app\models\Kategorija::vratiKategorijeNiz())?>
+        <?= Html::submitButton('Azuriraj informacije',['class' => 'btn btn-info'])?>
+        <?php ActiveForm::end()?>
+        <div style='border-bottom: 2px solid; margin: 1% 0px 1% 0px'></div>
+    </div>
+</div>
+
 <div id="navigacijaAsoc">
     <?php echo !isset($kreiranjeAsocijacije->asocijacija->id) 
             || (nadjiPozicijuAsoc($kreiranjeAsocijacije->asocijacija, $kreiranjeAsocijacije) > 1) 
