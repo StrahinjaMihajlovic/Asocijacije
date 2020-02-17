@@ -110,11 +110,7 @@ class SiteController extends Controller
     public function actionContact()
     {
         $model = new ContactForm();
-        /*if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }*/
+        
         return $this->render('contact', [
             'model' => $model,
         ]);
@@ -133,10 +129,10 @@ class SiteController extends Controller
     public function actionSignup($kod = false){
         $korisnik = new \app\models\Korisnik();
         
-        if(strlen($kod) > 32){
+        if(strlen($kod) > 32){ //uzimamo iz get parametra i izvlacimo informacije sta je auth_kod a sta je id korisnika
             $unos = str_split($kod,32);
             $korisnik = $korisnik->findOne($unos[1]);
-            if($unos[0] === $korisnik->auth_key){
+            if(isset($korisnik) && ($unos[0] === $korisnik->auth_key)){
                 $korisnik->aktivan = 1;
                 $korisnik->noviAuthKod();
                 if($korisnik->save()){
@@ -148,7 +144,7 @@ class SiteController extends Controller
         
         
         $korisnik->scenario = 'signup';
-        if($korisnik->load(\yii::$app->request->post())){
+        if($korisnik->load(\yii::$app->request->post())){ //kad je zahtev za signup prosledjen
             $korisnik->novaLozinka($korisnik->lozinka);
             if(!$korisnik->save()){
                 return $this->render('signup', ['model' => new \app\models\Korisnik()]);

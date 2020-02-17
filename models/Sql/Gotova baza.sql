@@ -1,24 +1,9 @@
-<?php
-
-use yii\db\Migration;
-
-/**
- * Class m200217_162234_nova_baza
- */
-class m200217_162234_nova_baza extends Migration
-{
-    /**
-     * {@inheritdoc}
-     */
-    public function safeUp()
-    {
-        $this->execute(
-                    "-- Valentina Studio --
+-- Valentina Studio --
 -- MySQL dump --
 -- ---------------------------------------------------------
 
-CREATE DATABASE IF NOT EXISTS `proba` CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `proba`;
+CREATE DATABASE IF NOT EXISTS `Asocijacije` CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `Asocijacije`;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,206 +15,206 @@ USE `proba`;
 
 -- CREATE TABLE 'asocijacija' ----------------------------------
 CREATE TABLE `asocijacija` ( 
-	`id` BigInt( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`kreator_id` Int( 11 ) NULL,
-	`datum_kreiranja` DateTime NULL DEFAULT CURRENT_TIMESTAMP,
+	`id` BIGINT( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
+	`kreator_id` INT( 11 ) NULL,
+	`datum_kreiranja` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `id` UNIQUE( `id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'igra' -----------------------------------------
 CREATE TABLE `igra` ( 
-	`id` BigInt( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`kategorija_id` BigInt( 20 ) UNSIGNED NOT NULL,
-	`kreator_id` Int( 11 ) NULL,
-	`naziv` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`opis` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`aktivna` TinyInt( 1 ) NOT NULL DEFAULT 0,
-	`broj_igranja` Int( 11 ) NOT NULL DEFAULT 0,
-	`sablon_igre_id` BigInt( 20 ) UNSIGNED NULL,
+	`id` BIGINT( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
+	`kategorija_id` BIGINT( 20 ) UNSIGNED NOT NULL,
+	`kreator_id` INT( 11 ) NULL,
+	`naziv` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`opis` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`aktivna` TINYINT( 1 ) NOT NULL DEFAULT 0,
+	`broj_igranja` INT( 11 ) NOT NULL DEFAULT 0,
+	`sablon_igre_id` BIGINT( 20 ) UNSIGNED NULL,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `id` UNIQUE( `id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'igra_asocijacija' -----------------------------
 CREATE TABLE `igra_asocijacija` ( 
-	`igra_id` BigInt( 20 ) UNSIGNED NOT NULL,
-	`asocijacija_id` BigInt( 20 ) UNSIGNED NOT NULL,
+	`igra_id` BIGINT( 20 ) UNSIGNED NOT NULL,
+	`asocijacija_id` BIGINT( 20 ) UNSIGNED NOT NULL,
 	PRIMARY KEY ( `igra_id`, `asocijacija_id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB;
+ENGINE = INNODB;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'kategorija' -----------------------------------
 CREATE TABLE `kategorija` ( 
-	`id` BigInt( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`naziv` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`roditelj_id` BigInt( 20 ) UNSIGNED NULL,
-	`levo` Int( 11 ) NULL,
-	`desno` Int( 11 ) NULL,
+	`id` BIGINT( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
+	`naziv` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`roditelj_id` BIGINT( 20 ) UNSIGNED NULL,
+	`levo` INT( 11 ) NULL,
+	`desno` INT( 11 ) NULL,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `id` UNIQUE( `id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'korisnik' -------------------------------------
 CREATE TABLE `korisnik` ( 
-	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`korisnicko_ime` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`email` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`lozinka` VarChar( 60 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`reset_kod` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`auth_key` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`aktivan` TinyInt( 1 ) NULL,
-	`datum_registrovanja` DateTime NULL DEFAULT CURRENT_TIMESTAMP,
-	`prebivaliste` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`pol` TinyInt( 1 ) NULL,
-	`datum_rodjenja` Date NULL,
-	`zanimanje` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`je_admin` TinyInt( 1 ) NULL DEFAULT 0,
+	`id` INT( 11 ) AUTO_INCREMENT NOT NULL,
+	`korisnicko_ime` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`email` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`lozinka` VARCHAR( 60 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`reset_kod` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`auth_key` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`aktivan` TINYINT( 1 ) NULL,
+	`datum_registrovanja` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`prebivaliste` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`pol` TINYINT( 1 ) NULL,
+	`datum_rodjenja` DATE NULL,
+	`zanimanje` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`je_admin` TINYINT( 1 ) NULL DEFAULT 0,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'migration' ------------------------------------
 CREATE TABLE `migration` ( 
-	`version` VarChar( 180 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`apply_time` Int( 11 ) NULL,
+	`version` VARCHAR( 180 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`apply_time` INT( 11 ) NULL,
 	PRIMARY KEY ( `version` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB;
+ENGINE = INNODB;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'neprimerene_reci' -----------------------------
 CREATE TABLE `neprimerene_reci` ( 
-	`id` BigInt( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`rec` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`id` BIGINT( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
+	`rec` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `id` UNIQUE( `id` ),
 	CONSTRAINT `rec` UNIQUE( `rec` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'pojam' ----------------------------------------
 CREATE TABLE `pojam` ( 
-	`id` BigInt( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`kreator_id` Int( 11 ) NULL,
-	`sadrzaj` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`id` BIGINT( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
+	`kreator_id` INT( 11 ) NULL,
+	`sadrzaj` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `id` UNIQUE( `id` ),
 	CONSTRAINT `sadrzaj` UNIQUE( `sadrzaj` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'pojam_polje_asocijacija' ----------------------
 CREATE TABLE `pojam_polje_asocijacija` ( 
-	`id_asocijacije` BigInt( 20 ) UNSIGNED NOT NULL,
-	`id_polja` BigInt( 20 ) UNSIGNED NOT NULL,
-	`id_pojma` BigInt( 20 ) UNSIGNED NOT NULL,
+	`id_asocijacije` BIGINT( 20 ) UNSIGNED NOT NULL,
+	`id_polja` BIGINT( 20 ) UNSIGNED NOT NULL,
+	`id_pojma` BIGINT( 20 ) UNSIGNED NOT NULL,
 	PRIMARY KEY ( `id_asocijacije`, `id_polja`),
-	constraint un_id_asocijacije unique(id_asocijacije, id_pojma))
+	CONSTRAINT un_id_asocijacije UNIQUE(id_asocijacije, id_pojma))
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB;
+ENGINE = INNODB;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'pokusaji_logovanja' ---------------------------
 CREATE TABLE `pokusaji_logovanja` ( 
-	`id` BigInt( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`korisnik_id` Int( 11 ) NOT NULL,
-	`broj_pokusaja` Int( 11 ) NULL,
-	`vreme_zadnjeg` DateTime NULL DEFAULT CURRENT_TIMESTAMP,
+	`id` BIGINT( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
+	`korisnik_id` INT( 11 ) NOT NULL,
+	`broj_pokusaja` INT( 11 ) NULL,
+	`vreme_zadnjeg` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `id` UNIQUE( `id` ),
 	CONSTRAINT `korisnik_id_2` UNIQUE( `korisnik_id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'polje' ----------------------------------------
 CREATE TABLE `polje` ( 
-	`id` BigInt( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`sablon_igre_id` BigInt( 20 ) UNSIGNED NULL,
-	`naziv` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`id` BIGINT( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
+	`sablon_igre_id` BIGINT( 20 ) UNSIGNED NULL,
+	`naziv` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `id` UNIQUE( `id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'resena_asocijacija' ---------------------------
 CREATE TABLE `resena_asocijacija` ( 
-	`asocijacija_id` BigInt( 20 ) UNSIGNED NOT NULL,
-	`korisnik_id` Int( 11 ) NOT NULL,
-	`otvorena_polja` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`asocijacija_id` BIGINT( 20 ) UNSIGNED NOT NULL,
+	`korisnik_id` INT( 11 ) NOT NULL,
+	`otvorena_polja` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `asocijacija_id`, `korisnik_id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB;
+ENGINE = INNODB;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'resena_igra' ----------------------------------
 CREATE TABLE `resena_igra` ( 
-	`igra_id` BigInt( 20 ) UNSIGNED NOT NULL,
-	`korisnik_id` Int( 11 ) NOT NULL,
-	`resene_asocijacije` Int( 11 ) NULL,
+	`igra_id` BIGINT( 20 ) UNSIGNED NOT NULL,
+	`korisnik_id` INT( 11 ) NOT NULL,
+	`resene_asocijacije` INT( 11 ) NULL,
 	PRIMARY KEY ( `igra_id`, `korisnik_id` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB;
+ENGINE = INNODB;
 -- -------------------------------------------------------------
 
 
 -- CREATE TABLE 'sablon_igre' ----------------------------------
 CREATE TABLE `sablon_igre` ( 
-	`id` BigInt( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`resenje` BigInt( 20 ) UNSIGNED NULL,
-	`naziv` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`id` BIGINT( 20 ) UNSIGNED AUTO_INCREMENT NOT NULL,
+	`resenje` BIGINT( 20 ) UNSIGNED NULL,
+	`naziv` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `id` UNIQUE( `id` ),
 	CONSTRAINT `naziv` UNIQUE( `naziv` ),
 	CONSTRAINT `resenje` UNIQUE( `resenje` ) )
 CHARACTER SET = utf8
 COLLATE = utf8_general_ci
-ENGINE = InnoDB
+ENGINE = INNODB
 AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 
@@ -319,8 +304,8 @@ CREATE INDEX `idx_korisnik_resena_igra` USING BTREE ON `resena_igra`( `korisnik_
 ALTER TABLE `igra_asocijacija`
 	ADD CONSTRAINT `fk_asocijacija_igra_asocijacija` FOREIGN KEY ( `asocijacija_id` )
 	REFERENCES `asocijacija`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -328,8 +313,8 @@ ALTER TABLE `igra_asocijacija`
 ALTER TABLE `resena_asocijacija`
 	ADD CONSTRAINT `fk_asocijacija_resena_asocijacija` FOREIGN KEY ( `asocijacija_id` )
 	REFERENCES `asocijacija`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -337,8 +322,8 @@ ALTER TABLE `resena_asocijacija`
 ALTER TABLE `igra_asocijacija`
 	ADD CONSTRAINT `fk_igra_igra_asocijacija` FOREIGN KEY ( `igra_id` )
 	REFERENCES `igra`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -346,8 +331,8 @@ ALTER TABLE `igra_asocijacija`
 ALTER TABLE `resena_igra`
 	ADD CONSTRAINT `fk_igra_resena_igra` FOREIGN KEY ( `igra_id` )
 	REFERENCES `igra`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -355,8 +340,8 @@ ALTER TABLE `resena_igra`
 ALTER TABLE `igra`
 	ADD CONSTRAINT `fk_kategorija_igra` FOREIGN KEY ( `kategorija_id` )
 	REFERENCES `kategorija`( `id` )
-	ON DELETE Restrict
-	ON UPDATE Cascade;
+	ON DELETE RESTRICT
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -364,8 +349,8 @@ ALTER TABLE `igra`
 ALTER TABLE `resena_asocijacija`
 	ADD CONSTRAINT `fk_korisnik_resena_asocijacija` FOREIGN KEY ( `korisnik_id` )
 	REFERENCES `korisnik`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -373,8 +358,8 @@ ALTER TABLE `resena_asocijacija`
 ALTER TABLE `resena_igra`
 	ADD CONSTRAINT `fk_korisnik_resena_igra` FOREIGN KEY ( `korisnik_id` )
 	REFERENCES `korisnik`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -382,8 +367,8 @@ ALTER TABLE `resena_igra`
 ALTER TABLE `asocijacija`
 	ADD CONSTRAINT `fk_kreator_asocijacija` FOREIGN KEY ( `kreator_id` )
 	REFERENCES `korisnik`( `id` )
-	ON DELETE set null
-	ON UPDATE Cascade;
+	ON DELETE SET NULL
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -391,8 +376,8 @@ ALTER TABLE `asocijacija`
 ALTER TABLE `igra`
 	ADD CONSTRAINT `fk_kreator_igra` FOREIGN KEY ( `kreator_id` )
 	REFERENCES `korisnik`( `id` )
-	ON DELETE set null
-	ON UPDATE Cascade;
+	ON DELETE SET NULL
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -400,8 +385,8 @@ ALTER TABLE `igra`
 ALTER TABLE `pojam`
 	ADD CONSTRAINT `fk_kreator_pojam` FOREIGN KEY ( `kreator_id` )
 	REFERENCES `korisnik`( `id` )
-	ON DELETE set null
-	ON UPDATE Cascade;
+	ON DELETE SET NULL
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -409,8 +394,8 @@ ALTER TABLE `pojam`
 ALTER TABLE `polje`
 	ADD CONSTRAINT `fk_polje_sablon_igre` FOREIGN KEY ( `sablon_igre_id` )
 	REFERENCES `sablon_igre`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -418,8 +403,8 @@ ALTER TABLE `polje`
 ALTER TABLE `sablon_igre`
 	ADD CONSTRAINT `fk_polje_sablon_igre_resenje` FOREIGN KEY ( `resenje` )
 	REFERENCES `polje`( `id` )
-	ON DELETE set null
-	ON UPDATE Cascade;
+	ON DELETE SET NULL
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -428,8 +413,8 @@ ALTER TABLE `sablon_igre`
 ALTER TABLE `kategorija`
 	ADD CONSTRAINT `fk_roditelj_kategorija` FOREIGN KEY ( `roditelj_id` )
 	REFERENCES `kategorija`( `id` )
-	ON DELETE restrict
-	ON UPDATE Cascade;
+	ON DELETE RESTRICT
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -437,8 +422,8 @@ ALTER TABLE `kategorija`
 ALTER TABLE `igra`
 	ADD CONSTRAINT `fk_sablon_igre_igra` FOREIGN KEY ( `sablon_igre_id` )
 	REFERENCES `sablon_igre`( `id` )
-	ON DELETE Restrict
-	ON UPDATE Cascade;
+	ON DELETE RESTRICT
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -446,8 +431,8 @@ ALTER TABLE `igra`
 ALTER TABLE `pojam_polje_asocijacija`
 	ADD CONSTRAINT `fk_veza_asocijacija` FOREIGN KEY ( `id_asocijacije` )
 	REFERENCES `asocijacija`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -455,8 +440,8 @@ ALTER TABLE `pojam_polje_asocijacija`
 ALTER TABLE `pojam_polje_asocijacija`
 	ADD CONSTRAINT `fk_veza_pojam` FOREIGN KEY ( `id_pojma` )
 	REFERENCES `pojam`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -464,8 +449,8 @@ ALTER TABLE `pojam_polje_asocijacija`
 ALTER TABLE `pojam_polje_asocijacija`
 	ADD CONSTRAINT `fk_veza_polje` FOREIGN KEY ( `id_polja` )
 	REFERENCES `polje`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
 
@@ -473,14 +458,37 @@ ALTER TABLE `pojam_polje_asocijacija`
 ALTER TABLE `pokusaji_logovanja`
 	ADD CONSTRAINT `f_korisnik_pokusaji_logovanja` FOREIGN KEY ( `korisnik_id` )
 	REFERENCES `korisnik`( `id` )
-	ON DELETE Cascade
-	ON UPDATE Cascade;
+	ON DELETE CASCADE
+	ON UPDATE CASCADE;
 -- -------------------------------------------------------------
 
+INSERT INTO korisnik(id, korisnicko_ime, email, lozinka, aktivan, je_admin) 
+VALUES(1, 'admin', 'admin@admin.com', '$2y$13$STP2UzYtmu44wQLnv6sy7OJZdBq8JR8YhIY20cPvx/JHsY8wPJM1i', 1, 1);
+INSERT INTO pokusaji_logovanja(korisnik_id, broj_pokusaja) VALUES(1,0);
 
+INSERT INTO kategorija(naziv)
+VALUES('Tehnologija'),('Geografija'),('Biologija'), ('Knjizenvost'),
+('Racunarstvo'), ('Politika'), ('Fizika'), 
+('Sport'),  ('Psihologija') ,('Izumi');
 
+UPDATE kategorija
+SET roditelj_id = 1
+WHERE naziv = 'Racunarstvo' OR naziv = 'Izumi';
 
+INSERT INTO sablon_igre(naziv) VALUES('4x4');
 
+INSERT INTO polje(naziv, sablon_igre_id) 
+VALUES('Resenje', 1),('A', 1),
+('B', 1),('A1', 1),('A2', 1),
+('A3', 1),('A4', 1),('B1', 1),
+('B2', 1),('B3', 1),('B4', 1),
+('C', 1),('C1', 1),('C2', 1),
+('C3', 1),('C4', 1),('D', 1),
+('D1', 1),('D2', 1),('D3', 1),('D4', 1);
+
+UPDATE sablon_igre
+SET resenje = 1
+WHERE id=1;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -488,54 +496,3 @@ ALTER TABLE `pokusaji_logovanja`
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 -- ---------------------------------------------------------
-
-
-"
-                );
-                $this->insert('korisnik', ['korisnicko_ime' => 'admin'
-                    , 'email' => 'admin@admin.com', 'lozinka' 
-                    => yii::$app->security->generatePasswordHash('admin')
-                        , 'aktivan' => 1, 'je_admin' => 1]);
-                    $this->insert('pokusaji_logovanja', ['korisnik_id' => 1, 'broj_pokusaja' => 0]);
-                    $this->execute("insert into kategorija(naziv)"
-                            . "values('Tehnologija'),('Geografija'),('Biologija'), ('Knjizenvost'),"
-                            . "('Racunarstvo'), ('Politika'), ('Fizika'), "
-                            . "('Sport'),  ('Psihologija') ,('Izumi')");
-                    $this->update('kategorija', ['roditelj_id' => 1], ['naziv' => 'Racunarstvo']);
-                    $this->update('kategorija', ['roditelj_id' => 1], ['naziv' => 'Izumi']);
-                    
-                    $this->insert('sablon_igre', ['naziv'=>'4x4']);
-                    $this->execute("insert into polje(naziv, sablon_igre_id) "
-                            . "values('Resenje', 1),('A', 1),"
-                            . "('B', 1),('A1', 1),('A2', 1),"
-                            . "('A3', 1),('A4', 1),('B1', 1),"
-                            . "('B2', 1),('B3', 1),('B4', 1),"
-                            . "('C', 1),('C1', 1),('C2', 1),"
-                            . "('C3', 1),('C4', 1),('D', 1),"
-                            . "('D1', 1),('D2', 1),('D3', 1),('D4', 1)");
-                    $this->update('sablon_igre', ['resenje' => 1], ['id' => 1]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function safeDown()
-    {
-        $this->execute("drop database proba");
-    }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m200217_162234_nova_baza cannot be reverted.\n";
-
-        return false;
-    }
-    */
-}

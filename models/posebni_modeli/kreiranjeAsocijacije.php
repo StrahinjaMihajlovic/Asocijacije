@@ -72,8 +72,10 @@ class kreiranjeAsocijacije extends \yii\base\Model{
        $poljaModeliNiz = $this->sablon->vratiSvaPoljaPoRedu();
        
        $rezultatAsoc = $this->asocijacija->dodajAsocijacijuUBazi($pojamNizIds, $korisnikId);
-       if($rezultatAsoc){
-           \app\models\PojamPoljeAsocijacija::stvoriVeze($this->asocijacija->id, $poljaModeliNiz, $pojamNizIds);
+       if($rezultatAsoc && !(\app\models\PojamPoljeAsocijacija
+               ::stvoriVeze($this->asocijacija->id, $poljaModeliNiz, $pojamNizIds)))
+       {
+           $this->asocijacija->delete();
        }
        //vraca true ako su se i asocijacija i veza igre i asocijacije napravile u bazi podataka
        $this->igra->aktivna = 0;

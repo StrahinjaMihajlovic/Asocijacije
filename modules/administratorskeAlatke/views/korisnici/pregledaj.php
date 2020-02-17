@@ -29,7 +29,7 @@ use yii\widgets\DetailView;
             [
                 'attribute' => 'pol',
                 'value' => function($model){
-                    if($model->pol === 0){
+                    if($model->pol == 0){
                         return 'Muski';
                     }else{
                         return 'Ženski';
@@ -40,7 +40,7 @@ use yii\widgets\DetailView;
             [
                 'attribute' => 'aktivan',
                 'value' => function ($model){
-                    if($model->aktivan === 1){
+                    if($model->aktivan == 1){
                         return '<p class ="text-success">Aktivan</p>';
                     }else{
                         return '<p class="text-danger">Nije aktivan</p>';

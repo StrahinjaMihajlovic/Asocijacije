@@ -36,7 +36,6 @@ class KorisnickiAlatiController extends \yii\web\Controller
     public function actionKreiranjeigre(){
         $igra = new \app\models\Igra();
         $kategorija = new \app\models\Kategorija();
-        
         if(\yii::$app->request->post('Igra')){
             $igra->attributes = \yii::$app->request->post('Igra'); 
             //probaj kreirati igru u bazi i ako ne uspe, ostani na stranici, u suprotnom idi na intefejz za kreiranje 

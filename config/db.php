@@ -3,6 +3,7 @@
 return [
     'class' => 'yii\db\Connection',
 
+
     'dsn' => 'mysql:host=localhost;dbname=Asocijacije',//change your credentials here  
     'username' => 'root',
     'password' => '',
