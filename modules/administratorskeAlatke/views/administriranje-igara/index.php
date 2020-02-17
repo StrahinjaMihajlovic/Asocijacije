@@ -14,17 +14,23 @@ app\modules\administratorskeAlatke\assets\gridviewAdminAsset::register(yii::$app
 <?=
 GridView::widget([
     'dataProvider' => $modelIgra,
+    'filterModel' => $modelSearch,
     'columns' => [
-        'id',
         'naziv',
         'opis',
         [
-            'attribute' => 'kategorija.naziv',
-            'label' => 'Kategorija'
+            'attribute' => 'kategorija_id',
+            'label' => 'Kategorija',
+            'value' => function($model){
+                return $model->kategorija->naziv;
+            }
         ],
         [
-            'attribute'=>'kreator.korisnicko_ime',
-            'label' => 'Autor'
+            'attribute'=>'kreator_id',
+            'label' => 'Autor',
+            'value' => function($model){
+                return $model->kreator->korisnicko_ime;
+            }
         ],
         [
             'attribute' => 'aktivna',
@@ -37,7 +43,8 @@ GridView::widget([
                     return '<p class ="text-danger">Nije odobrena</p>';
                 }
             },
-            'format' => 'html'
+            'format' => 'html',
+                    'filter' => [1 => 'Odobrena', 0 => 'Ceka na odobrenje', -1 => 'Nije odobrena']
         ],
         [
             'class' => yii\grid\ActionColumn::class,

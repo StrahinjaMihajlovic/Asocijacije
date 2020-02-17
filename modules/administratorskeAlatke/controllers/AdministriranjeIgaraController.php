@@ -15,8 +15,9 @@ use app\models\Igra;
  */
 class AdministriranjeIgaraController extends \yii\web\Controller{
     public function actionIndex(){
-        $igra = new Igra;
-        return $this->render('index',['modelIgra' => $igra->trazi()]);
+        $igraSearch = new \app\models\IgraSearch();
+        $igra = $igraSearch->search(\yii::$app->request->get());
+        return $this->render('index',['modelIgra' => $igra, 'modelSearch' => $igraSearch]);
     }
     
     public function  actionPregledaj($id){
