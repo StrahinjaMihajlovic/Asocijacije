@@ -9,7 +9,7 @@ namespace app\models;
 class KorisnikSearch extends Korisnik{
     public function rules(){
         return [
-            [['korisnicko_ime', 'email'],'string'],
+            [['korisnicko_ime', 'email', 'prebivaliste'],'string'],
             [['aktivan'], 'integer']
         ];
     }
@@ -28,6 +28,7 @@ class KorisnikSearch extends Korisnik{
         
         $query->andFilterWhere(['like', 'korisnicko_ime', $this->korisnicko_ime]);
         $query->andFilterWhere(['like', "email", $this->email]);
+        $query->andFilterWhere(['like', "prebivaliste", $this->prebivaliste]);
         $query->andFilterWhere(['aktivan' => $this->aktivan]);
         return $dataProvider;
     }

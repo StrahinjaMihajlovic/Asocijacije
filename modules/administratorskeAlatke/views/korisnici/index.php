@@ -12,16 +12,32 @@ use yii\bootstrap\Modal;
      app\modules\administratorskeAlatke\assets\gridviewAdminAsset::register($this);
 ?>
 
+<div id='naslov'>
+    <h1>Prikaz korisnika</h1>
+</div>
+
 <?= Html::a('Kreiraj novog korisnika', ['kreiraj'], ['class' => 'btn btn-success'])?>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $dataFilter,
     'columns' => [
-        'id',
         'korisnicko_ime',
         'email',
-        'aktivan',
+        'prebivaliste',
+        [
+            'attribute' => 'aktivan',
+            'label' => 'Aktivan',
+            'value' => function ($model){
+                    if($model->aktivan === 1){
+                        return '<p class ="text-success">Aktivan</p>';
+                    }else{
+                        return '<p class="text-danger">Nije aktivan</p>';
+                    }
+            },
+                    'format' => 'html',
+                    'filter' => [0 => 'Nije aktivan', 1 => 'Aktivan']
+        ],
         [
             'class' => yii\grid\ActionColumn::class,
             'buttons' => [

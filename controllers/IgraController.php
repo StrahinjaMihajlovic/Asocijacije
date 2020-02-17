@@ -96,7 +96,15 @@ class IgraController extends \yii\web\Controller
                 ,'igraAsocijacije' => $igraAsocijacijeObjekt
                 , 'sopstveneIgre' =>$sopstveneIgre]);
     }
-     
+    
+    public function actionIzbrisiIgru($id){
+        $igra = Igra::findOne(intval($id));
+        if($igra->kreator_id === \yii::$app->user->getId()){ //brisi samo ako je autor igre trenutni korisnik
+            $igra->delete();
+        }
+        return $this->redirect(['mojeigre']);
+    }
+    
     private function vratiSopstveneIgre(){
         return (new Igra)->vratiSopstveneIgre(\yii::$app->user->id);
     }

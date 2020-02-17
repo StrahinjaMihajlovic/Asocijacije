@@ -78,7 +78,9 @@ class Korisnik extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if ($this->isNewRecord) {
+            if ($this->isNewRecord && isset($this->aktivan)) {
+                $this->auth_key = Yii::$app->security->generateRandomString();
+            }else if($this->isNewRecord){
                 $this->auth_key = Yii::$app->security->generateRandomString();
                 $this->aktivan = 0;
             }

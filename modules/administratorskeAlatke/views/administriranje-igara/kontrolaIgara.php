@@ -15,6 +15,13 @@ if(isset($modeliIgara)):
 $asocijacije = $modeliIgara->getAsocijacijas();?>
 <div id='informacijeIgre' data-value='<?=$modeliIgara->id?>'>
     <h2>Igra "<?=$modeliIgara->naziv?>" od korisnika <?=$modeliIgara->getKreator()->one()->korisnicko_ime?></h2>
+    <p style="display: inline-block">Prikazi više informacija</p>
+    <a data-toggle='collapse' href="#collapse"><span class="caret"></span></a>
+    <div id='collapse' class="collapse">
+        <p>Opis igre: <?=$modeliIgara->opis?></p>
+        <p>Kategorija: <?=$modeliIgara->kategorija->naziv?></p>
+        <div style="border-bottom: 2px solid; margin: 1% 0px 1% 0px"></div>
+    </div>
 </div>
 <div>
 <?= ListView::widget([

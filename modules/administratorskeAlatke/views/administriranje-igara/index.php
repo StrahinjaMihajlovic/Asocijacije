@@ -11,6 +11,10 @@ use yii\bootstrap\Modal;
 app\modules\administratorskeAlatke\assets\gridviewAdminAsset::register(yii::$app->view);
 ?>
 
+<div id='naslov'>
+    <h1>Prikaz igara</h1>
+</div>
+
 <?=
 GridView::widget([
     'dataProvider' => $modelIgra,

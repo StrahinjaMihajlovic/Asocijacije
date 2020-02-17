@@ -28,10 +28,14 @@ $this->title = 'Moje igre';
         ?>
         <div id ='<?php echo $osobine['naziv']?>' class="igre">
             <h2 style='display: inline'><?php echo $osobine['naziv']?></h2>
-            <?php echo Html::a('Dopuni ili izmeni', yii\helpers\Url::to(
+            <?php 
+            echo Html::a('Dopuni ili izmeni', yii\helpers\Url::to(
                     ['korisnicki-alati/kreiranjeasocijacije'
                         , 'trenIgra' => $osobine['id']])
-                    , ['class' => "btn btn-default"]); 
+                    , ['class' => "btn btn-default"]);
+            echo Html::a('Izbrisi ovu igru', \yii\helpers\Url::to([
+                'igra/izbrisi-igru', 'id' => $osobine['id']
+            ],true),['class' => 'btn btn-warning']);
             ?>
         <p>Kategorija: <?php echo $igra->kategorija->naziv ?></p>
         <p style='display : inline-block'>Odobrena: <?php switch($osobine['aktivna']){
