@@ -22,7 +22,7 @@ class Korisnik extends \yii\db\ActiveRecord
      * {@inheritdoc}
      */
     public $lozinka_uneta; // za prikaz trenutne lozinke kod admina i korisnika
-    
+    public $lozinka_ponovljena;
     public static function tableName()
     {
         return 'korisnik';
@@ -37,7 +37,9 @@ class Korisnik extends \yii\db\ActiveRecord
             [['korisnicko_ime', 'lozinka', 'email'], 'required'],
             [['reset_kod', 'auth_key'], 'string'],
             [['korisnicko_ime', 'email'], 'string', 'max' => 30],
-            [['lozinka'], 'string', 'max' => 60],
+            [['lozinka', 'lozinka_ponovljena'], 'string', 'max' => 60],
+            [['lozinka_ponovljena'], 'compare', 'compareAttribute' => 'lozinka'
+                , 'message' => 'Ponovljena lozinka mora da se poklapa sa prvobitno unešenom lozinkom!'],
             [['email'], 'unique'],
             [['email'], 'email'],
             [['lozinka_uneta'], 'string'],
@@ -61,14 +63,15 @@ class Korisnik extends \yii\db\ActiveRecord
             'reset_kod' => 'Reset Kod',
             'auth_key' => 'Auth Key',
             'aktivan' => 'Aktivan',
-            'lozinka_uneta' => 'Lozinka'
+            'lozinka_uneta' => 'Lozinka',
+            'lozinka_ponovljena' => 'Ponovljena lozinka'
         ];
         
     }
     
     public function scenarios() {
        $scenariji = parent::scenarios();
-       $scenariji['signup'] = ['korisnicko_ime', 'email'];
+       $scenariji['signup'] = ['korisnicko_ime', 'email', 'lozinka'];
        $scenariji['promenaPodatakaAdmin'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan'];
        $scenariji['kreiranjeKorisnika'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan'];
        $scenariji['promenaPodatakaKorisnik'] = ['korisnicko_ime', 'email', 'lozinka_uneta', 'aktivan', 'pol', 'datum_rodjenja'];

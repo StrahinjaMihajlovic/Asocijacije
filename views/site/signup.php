@@ -17,7 +17,7 @@ $form = \yii\bootstrap\ActiveForm::begin([
 <?= $form->field($model, 'email')->label('E-mail')->textInput()?>
 <?= $form->field($model, 'korisnicko_ime')->label('korisnicko ime')->textInput(); ?>
 <?= $form->field($model, 'lozinka')->label('Lozinka')->passwordInput();?>
-<?= Html::label('Ponovi lozinku', 'ponovljena') . Html::passwordInput('ponovljena'); ?>
+<?= $form->field($model, 'lozinka_ponovljena')->label('Ponovi lozinku')->passwordInput(); ?>
 <?= Html::submitButton('Registruj se')?>
 
 <?php

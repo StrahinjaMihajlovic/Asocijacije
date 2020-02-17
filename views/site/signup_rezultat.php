@@ -15,3 +15,9 @@
  * @author strahinja
  */
 
+if($uspeh):?>
+
+<h2 class='text-center text-success'>Zahtev prihvacen, proverite svoj mail da biste se mogli logovati!</h2>
+<?php else:?>
+<h2 class='text-center text-success'>Zahtev prihvacen, proverite svoj mail da biste se mogli logovati!</h2>
+<?php endif; ?>

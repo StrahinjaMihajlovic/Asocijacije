@@ -41,7 +41,7 @@ class Igra extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['kategorija_id', 'kreator_id', 'naziv'], 'required'],
+            [['kategorija_id', 'naziv'], 'required'],
             [['kategorija_id', 'kreator_id', 'aktivna', 'broj_igranja', 'sablon_igre_id'], 'integer'],
             [['opis'], 'string'],
             [['naziv'], 'string', 'max' => 100],
@@ -183,7 +183,7 @@ class Igra extends \yii\db\ActiveRecord
     
     public function stvoriIgruUBazi($idKorisnika){
         $this->setAttributes(['kreator_id' => $idKorisnika,  'aktivna' => 0
-            , 'broj_igranja' => 0, 'sablon_igre_id' => 2]);
+            , 'broj_igranja' => 0, 'sablon_igre_id' => 1]);
         return $this->save() ? $this : false;
     }
     

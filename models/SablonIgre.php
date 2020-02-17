@@ -31,7 +31,7 @@ class SablonIgre extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['resenje', 'naziv'], 'required'],
+            [['naziv'], 'required'],
             [['resenje'], 'integer'],
             [['naziv'], 'string', 'max' => 10],
             [['resenje'], 'unique'],

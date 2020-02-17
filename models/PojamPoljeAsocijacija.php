@@ -32,6 +32,10 @@ class PojamPoljeAsocijacija extends \yii\db\ActiveRecord
     {
         return [
             [['id_asocijacije', 'id_polja', 'id_pojma'], 'integer'],
+            [['id_asocijacije', 'id_polja','id_asocijacije', 'id_pojma'] 
+                ,'unique', 'targetAttribute' => ['id_asocijacije', 'id_polja']],
+            [['id_asocijacije', 'id_pojma'] ,'unique', 'targetAttribute' => 
+                ['id_asocijacije', 'id_pojma']],
             [['id_asocijacije'], 'exist', 'skipOnError' => true, 'targetClass' => Asocijacija::className(), 'targetAttribute' => ['id_asocijacije' => 'id']],
             [['id_pojma'], 'exist', 'skipOnError' => true, 'targetClass' => Pojam::className(), 'targetAttribute' => ['id_pojma' => 'id']],
             [['id_polja'], 'exist', 'skipOnError' => true, 'targetClass' => Polje::className(), 'targetAttribute' => ['id_polja' => 'id']],

@@ -65,7 +65,7 @@ class KorisnickiAlatiController extends \yii\web\Controller
         
         $kreiranjeAsocijacije = new kreiranjeAsocijacije();
         $kreiranjeAsocijacije->igra = $igra;
-        $kreiranjeAsocijacije->sablon = (new SablonIgre())->vratiSablon(2);
+        $kreiranjeAsocijacije->sablon = (new SablonIgre())->vratiSablon(SablonIgre::find()->one()->id);
         $kreiranjeAsocijacije->asocijacija = (new \app\models\Asocijacija());
         $kreiranjeAsocijacije->AsocijacijeUIgri = $kreiranjeAsocijacije
                 ->asocijacija->vratiSveAsocijacijeIgre($igra->id)->getModels();
@@ -150,7 +150,8 @@ class KorisnickiAlatiController extends \yii\web\Controller
     
     public function actionAzuriranjeIgre($id){
         $igra = \app\models\Igra::findOne(intval($id));
-        if($igra->load(\yii::$app->request->post()) && $igra->save(true, ['naziv', 'opis','kategorija_id'])){
+        $igra->aktivna = 0;
+        if($igra->load(\yii::$app->request->post()) && $igra->save(true, ['naziv', 'opis','kategorija_id', 'aktivna'])){
             $this->redirect(['kreiranjeasocijacije', 'trenIgra' => $igra->id]);
         }
     }

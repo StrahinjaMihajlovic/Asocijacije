@@ -153,14 +153,15 @@ class SiteController extends Controller
             if(!$korisnik->save()){
                 return $this->render('signup', ['model' => new \app\models\Korisnik()]);
             }
-             \yii::$app->mailer->compose()->setFrom('strale.develop@gmail.com')
+             $uspesnost = \yii::$app->mailer->compose()->setFrom('strale.develop@gmail.com')
                     ->setTo($korisnik->email)->setSubject('Registracija')
                     ->setTextBody("Hvala na registraciji,\n "
                             . "Registrujte se na sledecem linku: " 
                             . (new \yii\web\UrlManager)->createAbsoluteUrl(['site/signup', 'kod' 
                                 => $korisnik->auth_key.$korisnik->id]))->send();
             
-            return $this->render('signup_uspeh');
+            return $uspesnost ? $this->render('signup_rezultat', ['uspeh' => true])
+                    : $this->render('signup_rezultat', ['uspeh' => false]) ;
         }
         return $this->render('signup', ['model' => new \app\models\Korisnik()]);
     }

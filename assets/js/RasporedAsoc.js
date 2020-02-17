@@ -27,16 +27,16 @@ function podesavanjeElemenataAsset(){
                 $(this).position({
                     my: "right bottom",
                     at: "left top",
-                    of: $(this).siblings(".tekstPolje"),
+                    of: $(this).siblings(".tekstPolje").children('input'),
                     collision: 'fit',
-                            within: $(this).parent
+                            within: $(this).parent()
                 });
                 break;
             case 'B':
                 $(this).position({
                     my: "left bottom",
                     at: "right top",
-                    of: $(this).siblings(".tekstPolje"),
+                    of: $(this).siblings(".tekstPolje").children('input'),
                     collision: 'fit',
                             within: $(this).parent
                 });
@@ -45,7 +45,7 @@ function podesavanjeElemenataAsset(){
                 $(this).position({
                     my: "right top",
                     at: "left bottom",
-                    of: $(this).siblings(".tekstPolje"),
+                    of: $(this).siblings(".tekstPolje").children('input'),
                     collision: 'fit',
                             within: $(this).parent
                 });
@@ -54,7 +54,7 @@ function podesavanjeElemenataAsset(){
                 $(this).position({
                     my: "left top",
                     at: "right bottom",
-                    of: $(this).siblings(".tekstPolje"),
+                    of: $(this).siblings(".tekstPolje").children('input'),
                     collision: 'fit',
                             within: $(this).parent
                 });

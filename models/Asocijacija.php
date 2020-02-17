@@ -35,11 +35,10 @@ class Asocijacija extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['resenje_id', 'kreator_id'], 'required'],
-            [['resenje_id', 'kreator_id'], 'integer'],
+            [['kreator_id'], 'required'],
+            [['kreator_id'], 'integer'],
             [['datum_kreiranja'], 'datetime', 'format' => 'yyyy-MM-dd HH:mm:ss'],
             [['kreator_id'], 'exist', 'skipOnError' => true, 'targetClass' => Korisnik::className(), 'targetAttribute' => ['kreator_id' => 'id']],
-            [['resenje_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pojam::className(), 'targetAttribute' => ['resenje_id' => 'id']],
         ];
     }
 
@@ -50,7 +49,6 @@ class Asocijacija extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'resenje_id' => 'Resenje ID',
             'kreator_id' => 'Kreator ID',
             'datum_kreiranja' => 'Datum kreiranja'
         ];
@@ -116,7 +114,6 @@ class Asocijacija extends \yii\db\ActiveRecord
     
     public function dodajAsocijacijuUBazi($pojmoviIds, $korisnikId){
         $this->setAttribute('kreator_id' , $korisnikId);
-        $this->resenje_id = $pojmoviIds[0];
         $rez = $this->save();
         return $rez ? $this : false;
     }
@@ -139,11 +136,10 @@ class Asocijacija extends \yii\db\ActiveRecord
     }
     
     public function azurirajTrenAsoc($pojmoviIds){
-        $this->resenje_id = $pojmoviIds[0];
         $this->datum_kreiranja = date('Y-m-d H:i:s');
         $igraModel = $this->igras[0];
         $igraModel->aktivna = 0;
-        return $this->save() && $igraModel->save() ? $this : false;
+        return $this->save() && $igraModel->save() ? $this : $this;
     }
     
     protected function srediIdPojmovaKaoTekst($pojmoviIds){
