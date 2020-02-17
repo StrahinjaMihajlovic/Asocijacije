@@ -60,7 +60,9 @@ class KorisnickiAlatiController extends \yii\web\Controller
         /*$nizPolja = (new Polje())->vratiSvaPoljaSablona($sablon->id);
         $pojam = new \app\models\Pojam();*/
         $igra = (new \app\models\Igra())->vratiIgru($trenIgra);
-        
+        if($igra->kreator_id != \yii::$app->user->getId()){
+            return $this->redirect(['igra/mojeigre']);
+        }
         
         $kreiranjeAsocijacije = new kreiranjeAsocijacije();
         $kreiranjeAsocijacije->igra = $igra;
