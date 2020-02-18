@@ -17,8 +17,8 @@ class m200217_162234_nova_baza extends Migration
 -- MySQL dump --
 -- ---------------------------------------------------------
 
-CREATE DATABASE IF NOT EXISTS `proba` CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `proba`;
+CREATE DATABASE IF NOT EXISTS `Asocijacije` CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `Asocijacije`;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
